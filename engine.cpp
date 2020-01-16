@@ -1,7 +1,7 @@
 
 #include "gui.hpp"
 #include "tile.hpp"
-#include "interface.hpp"
+#include "player.hpp"
 #include <cstdio>
 #include <vector>
 

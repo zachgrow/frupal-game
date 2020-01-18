@@ -1,0 +1,9 @@
+README file for Group A(wesome)'s FRUPAL game
+
+DIRECTORY STRUCTURE
+	./			Contains the makefile, the game configuration, and this README.
+	doc/		Contains any shared documentation about the source code.
+	fonts/		Contains font files as TTFs or bitmaps.
+	include/	Contains the source code of any external libraries.
+	lib/		Contains precompiled library objects.
+	src/		Contains the source code and objects of the game.

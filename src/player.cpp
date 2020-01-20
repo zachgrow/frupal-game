@@ -2,7 +2,7 @@
  * Auth: Carlos Sotello
  * Desc: This file contains the imlimentation for the player class
  */
-#include"player.h"
+#include"player.hpp"
 
 player::player():name(NULL),money(0),energy(0){//default constructor
   pos[0] = 0;
@@ -57,7 +57,7 @@ int player::getEnergy(){
 }
 
 void player::action(){
-  
+
 }
 
 bool player::move(char inp){//change the players position based on user input, returns true after succesful movement

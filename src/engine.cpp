@@ -19,25 +19,32 @@ int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
 	if (argc >= 2) {
-		// Parse the command line options
-		// need to invent some command line options!
-		std::cerr << "*** No command line options are available at this time." << std::endl;
-		return 1; // Exit the program by throwing a generic error code
+		if (*argv[1] == '-') {
+			// Parse the command line options
+			// need to invent some command line options!
+			std::cerr << "*** No command line options are available at this time.\n";
+			return EXIT_FAILURE; // Exit the program by throwing a generic error code
+		}
+		else {
+			configFilePath = argv[1];
+		}
 	}
 	GameEngine engine;
 	if (!engine.initialize(configFilePath)) { // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
 		std::cerr << "*** There was a problem loading the configuration." << std::endl;
 		std::cerr << "*** The game will now exit." << std::endl;
-		return 5; // Exit the program and throw a (different) error code
+		return EXIT_FAILURE; // Exit the program and throw a (different) error code
 	}
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
 }
+
 GameEngine::GameEngine() noexcept
 {
 
 }
-bool GameEngine::initialize(std::string configFile)
+
+bool GameEngine::initialize(const std::string& configFile)
 {
 	// Sets up the initial game state; this is NOT in the constructor because
 	// we want to keep track of whether an error has arisen from the GameEngine
@@ -46,16 +53,21 @@ bool GameEngine::initialize(std::string configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
-	gui = new GameGUI(screenHeight, screenWidth);
+	gui = GameGUI(screenHeight, screenWidth);
 	return true;
 }
+
 void GameEngine::loop()
 {
 	// Fetch player action
 	// Perform action
 	// Write result
+	auto player_pos = player.getPos();
+	gui.update(map, player_pos.x, player_pos.y);
+	gui.render();
 }
-bool GameEngine::loadConfiguration(std::string inputFile)
+
+bool GameEngine::loadConfiguration(const std::string& inputFile)
 {
 	std::ifstream config(inputFile); // Open the configuration file
 	if (!config) { // Was the config file opened successfully?

@@ -18,7 +18,7 @@
 
 # ! Allow the user's environment to specify the value of CXX! If make says it cannot be found, check your environment variables to ensure it is set correctly.
 CXXFLAGS=-std=c++11 -Wall -g
-LDFLAGS=
+LDFLAGS=-Llib/BearLibTerminal/Linux64 -lBearLibTerminal
 
 # Custom variables
 # Note that variables can be recursively defined by using $(foo) in the def:

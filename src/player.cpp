@@ -12,14 +12,12 @@ Player::Player():name(NULL),money(0),energy(0){//default constructor
 }
 
 Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy){//constructor to set given values
-  this->name = new char[strlen(name)+1];
-  strcpy(this->name,name);
+  this->name = name;
   position.x = 0;
   position.y = 0;
 }
 Player::Player(const Player& user){//copy constructor
-  name = new char[strlen(user.name)+1];
-  strcpy(name,user.name);
+  this->name = user.name;
   money = user.money;
   energy = user.energy;
   position.x = user.position.x;

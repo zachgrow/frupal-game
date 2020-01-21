@@ -19,6 +19,7 @@ private:
 
 class Vendor : public Actor{
 public:
+  Vendor();
   void action();
 private:
 
@@ -51,6 +52,6 @@ private:
   int money;
   int energy;
   Pos position;
-  char * name;
+  string name;
 
 };

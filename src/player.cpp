@@ -11,7 +11,7 @@ Player::Player():name(NULL),money(0),energy(0){//default constructor
   position.y = 0;
 }
 
-Player::Player(int strtMoney,int strtEnergy, char * name):money(strtMoney),energy(strtEnergy){//constructor to set given values
+Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy){//constructor to set given values
   this->name = new char[strlen(name)+1];
   strcpy(this->name,name);
   position.x = 0;
@@ -27,8 +27,7 @@ Player::Player(const Player& user){//copy constructor
 }
 
 Player::~Player(){
-  if(name)
-    delete name;
+
 }
 void Player::display(){//displays the players class members
   if(name)
@@ -37,11 +36,10 @@ void Player::display(){//displays the players class members
 }
 
 //setter functions for the class members
-void Player::setName(char * name){
+void Player::setName(string name){
   if(this->name)
     delete this->name;
-  this->name = new char[strlen(name)+1];
-  strcpy(this->name,name);
+  this->name = name;
 }
 void Player::setMoney(int money){
   this->money = money;
@@ -61,7 +59,7 @@ int Player::getMoney(){
 int Player::getEnergy(){
   return energy;
 }
-char* Player::getName(){
+string Player::getName(){
   return name;
 }
 Pos Player::getPos(){

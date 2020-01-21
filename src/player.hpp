@@ -29,9 +29,12 @@ public:
   void setName(char * name);//setter functions
   void setMoney(int money);
   void setEnergy(int energy);
+  void setPos(int x, int y);
 
   int getMoney();//getter functions
   int getEnergy();
+  char* getName();
+  int* getPos();
 
   void display();//display function mostly for testing
   bool move(char inp);//changes the players position based on character input

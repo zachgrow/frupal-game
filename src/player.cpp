@@ -47,6 +47,10 @@ void player::setMoney(int money){
 void player::setEnergy(int energy){
   this->energy = energy;
 }
+void player::setPos(int x, int y){
+  pos[0] = x;
+  pos[1] = y;
+}
 
 //getter functions
 int player::getMoney(){
@@ -54,6 +58,12 @@ int player::getMoney(){
 }
 int player::getEnergy(){
   return energy;
+}
+char* player::getName(){
+  return name;
+}
+int* player::getPos(){
+  return pos;
 }
 
 void player::action(){

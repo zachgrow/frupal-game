@@ -3,25 +3,27 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
+Vendor::Vendor(){}
+void Vendor::action(){}
 
 Player::Player():name(NULL),money(0),energy(0){//default constructor
-  pos[0] = 0;
-  pos[1] = 0;
+  position.x = 0;
+  position.y = 0;
 }
 
 Player::Player(int strtMoney,int strtEnergy, char * name):money(strtMoney),energy(strtEnergy){//constructor to set given values
   this->name = new char[strlen(name)+1];
   strcpy(this->name,name);
-  pos[0] = 0;
-  pos[1] = 0;
+  position.x = 0;
+  position.y = 0;
 }
 Player::Player(const Player& user){//copy constructor
   name = new char[strlen(user.name)+1];
   strcpy(name,user.name);
   money = user.money;
   energy = user.energy;
-  pos[0] = user.pos[0];
-  pos[1] = user.pos[1];
+  position.x = user.position.x;
+  position.y = user.position.y;
 }
 
 Player::~Player(){
@@ -31,7 +33,7 @@ Player::~Player(){
 void Player::display(){//displays the players class members
   if(name)
     cout << name << endl;
-  cout << money << endl << energy << endl << pos[0] << " " << pos[1] << endl;
+  cout << money << endl << energy << endl << position.x << " " << position.y << endl;
 }
 
 //setter functions for the class members
@@ -48,8 +50,8 @@ void Player::setEnergy(int energy){
   this->energy = energy;
 }
 void Player::setPos(int x, int y){
-  pos[0] = x;
-  pos[1] = y;
+  position.x = x;
+  position.y = y;
 }
 
 //getter functions
@@ -62,8 +64,8 @@ int Player::getEnergy(){
 char* Player::getName(){
   return name;
 }
-int* Player::getPos(){
-  return pos;
+Pos Player::getPos(){
+  return position;
 }
 
 void Player::action(){

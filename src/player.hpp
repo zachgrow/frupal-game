@@ -9,15 +9,23 @@
 
 using namespace std;
 
-class actor{//actor class acts as base class for player and vendor
+struct Pos{ int x; int y;};
+
+class Actor{//actor class acts as base class for player and vendor
 public:
   virtual void action() = 0;
+private:
+};
+
+class Vendor : public Actor{
+public:
+  void action();
 private:
 
 };
 
 
-class Player : public actor{
+class Player : public Actor{
 public:
   Player();//constructors
   Player(int strtMoney,int strtEnergy,char * name);
@@ -42,7 +50,7 @@ public:
 private:
   int money;
   int energy;
-  int pos[2];
+  Pos position;
   char * name;
 
 };

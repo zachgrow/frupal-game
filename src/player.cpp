@@ -4,18 +4,18 @@
  */
 #include"player.hpp"
 
-player::player():name(NULL),money(0),energy(0){//default constructor
+Player::Player():name(NULL),money(0),energy(0){//default constructor
   pos[0] = 0;
   pos[1] = 0;
 }
 
-player::player(int strtMoney,int strtEnergy, char * name):money(strtMoney),energy(strtEnergy){//constructor to set given values
+Player::Player(int strtMoney,int strtEnergy, char * name):money(strtMoney),energy(strtEnergy){//constructor to set given values
   this->name = new char[strlen(name)+1];
   strcpy(this->name,name);
   pos[0] = 0;
   pos[1] = 0;
 }
-player::player(const player& user){//copy constructor
+Player::Player(const Player& user){//copy constructor
   name = new char[strlen(user.name)+1];
   strcpy(name,user.name);
   money = user.money;
@@ -24,53 +24,53 @@ player::player(const player& user){//copy constructor
   pos[1] = user.pos[1];
 }
 
-player::~player(){
+Player::~Player(){
   if(name)
     delete name;
 }
-void player::display(){//displays the players class members
+void Player::display(){//displays the players class members
   if(name)
     cout << name << endl;
   cout << money << endl << energy << endl << pos[0] << " " << pos[1] << endl;
 }
 
 //setter functions for the class members
-void player::setName(char * name){
+void Player::setName(char * name){
   if(this->name)
     delete this->name;
   this->name = new char[strlen(name)+1];
   strcpy(this->name,name);
 }
-void player::setMoney(int money){
+void Player::setMoney(int money){
   this->money = money;
 }
-void player::setEnergy(int energy){
+void Player::setEnergy(int energy){
   this->energy = energy;
 }
-void player::setPos(int x, int y){
+void Player::setPos(int x, int y){
   pos[0] = x;
   pos[1] = y;
 }
 
 //getter functions
-int player::getMoney(){
+int Player::getMoney(){
   return money;
 }
-int player::getEnergy(){
+int Player::getEnergy(){
   return energy;
 }
-char* player::getName(){
+char* Player::getName(){
   return name;
 }
-int* player::getPos(){
+int* Player::getPos(){
   return pos;
 }
 
-void player::action(){
+void Player::action(){
 
 }
 
-bool player::move(char inp){//change the players position based on user input, returns true after succesful movement
+bool Player::move(char inp){//change the players position based on user input, returns true after succesful movement
   switch(inp){
     case('w'):
       pos[0]--;

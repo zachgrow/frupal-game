@@ -17,12 +17,12 @@ private:
 };
 
 
-class player : public actor{
+class Player : public actor{
 public:
-  player();//constructors
-  player(int strtMoney,int strtEnergy,char * name);
-  player(const player& user);
-  ~player();
+  Player();//constructors
+  Player(int strtMoney,int strtEnergy,char * name);
+  Player(const Player& user);
+  ~Player();
 
   void action();//action will call relevant function
 

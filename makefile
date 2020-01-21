@@ -15,10 +15,7 @@
 # -Wall		Display all warnings
 # -g		Activate debugging symbols for use in GDB
 # -c		Compile the source into objects but do not link them
-
-# ! Allow the user's environment to specify the value of CXX! If make says it cannot be found, check your environment variables to ensure it is set correctly.
-CXXFLAGS=-std=c++11 -Wall -g
-LDFLAGS=
+# -I		Specify additional directories to be searched when including files
 
 # Custom variables
 # Note that variables can be recursively defined by using $(foo) in the def:
@@ -34,6 +31,18 @@ HEDS=$(wildcard src/*.hpp)
 SRCS=$(wildcard src/*.cpp)
 # The object files live next to the source files, with a different extension
 OBJS=$(SRCS:.cpp=.o)
+# Specifies the path to any external libraries we will include when compiling
+INCLUDE=./include
+
+# ! Allow the user's environment to specify the value of CXX! If make says it cannot be found, check your environment variables to ensure it is set correctly.
+CXXFLAGS=-I$(INCLUDE) -std=c++11 -Wall -g
+# WARNING
+# These linker flags are HIGHLY OS dependent! Proper OS detection should be
+# implemented so that the program will compile under either system.
+# These linker flags are meant for Linux x64:
+LDFLAGS=-lBearLibTerminal -L lib/BearLibTerminal/Linux64 -Wl,-rpath="lib/BearLibTerminal/Linux64"
+#LDFLAGS=-lBearLibTerminal -L. -Wl,-rpath=.
+# End of Linux_x64 flags
 
 # Make targets
 # If all the objects are up to date, recompile the binary

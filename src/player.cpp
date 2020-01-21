@@ -75,16 +75,16 @@ void Player::action(){
 bool Player::move(char inp){//change the players position based on user input, returns true after succesful movement
   switch(inp){
     case('w'):
-      pos[0]--;
+      position.x--;
       return true;
     case('a'):
-      pos[1]--;
+      position.y--;
       return true;
     case('s'):
-      pos[0]++;
+      position.x++;
       return true;
     case('d'):
-      pos[1]++;
+      position.y++;
       return true;
     default:return false;
   }

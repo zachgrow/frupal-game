@@ -42,7 +42,7 @@ public:
   int getMoney();//getter functions
   int getEnergy();
   char* getName();
-  int* getPos();
+  Pos getPos();
 
   void display();//display function mostly for testing
   bool move(char inp);//changes the players position based on character input

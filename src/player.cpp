@@ -28,9 +28,8 @@ Player::~Player(){
 
 }
 void Player::display(){//displays the players class members
-  if(name)
-    cout << name << endl;
-  cout << money << endl << energy << endl << position.x << " " << position.y << endl;
+  cout << name << endl << money << endl
+  << energy << endl << position.x << " " << position.y << endl;
 }
 
 //setter functions for the class members

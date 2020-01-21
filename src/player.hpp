@@ -29,7 +29,7 @@ private:
 class Player : public Actor{
 public:
   Player();//constructors
-  Player(int strtMoney,int strtEnergy,char * name);
+  Player(int strtMoney,int strtEnergy,string name);
   Player(const Player& user);
   ~Player();
 

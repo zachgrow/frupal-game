@@ -35,8 +35,6 @@ void Player::display(){//displays the players class members
 
 //setter functions for the class members
 void Player::setName(string name){
-  if(this->name)
-    delete this->name;
   this->name = name;
 }
 void Player::setMoney(int money){

@@ -27,6 +27,10 @@ void GameGUI::update() {
 	// polls game state for changes in displayed information
 
 }
+void GameGUI::update(std::vector<std::vector<Tile>>& map, int player_x, int player_y)
+{
+	// Does nothing right now.
+}
 void GameGUI::render() {
 	// draws the interface onto the screen
 

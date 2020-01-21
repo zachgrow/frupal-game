@@ -7,7 +7,9 @@ DESC Contains definitions of the GameGUI class, which displays the game
 #ifndef FRUPALGAME_SRC_GUI_HPP_INCLUDED
 #define FRUPALGAME_SRC_GUI_HPP_INCLUDED
 
+#include "tile.hpp"
 #include <string>
+#include <vector>
 
 class GameGUI {
 	public:
@@ -15,7 +17,8 @@ class GameGUI {
 		GameGUI(unsigned int maxWidth, unsigned int maxHeight);
 		~GameGUI();
 		void initialize(); // Initializes a GameGUI to initial parameters
-		void update(); // Polls the game state for changes in displayed info
+		void update();
+		void update(std::vector<std::vector<Tile>>& map, int player_x, int player_y); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 	
 	private:

@@ -17,10 +17,11 @@ struct GameEngine
 	int screenHeight;// Height of terminal in # of monospace chars
 	int jewelsX;
 	int jewelsY;
-	GameEngine() noexcept;	// Default constructor
-	GameGUI gui;			// Pointer to the game interface object
 	std::vector<std::vector<Tile>> map;
+	Player player;
+	GameGUI gui;			// Pointer to the game interface object
 
+	GameEngine() noexcept;	// Default constructor
 	void loop();			// Core game loop
 	bool initialize(const std::string& configFile); // Initialize the engine's components
 	bool loadConfiguration(const std::string& configFile); // Loads external config

@@ -57,6 +57,9 @@ void GameEngine::loop()
 	// Fetch player action
 	// Perform action
 	// Write result
+	auto player_pos = player.getPos();
+	gui.update(map, player_pos[0], player_pos[1]);
+	gui.render();
 }
 
 bool GameEngine::loadConfiguration(const std::string& inputFile)

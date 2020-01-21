@@ -4,6 +4,7 @@ AUTH Josiah Baldwin, Zach Grow
 DESC Contains implementation of game engine as well as main()
 */
 
+#include "BearLibTerminal.h"
 #include "gui.hpp"
 #include "tile.hpp"
 #include "player.hpp"
@@ -32,8 +33,14 @@ int main(int argc, char** argv)
 		return 5; // Exit the program and throw a (different) error code
 	}
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
+	// Invoke the game loop
+	engine.loop();
+	// WHEN the player has closed the game:
+	engine.terminate();
 }
-GameEngine::GameEngine() noexcept
+GameEngine::GameEngine() noexcept :
+screenWidth(80),
+screenHeight(50)
 {
 
 }
@@ -46,7 +53,7 @@ bool GameEngine::initialize(std::string configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
-	gui = new GameGUI(screenHeight, screenWidth);
+	gui = new GameGUI(screenHeight, screenWidth, terminalFontPath);
 	return true;
 }
 void GameEngine::loop()
@@ -82,6 +89,9 @@ bool GameEngine::loadConfiguration(std::string inputFile)
 				screenWidth = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "screenHeight") {
 				screenHeight = std::stoul(configValue, nullptr, 0);
+			} else if (configKey == "font") {
+//				int valueLength = configValue.length();
+				terminalFontPath = configValue;
 			} else { // No matching config key was found!
 				std::cerr << "Configuration key " << configKey << " is not recognized by the game." << std::endl;
 			}
@@ -90,4 +100,8 @@ bool GameEngine::loadConfiguration(std::string inputFile)
 	config.close();
 	// close the file
 	return true;
+}
+void GameEngine::terminate() {
+	// Performs closing-of-the-game methods before the engine itself shuts down
+	delete gui;
 }

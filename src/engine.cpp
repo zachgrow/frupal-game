@@ -63,7 +63,7 @@ void GameEngine::loop()
 	// Perform action
 	// Write result
 	auto player_pos = player.getPos();
-	gui.update(map, player_pos[0], player_pos[1]);
+	gui.update(map, player_pos.x, player_pos.y);
 	gui.render();
 }
 

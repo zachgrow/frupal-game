@@ -35,14 +35,14 @@ public:
 
   void action();//action will call relevant function
 
-  void setName(char * name);//setter functions
+  void setName(string name);//setter functions
   void setMoney(int money);
   void setEnergy(int energy);
   void setPos(int x, int y);
 
   int getMoney();//getter functions
   int getEnergy();
-  char* getName();
+  string getName();
   Pos getPos();
 
   void display();//display function mostly for testing

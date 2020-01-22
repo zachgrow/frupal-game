@@ -62,8 +62,13 @@ bool GameEngine::initialize(const std::string& configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
-	gui = GameGUI(screenHeight, screenWidth, configFile);
+	if (!terminal_open()) { // Try creating a BearLibTerminal instance
+		// If it didn't work, send an error message to stderr
+		cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+	}
+	gui = GameGUI(screenHeight, screenWidth, terminalFontPath);
 	// FIXME: is a sanity check needed here?
+	// FIXME: include the call to terminal_set here?
 	return true;
 }
 
@@ -105,10 +110,9 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 			} else if (configKey == "screenHeight") {
 				screenHeight = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "font") {
-//				int valueLength = configValue.length();
 				terminalFontPath = configValue;
 			} else { // No matching config key was found!
-				std::cerr << "Configuration key " << configKey << " is not recognized by the game." << std::endl;
+				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << std::endl;
 			}
 		}
 	}
@@ -121,4 +125,5 @@ void GameEngine::terminate()
 {
 	// Performs closing-of-the-game methods before the engine itself shuts down
 	// If we wanted to save the game automatically, we could do so here
+	terminal_close(); // Halt the BearLibTerminal instance
 }

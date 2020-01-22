@@ -32,17 +32,12 @@ screenHeight(maxHeight),
 fontPath(fullFontPath) {
 	// Constructor with dimensions of terminal window
 	// FIXME: Need some kind of guarantee on the sanity of the maxFOO params...
-	if (!terminal_open()) { // Try creating a BearLibTerminal instance
-		// If it didn't work, send an error message to stderr
-		cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
-	}
 	if (fullFontPath != "") {
 		fontPath = fullFontPath;
 	}
 }
 GameGUI::~GameGUI() {
 	// default destructor
-	terminal_close(); // Halt the BearLibTerminal instance
 }
 void GameGUI::initialize() {
 	// Sets a created GameGUI object to initial valid conditions

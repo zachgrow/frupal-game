@@ -4,8 +4,12 @@ AUTH Zach Grow
 DESC Contains definitions of the GameGUI class, which displays the game
      interface, including menu drawing and selection
 */
+#ifndef FRUPALGAME_SRC_GUI_HPP_INCLUDED
+#define FRUPALGAME_SRC_GUI_HPP_INCLUDED
 
+#include "tile.hpp"
 #include <string>
+#include <vector>
 
 class GameGUI {
 	public:
@@ -27,3 +31,5 @@ class GameGUI {
 		unsigned int screenWidth;
 		// need a list of Messages for the message log
 };
+
+#endif // FRUPALGAME_SRC_GUI_HPP_INCLUDED

@@ -4,6 +4,7 @@ AUTH Josiah Baldwin, Zach Grow
 DESC Contains implementation of game engine as well as main()
 */
 
+#include "BearLibTerminal.h"
 #include "gui.hpp"
 #include "tile.hpp"
 #include "player.hpp"
@@ -28,8 +29,7 @@ int main(int argc, char** argv)
 			// need to invent some command line options!
 			std::cerr << "*** No command line options are available at this time.\n";
 			return EXIT_FAILURE; // Exit the program by throwing a generic error code
-		}
-		else {
+		} else {
 			configFilePath = argv[1];
 		}
 	}
@@ -41,11 +41,16 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE; // Exit the program and throw a (different) error code
 	}
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
+	// Invoke the game loop
+	engine.loop();
+	// WHEN the player has closed the game:
+	engine.terminate();
 }
-
-GameEngine::GameEngine() noexcept
+GameEngine::GameEngine() noexcept :
+screenWidth(80),
+screenHeight(50)
 {
-
+	// The default constructor
 }
 
 bool GameEngine::initialize(const std::string& configFile)
@@ -57,7 +62,7 @@ bool GameEngine::initialize(const std::string& configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
-	gui = GameGUI(screenHeight, screenWidth);
+	gui = GameGUI(screenHeight, screenWidth, configFile);
 	// FIXME: is a sanity check needed here?
 	return true;
 }
@@ -67,8 +72,8 @@ void GameEngine::loop()
 	// Fetch player action
 	// Perform action
 	// Write result
-	auto player_pos = player.getPos();
-	gui.update(map, player_pos.x, player_pos.y);
+//	auto player_pos = player.getPos();
+	gui.update();
 	gui.render();
 }
 
@@ -99,6 +104,9 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 				screenWidth = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "screenHeight") {
 				screenHeight = std::stoul(configValue, nullptr, 0);
+			} else if (configKey == "font") {
+//				int valueLength = configValue.length();
+				terminalFontPath = configValue;
 			} else { // No matching config key was found!
 				std::cerr << "Configuration key " << configKey << " is not recognized by the game." << std::endl;
 			}
@@ -107,4 +115,10 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 	config.close();
 	// close the file
 	return true;
+}
+
+void GameEngine::terminate()
+{
+	// Performs closing-of-the-game methods before the engine itself shuts down
+	// If we wanted to save the game automatically, we could do so here
 }

@@ -1,7 +1,7 @@
 /*   gui.hpp
 DATE Jan 16 2020
 AUTH Zach Grow
-DESC Contains definitions of the GameGUI class, which displays the game
+DESC Implements the GameGUI class, which handles the system input/output and the
      interface, including menu drawing and selection
 */
 #ifndef FRUPALGAME_SRC_GUI_HPP_INCLUDED
@@ -14,11 +14,12 @@ DESC Contains definitions of the GameGUI class, which displays the game
 class GameGUI {
 	public:
 		GameGUI();
-		GameGUI(unsigned int maxWidth, unsigned int maxHeight);
+		GameGUI(unsigned int maxWidth, unsigned int maxHeight, std::string fullFontPath);
 		~GameGUI();
 		void initialize(); // Initializes a GameGUI to initial parameters
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
+		void testBLT(); // BearLibTerminal debugging/test function
 	
 	private:
 		struct Message {
@@ -27,8 +28,9 @@ class GameGUI {
 			Message(const std::string *inputText);
 			~Message();
 		};
-		unsigned int screenHeight;
 		unsigned int screenWidth;
+		unsigned int screenHeight;
+		std::string fontPath;
 		// need a list of Messages for the message log
 };
 

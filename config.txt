@@ -1,2 +1,3 @@
 screenWidth=80
 screenHeight=50
+font=./fonts/VeraMono.ttf

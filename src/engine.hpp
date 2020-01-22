@@ -17,14 +17,16 @@ struct GameEngine
 	unsigned int screenHeight;// Height of terminal in # of monospace chars
 	int jewelsX;
 	int jewelsY;
-	std::vector<std::vector<Tile>> map;
+//	std::vector<std::vector<Tile>> map;
 	Player player;
 	GameGUI gui;			// Pointer to the game interface object
+	std::string terminalFontPath;// Contains relative path to the terminal font
 
 	GameEngine() noexcept;	// Default constructor
 	void loop();			// Core game loop
 	bool initialize(const std::string& configFile); // Initialize the engine's components
 	bool loadConfiguration(const std::string& configFile); // Loads external config
+	void terminate();		// Performs end-of-game cleanup before the engine itself is to be shutdown
 };
 
 #endif // FRUPALGAME_SRC_ENGINE_HPP_INCLUDED

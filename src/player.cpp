@@ -6,7 +6,7 @@
 Vendor::Vendor(){}
 void Vendor::action(){}
 
-Player::Player():name(NULL),money(0),energy(0){//default constructor
+Player::Player():money(0),energy(0),name(""){//default constructor
   position.x = 0;
   position.y = 0;
 }

@@ -3,7 +3,7 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
-const TOOLCOUNT = 5;
+const global TOOLCOUNT = 5;
 Vendor::Vendor(){}
 void Vendor::action(){}
 

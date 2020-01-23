@@ -15,6 +15,7 @@ Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energ
   this->name = name;
   position.x = 0;
   position.y = 0;
+
 }
 Player::Player(const Player& user){//copy constructor
   this->name = user.name;
@@ -22,6 +23,9 @@ Player::Player(const Player& user){//copy constructor
   energy = user.energy;
   position.x = user.position.x;
   position.y = user.position.y;
+  for(int i = 0; i < TOOLCOUNT; i++){
+    tools[i] = user.tools[i];
+  }
 }
 
 Player::~Player(){
@@ -61,24 +65,63 @@ Pos Player::getPos(){
   return position;
 }
 
-void Player::action(){
-
+void Player::action(){//player action takes user input and calls move or buy
+  string inp;
+  cout << "Would you like to move or buy a tool?" << endl;
+  getline(cin,inp);
+  if(inp.compare("move") == 0 || inp.compare("Move") == 0){
+    cout << "What direction would you like to move?" << endl;
+    getline(cin,inp);
+    move(inp);
+  }
+  else if(inp.compare("buy") == 0 || inp.compare("Buy") == 0){
+    cout << "What tool would you like to buy?" << endl;
+    getline(cin,inp);
+    buy(inp);
+    }
+  else{
+    cerr << "Please enter Move or Buy" << endl;
+    }
 }
 
-bool Player::move(char inp){//change the players position based on user input, returns true after succesful movement
-  switch(inp){
-    case('w'):
+bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
+//TODO:Add bounds checking
+    if(inp.compare("North") == 0 || inp.compare("north") == 0){
       position.x--;
       return true;
-    case('a'):
+    }
+    else if(inp.compare("West") == 0 || inp.compare("west") == 0){
       position.y--;
       return true;
-    case('s'):
+    }
+    else if(inp.compare("South") == 0 || inp.compare("south") == 0){
       position.x++;
       return true;
-    case('d'):
+    }
+    else if(inp.compare("East") == 0 || inp.compare("east") == 0){
       position.y++;
       return true;
-    default:return false;
+    }
+    else{
+      cerr << "Please enter North, South, East, or West." << endl;
+      return false;
+    }
   }
-}
+  bool Player::buy(string tool){//buy tool from vendor
+    if(hasTool(tool)){//check for tool
+      cerr << "You already have this tool" << endl;
+      return false;
+    }
+    else{
+      //buy the tool from the vendor
+      return true;
+    }
+  }
+  bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it
+    bool found = false;
+    for(int i = 0; i < TOOLCOUNT; i++){
+      if(tools[i] == tool)
+        found = true;
+    }
+    return found;
+  }

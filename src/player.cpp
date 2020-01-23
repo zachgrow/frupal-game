@@ -68,24 +68,25 @@ Pos Player::getPos(){
 void Player::action(){//player action takes user input and calls move or buy
   string inp;
   cout << "Would you like to move or buy a tool?" << endl;
-  getline(cin,inp);
-  if(inp.compare("move") == 0 || inp.compare("Move") == 0){
+  getline(cin,inp);//get user input
+  if(inp.compare("move") == 0 || inp.compare("Move") == 0){//make comparison
     cout << "What direction would you like to move?" << endl;
     getline(cin,inp);
-    move(inp);
+    move(inp);//call function
   }
   else if(inp.compare("buy") == 0 || inp.compare("Buy") == 0){
     cout << "What tool would you like to buy?" << endl;
     getline(cin,inp);
     buy(inp);
     }
-  else{
+  else{//invalid input
     cerr << "Please enter Move or Buy" << endl;
+    action();//restart action
     }
 }
 
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
-//TODO:Add bounds checking
+//TODO:Add bounds checking which will return false if a move is invalid
     if(inp.compare("North") == 0 || inp.compare("north") == 0){
       position.x--;
       return true;
@@ -104,7 +105,8 @@ bool Player::move(string inp){//change the players position based on user input,
     }
     else{
       cerr << "Please enter North, South, East, or West." << endl;
-      return false;
+      getline(cin, inp);//get new user input
+      return move(inp);
     }
   }
   bool Player::buy(string tool){//buy tool from vendor

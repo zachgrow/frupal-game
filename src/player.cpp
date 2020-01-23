@@ -85,6 +85,7 @@ void Player::action(){//player action takes user input and calls move or buy
 }
 
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
+//TODO:Add bounds checking
     if(inp.compare("North") == 0 || inp.compare("north") == 0){
       position.x--;
       return true;

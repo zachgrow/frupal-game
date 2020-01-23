@@ -6,7 +6,9 @@
 #include<iostream>
 #include<cstring>
 #include<cmath>
-const int TOOLCOUNT = 5;
+
+//Update when tools are implemented
+const int TOOLCOUNT = 5;//global used for size of players tool array
 
 using namespace std;
 

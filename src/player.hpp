@@ -46,12 +46,13 @@ public:
   Pos getPos();
 
   void display();//display function mostly for testing
-  bool move(char inp);//changes the players position based on character input
-  bool buy(char tool);//ideally buys a tool if possible based on a character unique to each tool
+  bool move(string inp);//changes the players position based on character input
+  bool buy(string tool);//ideally buys a tool if possible based on a character unique to each tool
+  bool hasTool(string tool);
 private:
   int money;
   int energy;
   Pos position;
   string name;
-
+  string tools[];
 };

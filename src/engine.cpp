@@ -116,7 +116,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 		// Find the matching configuration property and set its value
 		// FIXME: Include sanity checks on input values
 		// FIXME: Set up some kind of value defaults if anything's not set
-		if (configKey != "") { // Prevent trying the EOF char as a config key
+		if (configKey != "") { // Prevent trying blank lines (ie trailing lines)
 			if (configKey == "screenWidth") {
 				screenWidth = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "screenHeight") {

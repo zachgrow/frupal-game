@@ -7,6 +7,7 @@ DESC Contains definitions of the GameEngine class
 #define FRUPALGAME_SRC_ENGINE_HPP_INCLUDED
 
 #include "gui.hpp"
+#include "player.hpp"
 #include "tile.hpp"
 #include <string>		// String object for text
 #include <random>

@@ -49,6 +49,7 @@ int main(int argc, char** argv)
 
 // GameEngine class implementation
 GameEngine::GameEngine() noexcept :
+gameState(STARTUP),
 screenWidth(80),
 screenHeight(50)
 {
@@ -89,6 +90,8 @@ bool GameEngine::initialize(const std::string& configFile)
 
 	std::random_device rd;
 	randomEng.seed(rd());
+
+	gameState = RUNNING;
 
 	return true;
 }

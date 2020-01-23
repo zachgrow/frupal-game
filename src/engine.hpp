@@ -14,6 +14,14 @@ DESC Contains definitions of the GameEngine class
 
 struct GameEngine
 {
+	enum GameState {
+		STARTUP,
+		RUNNING,
+		VICTORY,
+		DEFEAT,
+		ERROR,
+	} gameState;
+
 	unsigned int screenWidth; // Width of terminal in # of monospace chars
 	unsigned int screenHeight; // Height of terminal in # of monospace chars
 	int jewelsX;

@@ -3,7 +3,6 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
-const global TOOLCOUNT = 5;
 Vendor::Vendor(){}
 void Vendor::action(){}
 
@@ -70,20 +69,17 @@ Pos Player::getPos(){
 void Player::action(){//player action takes user input and calls move or buy
   string inp;
   cout << "What would you like to move or buy a tool?" << endl;
-  cin.get(inp,100,'\n');
-  cin.ignore(10,'\n');
+  getline(cin,inp);
   if(inp.compare("move") == 0 || inp.compare("Move") == 0){
     inp = "";
     cout << "What direction would you like to move?" << endl;
-    cin.get(inp,100,'\n');
-    cin.ignore(10,'\n');
+    getline(cin,inp);
     move(inp);
   }
   else if(inp.compare("buy") == 0 || inp.compare("Buy") == 0){
     inp = "";
     cout << "What tool would you like to buy?" << endl;
-    cin.get(inp,100,'\n');
-    cin.ignore(10,'\n');
+    getline(cin,inp);
     buy(inp);
     }
   else{

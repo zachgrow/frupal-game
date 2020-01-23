@@ -6,6 +6,7 @@
 #include<iostream>
 #include<cstring>
 #include<cmath>
+const global TOOLCOUNT = 5;
 
 using namespace std;
 

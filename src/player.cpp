@@ -72,39 +72,46 @@ void Player::action(){//player action takes user input and calls move or buy
   cout << "What would you like to move or buy a tool?" << endl;
   cin.get(inp,100,'\n');
   cin.ignore(10,'\n');
-  switch(inp){
-    case "move" || "Move":
-      inp = "";
-      cout << "What direction would you like to move?" << endl;
-      cin.get(inp,100,'\n');
-      cin.ignore(10,'\n');
-      move(inp);
-    case "buy" || "Buy":
-      inp = "";
-      cout << "What tool would you like to buy?" << endl;
-      cin.get(inp,100,'\n');
-      cin.ignore(10,'\n');
-      buy(inp);
+  if(inp.compare("move") == 0 || inp.compare("Move") == 0){
+    inp = "";
+    cout << "What direction would you like to move?" << endl;
+    cin.get(inp,100,'\n');
+    cin.ignore(10,'\n');
+    move(inp);
   }
+  else if(inp.compare("buy") == 0 || inp.compare("Buy") == 0){
+    inp = "";
+    cout << "What tool would you like to buy?" << endl;
+    cin.get(inp,100,'\n');
+    cin.ignore(10,'\n');
+    buy(inp);
+    }
+  else{
+    cerr << "Please enter Move or Buy" << endl;
+    }
 }
 
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
-  switch(inp){
-    case("North" || "north"):
+    if(inp.compare("North") == 0 || inp.compare("north") == 0){
       position.x--;
       return true;
-    case("West" || "west"):
+    }
+    else if(inp.compare("West") == 0 || inp.compare("west") == 0){
       position.y--;
       return true;
-    case("South" || "south"):
+    }
+    else if(inp.compare("South") == 0 || inp.compare("south") == 0){
       position.x++;
       return true;
-    case("East" || "east"):
+    }
+    else if(inp.compare("East") == 0 || inp.compare("east") == 0){
       position.y++;
       return true;
-    default:
+    }
+    else{
       cerr << "Please enter North, South, East, or West." << endl;
       return false;
+    }
   }
   bool Player::buy(string tool){
     if(hasTool(tool)){

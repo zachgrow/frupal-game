@@ -75,15 +75,21 @@ bool GameEngine::initialize(const std::string& configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
+
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
 		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
 		return false;
 	}
+
 	gui.initialize(); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
+
+	std::random_device rd;
+	randomEng.seed(rd());
+
 	return true;
 }
 

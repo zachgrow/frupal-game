@@ -9,6 +9,7 @@ DESC Contains definitions of the GameEngine class
 #include "gui.hpp"
 #include "tile.hpp"
 #include <string>		// String object for text
+#include <random>
 #include <vector>
 
 struct GameEngine
@@ -22,6 +23,7 @@ struct GameEngine
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
+	std::mt19937 randomEng;
 
 	GameEngine() noexcept;	// Default constructor
 	void loop();			// Core game loop

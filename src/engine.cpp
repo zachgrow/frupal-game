@@ -49,6 +49,7 @@ int main(int argc, char** argv)
 
 // GameEngine class implementation
 GameEngine::GameEngine() noexcept :
+gameState(STARTUP),
 screenWidth(80),
 screenHeight(50)
 {
@@ -75,15 +76,23 @@ bool GameEngine::initialize(const std::string& configFile)
 		// If it didn't work, do not continue!
 		return false;
 	}
+
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
 		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
 		return false;
 	}
+
 	gui.initialize(); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
+
+	std::random_device rd;
+	randomEng.seed(rd());
+
+	gameState = RUNNING;
+
 	return true;
 }
 
@@ -116,7 +125,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 		// Find the matching configuration property and set its value
 		// FIXME: Include sanity checks on input values
 		// FIXME: Set up some kind of value defaults if anything's not set
-		if (configKey != "") { // Prevent trying the EOF char as a config key
+		if (configKey != "") { // Prevent trying blank lines (ie trailing lines)
 			if (configKey == "screenWidth") {
 				screenWidth = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "screenHeight") {

@@ -9,10 +9,19 @@ DESC Contains definitions of the GameEngine class
 #include "gui.hpp"
 #include "tile.hpp"
 #include <string>		// String object for text
+#include <random>
 #include <vector>
 
 struct GameEngine
 {
+	enum GameState {
+		STARTUP,
+		RUNNING,
+		VICTORY,
+		DEFEAT,
+		ERROR,
+	} gameState;
+
 	unsigned int screenWidth; // Width of terminal in # of monospace chars
 	unsigned int screenHeight; // Height of terminal in # of monospace chars
 	int jewelsX;
@@ -22,6 +31,7 @@ struct GameEngine
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
+	std::mt19937 randomEng;
 
 	GameEngine() noexcept;	// Default constructor
 	void loop();			// Core game loop

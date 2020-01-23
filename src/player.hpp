@@ -55,5 +55,5 @@ private:
   int energy;
   Pos position;
   string name;
-  string tools[];
+  string tools[TOOLCOUNT];
 };

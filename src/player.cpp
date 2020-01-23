@@ -6,7 +6,7 @@
 Vendor::Vendor(){}
 void Vendor::action(){}
 
-Player::Player():money(0),energy(0),name(""){//default constructor
+Player::Player():money(0),energy(0){//default constructor
   position.x = 0;
   position.y = 0;
 }
@@ -67,16 +67,14 @@ Pos Player::getPos(){
 
 void Player::action(){//player action takes user input and calls move or buy
   string inp;
-  cout << "What would you like to move or buy a tool?" << endl;
+  cout << "Would you like to move or buy a tool?" << endl;
   getline(cin,inp);
   if(inp.compare("move") == 0 || inp.compare("Move") == 0){
-    inp = "";
     cout << "What direction would you like to move?" << endl;
     getline(cin,inp);
     move(inp);
   }
   else if(inp.compare("buy") == 0 || inp.compare("Buy") == 0){
-    inp = "";
     cout << "What tool would you like to buy?" << endl;
     getline(cin,inp);
     buy(inp);

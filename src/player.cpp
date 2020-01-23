@@ -108,8 +108,8 @@ bool Player::move(string inp){//change the players position based on user input,
       return false;
     }
   }
-  bool Player::buy(string tool){
-    if(hasTool(tool)){
+  bool Player::buy(string tool){//buy tool from vendor
+    if(hasTool(tool)){//check for tool
       cerr << "You already have this tool" << endl;
       return false;
     }
@@ -118,7 +118,7 @@ bool Player::move(string inp){//change the players position based on user input,
       return true;
     }
   }
-  bool Player::hasTool(string tool){
+  bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it
     bool found = false;
     for(int i = 0; i < TOOLCOUNT; i++){
       if(tools[i] == tool)

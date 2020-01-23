@@ -131,4 +131,3 @@ bool Player::move(string inp){//change the players position based on user input,
     }
     return found;
   }
-}

@@ -1,3 +1,4 @@
 screenWidth=80
 screenHeight=50
-font=./fonts/VeraMono.ttf
+font=./fonts/UbuntuMono-R.ttf
+fontSize=12

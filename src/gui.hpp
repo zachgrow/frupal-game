@@ -14,7 +14,7 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 class GameGUI {
 	public:
 		GameGUI();
-		GameGUI(unsigned int maxWidth, unsigned int maxHeight, std::string fullFontPath);
+		GameGUI(unsigned int maxWidth, unsigned int maxHeight);
 		~GameGUI();
 		void initialize(); // Initializes a GameGUI to initial parameters
 		void update(); // Polls the game state for changes in displayed info

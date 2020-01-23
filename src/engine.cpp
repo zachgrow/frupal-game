@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 			// Parse the command line options
 			// need to invent some command line options!
 			std::cerr << "*** No command line options are available at this time.\n";
-			return EXIT_FAILURE; // Exit the program by throwing a generic error code
+			return 1; // Exit the program by throwing a generic error code
 		} else {
 			configFilePath = argv[1];
 		}
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 		// If it didn't work for some reason, say so and exit
 		std::cerr << "*** There was a problem loading the configuration." << std::endl;
 		std::cerr << "*** The game will now exit." << std::endl;
-		return EXIT_FAILURE; // Exit the program and throw a (different) error code
+		return 5; // Exit the program and throw a (different) error code
 	}
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
 	// Invoke the game loop
@@ -46,11 +46,24 @@ int main(int argc, char** argv)
 	// WHEN the player has closed the game:
 	engine.terminate();
 }
+
+// GameEngine class implementation
 GameEngine::GameEngine() noexcept :
 screenWidth(80),
 screenHeight(50)
 {
 	// The default constructor
+	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+}
+
+void GameEngine::loop()
+{
+	// Fetch player action
+	// Perform action
+	// Write result
+//	auto player_pos = player.getPos();
+	gui.update();
+	gui.render();
 }
 
 bool GameEngine::initialize(const std::string& configFile)
@@ -64,22 +77,21 @@ bool GameEngine::initialize(const std::string& configFile)
 	}
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
-		cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+		return false;
 	}
-	gui = GameGUI(screenHeight, screenWidth, terminalFontPath);
-	// FIXME: is a sanity check needed here?
-	// FIXME: include the call to terminal_set here?
+	gui.initialize(); // Initialize the GUI's state
+	std::string bltConfigString = generateBLTConfigString();
+//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
+	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 	return true;
 }
 
-void GameEngine::loop()
+void GameEngine::terminate()
 {
-	// Fetch player action
-	// Perform action
-	// Write result
-//	auto player_pos = player.getPos();
-	gui.update();
-	gui.render();
+	// Performs closing-of-the-game methods before the engine itself shuts down
+	// If we wanted to save the game automatically, we could do so here
+	terminal_close(); // Halt the BearLibTerminal instance
 }
 
 bool GameEngine::loadConfiguration(const std::string& inputFile)
@@ -98,32 +110,58 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 		getline(config, configLine); // Obtain a full line
 		lineStream.clear(); // Make sure the stream is empty
 		lineStream << configLine; // Put the config line into the stream
-		// Break the stream into a key and its value at the =
+		// Break the stream into a key and its value at the '='
 		getline(lineStream, configKey, '=');
 		getline(lineStream, configValue);
 		// Find the matching configuration property and set its value
 		// FIXME: Include sanity checks on input values
 		// FIXME: Set up some kind of value defaults if anything's not set
-		if (!config.eof()) { // Prevent trying the EOF char as a config key
+		if (configKey != "") { // Prevent trying the EOF char as a config key
 			if (configKey == "screenWidth") {
 				screenWidth = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "screenHeight") {
 				screenHeight = std::stoul(configValue, nullptr, 0);
 			} else if (configKey == "font") {
 				terminalFontPath = configValue;
+			} else if (configKey == "fontSize") {
+				terminalFontSize = std::stoul(configValue, nullptr, 0);
 			} else { // No matching config key was found!
 				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << std::endl;
 			}
 		}
 	}
 	config.close();
-	// close the file
 	return true;
 }
 
-void GameEngine::terminate()
+std::string GameEngine::generateBLTConfigString()
 {
-	// Performs closing-of-the-game methods before the engine itself shuts down
-	// If we wanted to save the game automatically, we could do so here
-	terminal_close(); // Halt the BearLibTerminal instance
+	// Generates a valid BearLibTerminal configuration string from our config
+	// Set the window title
+	std::string windowTitleOption="title='FRUPAL'";
+	// Set the window dimensions
+	std::string windowSizeOption="size=";
+	windowSizeOption.append(to_string(screenWidth));
+	windowSizeOption.append("x");
+	windowSizeOption.append(to_string(screenHeight));
+	// If we want to set up mouse input, it needs to be enabled here
+	// If we want to specify custom color names, we can do that here too
+	// ***
+	// Finally, generate the string to be returned
+	std::string fullOptionString;
+	// The terminal window title and dimensions will always be set
+	fullOptionString.append("window: ");
+	fullOptionString.append(windowTitleOption);
+	fullOptionString.append(", ");
+	fullOptionString.append(windowSizeOption);
+	// Only add the font option if it has been specified
+	if (terminalFontPath != "") {
+		// If we specify a font, we MUST also specify a size
+		fullOptionString.append("; font: ");
+		fullOptionString.append(terminalFontPath);
+		fullOptionString.append(", size=");
+		fullOptionString.append(to_string(terminalFontSize));
+	}
+	fullOptionString.append(";"); // Terminating character
+	return fullOptionString;
 }

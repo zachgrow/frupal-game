@@ -12,7 +12,11 @@ const int TOOLCOUNT = 5;//global used for size of players tool array
 
 using namespace std;
 
-struct Pos{ int x; int y;};
+struct Pos{
+  int x;
+  int y;
+  bool operator==(const Pos & other);
+};
 
 class Actor{//actor class acts as base class for player and vendor
 public:
@@ -25,7 +29,7 @@ public:
   Vendor();
   void action();
 private:
-
+  string tools[TOOLCOUNT];
 };
 
 

@@ -3,6 +3,10 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
+bool Pos::operator==(const Pos & other){
+  return x == other.x && y == other.y;
+}
+
 Vendor::Vendor(){}
 void Vendor::action(){}
 
@@ -87,6 +91,7 @@ void Player::action(){//player action takes user input and calls move or buy
 
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
 //TODO:Add bounds checking which will return false if a move is invalid
+//     Add energy cost based on tiles
     if(inp.compare("North") == 0 || inp.compare("north") == 0){
       position.x--;
       return true;
@@ -116,13 +121,14 @@ bool Player::move(string inp){//change the players position based on user input,
     }
     else{
       //buy the tool from the vendor
+      //Maybe this calls or gets called by vendor.action()
       return true;
     }
   }
   bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it
     bool found = false;
     for(int i = 0; i < TOOLCOUNT; i++){
-      if(tools[i] == tool)
+      if(tools[i].compare(tool) == 0)
         found = true;
     }
     return found;

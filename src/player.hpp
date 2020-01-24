@@ -2,6 +2,8 @@
  * Auth:Carlos Sotello
  * Desc: This is the header file for the player class which stores the users position and handles their movement and acitons.
  */
+#ifndef FRUPALGAME_SRC_PLAYER_HPP_INCLUDED
+#define FRUPALGAME_SRC_PLAYER_HPP_INCLUDED
 
 #include<iostream>
 #include<cstring>
@@ -66,3 +68,4 @@ private:
   string name;
   string tools[TOOLCOUNT];
 };
+#endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

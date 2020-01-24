@@ -50,7 +50,7 @@ void Player::setMoney(int money){
 void Player::setEnergy(int energy){
   this->energy = energy;
 }
-void Actor::setPos(int x, int y){
+void Player::setPos(int x, int y){
   position.x = x;
   position.y = y;
 }
@@ -65,9 +65,9 @@ int Player::getEnergy(){
 string Player::getName(){
   return name;
 }
-/*Pos Player::getPos(){
+Pos Player::getPos(){
   return position;
-}*/
+}
 
 void Player::action(){//player action takes user input and calls move or buy
   string inp;

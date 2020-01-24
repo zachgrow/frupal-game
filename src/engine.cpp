@@ -59,12 +59,25 @@ screenHeight(50)
 
 void GameEngine::loop()
 {
-	// Fetch player action
-	// Perform action
-	// Write result
-//	auto player_pos = player.getPos();
-	gui.update();
-	gui.render();
+	// BLT display explicitly requires an initial call to _refresh() prior to
+	// displaying anything onscreen
+	terminal_refresh();
+	// TK_CLOSE == true when the terminal window is closed
+	while (terminal_peek() != TK_CLOSE) { // _peek does not block if false (unlike _read)
+		// Fetch player action
+		if (terminal_has_input()) { // Is there control input waiting?
+			// Perform action
+			// Parse the command input by reading it from terminal_
+			int inputKey = terminal_read();
+			if (inputKey == TK_Q) {
+				// Press Q to quit
+				break;
+			}
+		}
+		// Write result
+		gui.update();
+		gui.render();
+	};
 }
 
 bool GameEngine::initialize(const std::string& configFile)

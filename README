@@ -20,3 +20,63 @@ Colors for messages and glyphs may be specified in one of three ways:
 	- as a comma-separated RGB string, R,G,B or A,R,G,B
 	128,255,255,0 = brown
 
+INPUT HANDLING
+(this info summarized from http://foo.wyrd.name/en:bearlibterminal:reference:input )
+In addition to the terminal output, BearLibTerminal will handle the keyboard
+input and associated events.
+HANDLING INPUT
+int terminal_has_input();
+	Returns a boolean value indicating whether input is waiting to be processed.
+int terminal_read();
+	Returns the next event from the input queue. If there are no more events in the queue, _read will block (wait) for an event to occur.
+int terminal_peek();
+	As with _read(), but does not remove the event from the queue or block if the queue is empty (returns 0 instead).
+
+CHECKING STATE
+int terminal_state(int slot);
+	Returns the current value of the state slot.
+int terminal_check(int slot);
+	Returns a boolean value that corresponds to the value of the state slot.
+
+Shortlist of States and Events:
+-------------------------------
+Keyboard inputs:
+EVENT: TRUE if the corresponding key was pressed
+STATE: current state of the key (see website info on input queue for details)
+
+TK_A ... TK_Z
+TK_0 ... TK_9
+TK_F1 ... TK_F12
+TK_SPACE
+TK_MINUS
+TK_EQUALS
+TK_RETURN
+TK_LBRACKET
+TK_RBRACKET
+TK_BACKSLASH
+TK_SEMICOLON
+TK_BACKSPACE
+(etc)
+
+Mouse inputs:
+(As of this writing (01/24/2020), mouse input needs to be enabled via the BLT configuration string before it can be detected.)
+EVENT: TRUE if corresponding button was pressed
+STATE: current state of the button
+TK_MOUSE_LEFT
+TK_MOUSE_RIGHT
+TK_MOUSE MIDDLE
+TK_MOUSE_X1
+TK_MOUSE_X2
+TK_MOUSE_MOVE evaluates TRUE if the mouse cursor has changed position by at least one cell
+TK_MOUSE_X	x-coordinate of cursor in terms of terminal cells
+TK_MOUSE_Y	y-coordinate of cursor in terms of terminal cells
+TK_MOUSE_PIXEL_X x-coordinate of mouse cursor in pixels
+TK_MOUSE_PIXEL_Y y-coordinate of mouse cursor in pixel
+TK_MOUSE_CLICKS	Number of fast consecutive clicks (ie single vs double-click)
+
+Terminal properties:
+TK_WIDTH	Width of terminal in cells
+TK_HEIGHT	Height of terminal in cells
+TK_EVENT	Code of the last dequeued input event (ie last keypress)
+
+

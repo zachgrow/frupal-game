@@ -25,6 +25,8 @@ public:
   void setPos(int x, int y);
 
 private:
+  Pos position;
+  string tools[TOOLCOUNT];
 };
 
 class Vendor : public Actor{

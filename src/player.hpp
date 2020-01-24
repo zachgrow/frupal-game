@@ -12,12 +12,18 @@ const int TOOLCOUNT = 5;//global used for size of players tool array
 
 using namespace std;
 
-struct Pos{ int x; int y;};
+struct Pos{
+  int x;
+  int y;
+  bool operator==(const Pos & other);//compare two positions(player and vendor)
+};
 
 class Actor{//actor class acts as base class for player and vendor
 public:
   virtual void action() = 0;
+
 private:
+
 };
 
 class Vendor : public Actor{
@@ -25,7 +31,8 @@ public:
   Vendor();
   void action();
 private:
-
+  Pos position;
+  string tools[TOOLCOUNT];
 };
 
 

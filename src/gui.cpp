@@ -207,7 +207,6 @@ void GameGUI::drawVerticalLine(unsigned int x, unsigned int y, int length) {
 void GameGUI::testBLT() {
 	// Debugging function to assist with checking BearLibTerminal functions
 	// try printing something to the screen and wait until the window is closed
-	terminal_print(1, 1, "Hello, world!");
+	terminal_print(1, 1, "Press Q or Alt+F4 to exit.");
 	terminal_refresh();
-	while (terminal_read() != TK_CLOSE);
 }

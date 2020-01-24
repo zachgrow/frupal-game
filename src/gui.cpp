@@ -92,7 +92,23 @@ void terminal_delay(int interval); // Suspend execution for time in milliseconds
 color_t color_from_name(name); // returns numeric value of specified color
 color_t color_from_argb(A, R, G, B); // as _from_name, but with ARGB values
 */
-
+/* *** The GUI Model Diagram
+  |<-     w          ->|       POINT  COORDS
+- 0------ ... -4- ... -2         0     0, 0
+^ |(0,0)       |       |         1     i, j
+| |   MAP      | S     |         2     i, 0
+h |            |  T    |         3     0, j
+| 5--    ...  -6   A   |         4     (i-18), 0
+v |  MESSAGES  |    T  |         5     0, (j-10)
+- 3-          -7-     -1         6     ([4].x), ([5].y)
+                        (i, j)   7     ([4].x), j
+BOUNDING LIMITS
+The map's minimum size is 20x20
+The viewport's minimum size is 40x20 (to allow 40 width for message output)
+The stat panel's minimum width is 18
+The terminal window's minimum size is 60x42
+The maximum width and height are supplied by GameEngine on GUI creation
+*/
 GameGUI::GameGUI() {
 	// default constructor
 	// Need to decide on some default terminal dimensions?
@@ -100,7 +116,9 @@ GameGUI::GameGUI() {
 }
 GameGUI::GameGUI(unsigned int maxWidth, unsigned int maxHeight) :
 screenWidth(maxWidth),
-screenHeight(maxHeight)
+screenHeight(maxHeight),
+statPanelWidth(36),
+messagePanelHeight(10)
 {
 	// Specific constructor
 }
@@ -119,8 +137,72 @@ void GameGUI::update() {
 }
 void GameGUI::render() {
 	// draws the interface onto the screen
-//	testBLT();
+	// -- can use terminal_crop to set scene/layer sizes?
+	// -- need some helper funcs to wrap around BLT's print funcs
+	// -- need some line-drawing methods
+	drawGUIBoxes();
+	// drawMapView
+	// writeMessageLog
+	// drawStatPanel
+	testBLT();
 	terminal_refresh(); // Tell BLT to go ahead and update the display
+}
+void GameGUI::drawGUIBoxes() {
+	// Handles the line-drawing methods to paint the interface borders
+	// METHOD
+	// Draw the long lines that cross the screen
+	unsigned int xMaximum = screenWidth - 1;
+	unsigned int yMaximum = screenHeight - 1;
+	clog << "screenWidth: " << screenWidth << endl;
+	clog << "screenHeight: " << screenHeight << endl;
+	clog << "xMax: " << xMaximum << endl;
+	clog << "yMax: " << yMaximum << endl;
+	drawHorizontalLine(0, 0, screenWidth);
+	drawHorizontalLine(0, (yMaximum - messagePanelHeight), (screenWidth - statPanelWidth));
+	drawHorizontalLine(0, yMaximum, screenWidth);
+	drawVerticalLine(0, 0, screenHeight);
+	drawVerticalLine((xMaximum - statPanelWidth), 0, screenHeight);
+	drawVerticalLine(xMaximum, 0, screenHeight);
+	// Draw the corners of the boxes by putting chars at those locations
+	// (see above diagram for the order in which the corners are drawn)
+	unsigned int innerXPosition= xMaximum - statPanelWidth;
+	unsigned int innerYPosition = yMaximum - messagePanelHeight;
+	terminal_put(0, 0, 0x250C); // top left
+	terminal_put(xMaximum, yMaximum, 0x2518); // bottom right
+	terminal_put(xMaximum, 0, 0x2510); // bottom left
+	terminal_put(0, yMaximum, 0x2514); // top right
+	terminal_put(innerXPosition, 0, 0x252C); // #4
+	terminal_put(0, innerYPosition, 0x251C); // #5
+	terminal_put(innerXPosition, innerYPosition, 0x2524); // #6
+	terminal_put(innerXPosition, yMaximum, 0x2534); // #7
+}
+void GameGUI::drawHorizontalLine(unsigned int x, unsigned int y, int length) {
+	// Draws a horizontal line from the specified point
+	// Specifying a negative length will draw the line 'backwards'
+	// If length == 0, it will fall through and do nothing
+	if (length > 0) {
+		for (int offset = 0; offset < length; offset++) {
+			terminal_put((x + offset), y, 0x2500);
+		}
+	} else if (length < 0) {
+		for (int offset = 0; offset < length; offset--) {
+			terminal_put((x + offset), y, 0x2500);
+		}
+	}
+}
+void GameGUI::drawVerticalLine(unsigned int x, unsigned int y, int length) {
+	// Draws a vertical line from the specified point
+	// Specifying a negative length will draw the line 'backwards'
+	// If length == 0, it will fall through and do nothing
+	if (length > 0) {
+		for (int offset = 0; offset < length; offset++) {
+			terminal_put(x, (y + offset), 0x2502);
+		}
+	} else if (length < 0) {
+		for (int offset = 0; offset < length; offset--) {
+			terminal_put(x, (y + offset), 0x2502);
+		}
+	}
 }
 void GameGUI::testBLT() {
 	// Debugging function to assist with checking BearLibTerminal functions

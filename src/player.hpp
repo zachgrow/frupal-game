@@ -15,13 +15,16 @@ using namespace std;
 struct Pos{
   int x;
   int y;
-  bool operator==(const Pos & other);
+  bool operator==(const Pos & other);//compare two positions(player and vendor)
 };
 
 class Actor{//actor class acts as base class for player and vendor
 public:
   virtual void action() = 0;
+  Pos getPos(){ return position;};
 private:
+  Pos position;
+  string tools[TOOLCOUNT];
 };
 
 class Vendor : public Actor{
@@ -29,7 +32,7 @@ public:
   Vendor();
   void action();
 private:
-  string tools[TOOLCOUNT];
+  //string tools[TOOLCOUNT];
 };
 
 
@@ -50,7 +53,7 @@ public:
   int getMoney();//getter functions
   int getEnergy();
   string getName();
-  Pos getPos();
+  //Pos getPos();
 
   void display();//display function mostly for testing
   bool move(string inp);//changes the players position based on character input
@@ -59,7 +62,7 @@ public:
 private:
   int money;
   int energy;
-  Pos position;
+  //Pos position;
   string name;
-  string tools[TOOLCOUNT];
+  //string tools[TOOLCOUNT];
 };

@@ -140,23 +140,36 @@ void GameGUI::render() {
 	// -- can use terminal_crop to set scene/layer sizes?
 	// -- need some helper funcs to wrap around BLT's print funcs
 	// -- need some line-drawing methods
-	drawGUIBoxes();
+	drawGUIFrame();
 	// drawMapView
 	// writeMessageLog
-	// drawStatPanel
+	displayStatPanel();
 	testBLT();
 	terminal_refresh(); // Tell BLT to go ahead and update the display
 }
-void GameGUI::drawGUIBoxes() {
+/***	Box-Drawing Char Unicode Codepoints
+		topLeft		= 0x250C,
+		topRight	= 0x2510,
+		bottomLeft	= 0x2514,
+		bottomRight	= 0x2518,
+		hLine		= 0x2500,
+		vLine		= 0x2502,
+		leftT		= 0x251C,
+		rightT		= 0x2524,
+		upperT		= 0x252C,
+		lowerT		= 0x2534,
+		cross		= 0x253C
+		*/
+void GameGUI::drawGUIFrame() {
 	// Handles the line-drawing methods to paint the interface borders
 	// METHOD
 	// Draw the long lines that cross the screen
 	unsigned int xMaximum = screenWidth - 1;
 	unsigned int yMaximum = screenHeight - 1;
-	clog << "screenWidth: " << screenWidth << endl;
-	clog << "screenHeight: " << screenHeight << endl;
-	clog << "xMax: " << xMaximum << endl;
-	clog << "yMax: " << yMaximum << endl;
+//	clog << "screenWidth: " << screenWidth << endl;
+//	clog << "screenHeight: " << screenHeight << endl;
+//	clog << "xMax: " << xMaximum << endl;
+//	clog << "yMax: " << yMaximum << endl;
 	drawHorizontalLine(0, 0, screenWidth);
 	drawHorizontalLine(0, (yMaximum - messagePanelHeight), (screenWidth - statPanelWidth));
 	drawHorizontalLine(0, yMaximum, screenWidth);
@@ -175,6 +188,46 @@ void GameGUI::drawGUIBoxes() {
 	terminal_put(0, innerYPosition, 0x251C); // #5
 	terminal_put(innerXPosition, innerYPosition, 0x2524); // #6
 	terminal_put(innerXPosition, yMaximum, 0x2534); // #7
+}
+void GameGUI::displayMap() {
+	// METHOD
+
+}
+//void GameGUI::displayStatPanel(Actor * player) {
+void GameGUI::displayStatPanel() {
+	// Displays the player's name, HP, and assorted other statistics
+	int cursorXPosition = screenWidth - statPanelWidth;
+	int cursorYPosition = 1;
+	terminal_bkcolor("black");
+	// Name
+	terminal_color("grey");
+	terminal_print(cursorXPosition, cursorYPosition, "Name:");
+	cursorXPosition += 15;
+	terminal_color("white");
+	terminal_print(cursorXPosition, cursorYPosition, "GENERIC");
+//	terminal_print(cursorXPosition, cursorYPosition, player->name);
+	cursorXPosition = screenWidth - statPanelWidth;
+	cursorYPosition++;
+	// HP: Current / Maximum
+	terminal_color("light red");
+	terminal_print(cursorXPosition, cursorYPosition, "HP:");
+	//FIXME: How to do inline realignment?
+	cursorXPosition += 15;
+	terminal_color("red");
+	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
+	cursorXPosition = screenWidth - statPanelWidth;
+	cursorYPosition++;
+	// Energy: Current / Maximum
+	terminal_color("light blue");
+	terminal_print(cursorXPosition, cursorYPosition, "Energy:");
+	cursorXPosition += 15;
+	terminal_color("blue");
+	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
+	cursorXPosition = screenWidth - statPanelWidth;
+	cursorYPosition++;
+}
+void GameGUI::displayMessageLog() {
+
 }
 void GameGUI::drawHorizontalLine(unsigned int x, unsigned int y, int length) {
 	// Draws a horizontal line from the specified point

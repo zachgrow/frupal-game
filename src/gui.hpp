@@ -20,9 +20,13 @@ class GameGUI {
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
+		// addMessage(string message); // Adds a string to the message log
 	
 	private:
-		void drawGUIBoxes();
+		void drawGUIFrame();
+		void displayMap();
+		void displayStatPanel();
+		void displayMessageLog();
 		void drawHorizontalLine(unsigned int x, unsigned int y, int length);
 		void drawVerticalLine(unsigned int x, unsigned int y, int length);
 		struct Message {
@@ -31,19 +35,6 @@ class GameGUI {
 			Message(const std::string *inputText);
 			~Message();
 		};
-/*		BoxChar	:	  int { // Lightweight (default)
-		topLeft		= 0x250C,
-		topRight	= 0x2510,
-		bottomLeft	= 0x2514,
-		bottomRight	= 0x2518,
-		hLine		= 0x2500,
-		vLine		= 0x2502,
-		leftT		= 0x251C,
-		rightT		= 0x2524,
-		upperT		= 0x252C,
-		lowerT		= 0x2534,
-		cross		= 0x253C
-		*/
 		
 		unsigned int screenWidth;
 		unsigned int screenHeight;

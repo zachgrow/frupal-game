@@ -12,6 +12,7 @@ DESC Contains definitions of the GameGUI class, which displays the game
 
 using namespace std;
 
+// **** GameGUI Methods
 /* *** A short guide to BearLibTerminal API - Jan 19 2020 (Zach)
 CALLED BY GameEngine: (ie do not call them here!)
 BLT CONFIGURATION
@@ -108,27 +109,49 @@ The viewport's minimum size is 40x20 (to allow 40 width for message output)
 The stat panel's minimum width is 18
 The terminal window's minimum size is 60x42
 The maximum width and height are supplied by GameEngine on GUI creation
-*/
-GameGUI::GameGUI() {
-	// default constructor
-	// Need to decide on some default terminal dimensions?
 
-}
-GameGUI::GameGUI(unsigned int maxWidth, unsigned int maxHeight) :
-screenWidth(maxWidth),
-screenHeight(maxHeight),
-statPanelWidth(36),
-messagePanelHeight(10)
-{
-	// Specific constructor
+LAYER MODEL
+NOTE: clear_area() affects CURRENT layer, clear() affects ALL layers!
+NOTE: Only layer 0 has a background color! All other layers have transp. bkgrnd
+255
+...
+09	GUI Elements
+08	SFX
+07	SFX
+06	SFX
+05	Actor (Upper)
+04	Actor (Middle)
+03	Actor (Lower)
+02	Map Terrain
+01	(Reserved)
+00	BACKGROUND - Reserved
+
+Each panel within the GUi will have its dimensions calculated when the game is loaded.
+This class will define some sane minimums in case the defined/calculated values are wrongly-sized.
+*/
+GameGUI::GameGUI() :
+statPanelWidthMinimum(36),
+msgPanelWidthMinimum(40),
+msgPanelHeightMinimum(10)
+{	// default constructor
+
 }
 GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize() {
-	// Sets a created GameGUI object to initial valid conditions
-
+void GameGUI::initialize(uint maxWidth, uint maxHeight) {
+	// Sets up a created GameGUI object to the runtime default configuration
+	// Assign the maximum parameters
+	windowWidth = maxWidth;
+	windowHeight = maxHeight;
+	// Calculate the dimensions of the map display
+	uint mapDisplayWidth = ((windowWidth - statPanelWidthMinimum - 3) < msgPanelWidthMinimum ? msgPanelWidthMinimum : (windowWidth - statPanelWidthMinimum - 3));
+	uint mapDisplayHeight = (windowHeight - msgPanelHeightMinimum - 3);
+	// Create the individual panel objects
+	mapDisplay.initialize(1, 1, mapDisplayWidth, mapDisplayHeight);
+	statPanel.initialize((windowWidth - statPanelWidthMinimum + 1), 1, statPanelWidthMinimum, (windowHeight - 2));
+	messageLog.initialize(2, (windowHeight - msgPanelHeightMinimum), msgPanelWidthMinimum, msgPanelHeightMinimum);
 }
 void GameGUI::update() {
 	// polls game state to see if any of the GUI elements need to change
@@ -140,11 +163,12 @@ void GameGUI::render() {
 	// -- can use terminal_crop to set scene/layer sizes?
 	// -- need some helper funcs to wrap around BLT's print funcs
 	// -- need some line-drawing methods
-	drawGUIFrame();
-	// drawMapView
-	// writeMessageLog
+	terminal_bkcolor("black"); // Set the background color
+	terminal_clear(); // Wipe everything off
+	displayMap();
+	displayMessageLog();
 	displayStatPanel();
-	testBLT();
+	drawGUIFrame();
 	terminal_refresh(); // Tell BLT to go ahead and update the display
 }
 /***	Box-Drawing Char Unicode Codepoints
@@ -164,22 +188,24 @@ void GameGUI::drawGUIFrame() {
 	// Handles the line-drawing methods to paint the interface borders
 	// METHOD
 	// Draw the long lines that cross the screen
-	unsigned int xMaximum = screenWidth - 1;
-	unsigned int yMaximum = screenHeight - 1;
-//	clog << "screenWidth: " << screenWidth << endl;
-//	clog << "screenHeight: " << screenHeight << endl;
+	uint xMaximum = windowWidth - 1;
+	uint yMaximum = windowHeight - 1;
+//	clog << "windowWidth: " << windowWidth << endl;
+//	clog << "windowHeight: " << windowHeight << endl;
 //	clog << "xMax: " << xMaximum << endl;
 //	clog << "yMax: " << yMaximum << endl;
-	drawHorizontalLine(0, 0, screenWidth);
-	drawHorizontalLine(0, (yMaximum - messagePanelHeight), (screenWidth - statPanelWidth));
-	drawHorizontalLine(0, yMaximum, screenWidth);
-	drawVerticalLine(0, 0, screenHeight);
-	drawVerticalLine((xMaximum - statPanelWidth), 0, screenHeight);
-	drawVerticalLine(xMaximum, 0, screenHeight);
+	terminal_bkcolor("black");
+	terminal_color("dark grey");
+	drawHorizontalLine(0, 0, windowWidth);
+	drawHorizontalLine(0, (yMaximum - msgPanelHeightMinimum), (windowWidth - statPanelWidthMinimum));
+	drawHorizontalLine(0, yMaximum, windowWidth);
+	drawVerticalLine(0, 0, windowHeight);
+	drawVerticalLine((xMaximum - statPanelWidthMinimum), 0, windowHeight);
+	drawVerticalLine(xMaximum, 0, windowHeight);
 	// Draw the corners of the boxes by putting chars at those locations
 	// (see above diagram for the order in which the corners are drawn)
-	unsigned int innerXPosition= xMaximum - statPanelWidth;
-	unsigned int innerYPosition = yMaximum - messagePanelHeight;
+	uint innerXPosition= xMaximum - statPanelWidthMinimum;
+	uint innerYPosition = yMaximum - msgPanelHeightMinimum;
 	terminal_put(0, 0, 0x250C); // top left
 	terminal_put(xMaximum, yMaximum, 0x2518); // bottom right
 	terminal_put(xMaximum, 0, 0x2510); // bottom left
@@ -190,23 +216,39 @@ void GameGUI::drawGUIFrame() {
 	terminal_put(innerXPosition, yMaximum, 0x2534); // #7
 }
 void GameGUI::displayMap() {
-	// METHOD
-
+	// Display the currently-explored map
+	terminal_layer(2);// Move to the Terrain layer
+	// Get the size of the map
+//	uint mapWidth = gameMap->getWidth();
+//	uint mapHeight = gameMap->getHeight();
+	uint mapWidth = 30;
+	uint mapHeight = 30;
+	int mapViewHorizontalOffset = (mapDisplay.width - mapWidth) / 2;
+	int mapViewVerticalOffset = (mapDisplay.height - mapHeight) / 2;
+	int cursorXPosition = mapViewHorizontalOffset + mapDisplay.xOrigin;
+	int cursorYPosition = mapViewVerticalOffset + mapDisplay.yOrigin;
+	// Display a test pattern for now
+	terminal_color("darker green");
+	for (uint echs = 0; echs < mapWidth; echs++) {
+		for (uint whye = 0; whye < mapHeight; whye++) {
+			terminal_put(cursorXPosition + echs, cursorYPosition + whye, '+');
+		}
+	}
 }
-//void GameGUI::displayStatPanel(Actor * player) {
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics
-	int cursorXPosition = screenWidth - statPanelWidth;
-	int cursorYPosition = 1;
+	// FIXME: update to use the individual panel dimensions
+	int cursorXPosition = statPanel.xOrigin;
+	int cursorYPosition = statPanel.yOrigin;
 	terminal_bkcolor("black");
 	// Name
 	terminal_color("grey");
 	terminal_print(cursorXPosition, cursorYPosition, "Name:");
 	cursorXPosition += 15;
 	terminal_color("white");
-	terminal_print(cursorXPosition, cursorYPosition, "GENERIC");
 //	terminal_print(cursorXPosition, cursorYPosition, player->name);
-	cursorXPosition = screenWidth - statPanelWidth;
+	terminal_print(cursorXPosition, cursorYPosition, "GENERIC");
+	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 	// HP: Current / Maximum
 	terminal_color("light red");
@@ -215,7 +257,7 @@ void GameGUI::displayStatPanel() {
 	cursorXPosition += 15;
 	terminal_color("red");
 	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
-	cursorXPosition = screenWidth - statPanelWidth;
+	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 	// Energy: Current / Maximum
 	terminal_color("light blue");
@@ -223,11 +265,18 @@ void GameGUI::displayStatPanel() {
 	cursorXPosition += 15;
 	terminal_color("blue");
 	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
-	cursorXPosition = screenWidth - statPanelWidth;
+	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 }
 void GameGUI::displayMessageLog() {
-
+	// Prints the message log onto the screen
+	// Obtain the starting position and set some defaults
+	int cursorXPosition = messageLog.xOrigin;
+	int cursorYPosition = messageLog.yOrigin;
+	terminal_color("white"); // Default text color, can be overridden inline
+	// Display some example text for now
+	terminal_print(cursorXPosition, cursorYPosition++, "Hello FRUPAL!");
+	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
 }
 void GameGUI::drawHorizontalLine(unsigned int x, unsigned int y, int length) {
 	// Draws a horizontal line from the specified point
@@ -263,3 +312,23 @@ void GameGUI::testBLT() {
 	terminal_print(1, 1, "Press Q or Alt+F4 to exit.");
 	terminal_refresh();
 }
+// **** GUIPanel Methods
+void GameGUI::GUIPanel::initialize(uint inputX, uint inputY, uint inputWidth, uint inputHeight) {
+	xOrigin = inputX;
+	yOrigin = inputY;
+	width = inputWidth;
+	height = inputHeight;
+}
+/*
+GameGUI::GUIPanel::GUIPanel(uint inputX, uint inputY, uint inputWidth, uint inputHeight) :
+xOrigin(inputX),
+yOrigin(inputY),
+width(inputWidth),
+height(inputHeight)
+{	// Constructs a GUIPanel from the supplied values
+	
+	// x and y refer to the upper-left origin point of the panel
+	// width and height are specified in number of terminal character spaces
+
+}
+*/

@@ -11,12 +11,13 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 #include <string>
 #include <vector>
 
+typedef unsigned int uint;
+
 class GameGUI {
 	public:
 		GameGUI();
-		GameGUI(unsigned int maxWidth, unsigned int maxHeight);
 		~GameGUI();
-		void initialize(); // Initializes a GameGUI to initial parameters
+		void initialize(uint maxWidth, uint maxHeight); // Initializes a GameGUI to initial parameters
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
@@ -27,8 +28,16 @@ class GameGUI {
 		void displayMap();
 		void displayStatPanel();
 		void displayMessageLog();
-		void drawHorizontalLine(unsigned int x, unsigned int y, int length);
-		void drawVerticalLine(unsigned int x, unsigned int y, int length);
+		void drawHorizontalLine(uint x, uint y, int length);
+		void drawVerticalLine(uint x, uint y, int length);
+		struct GUIPanel {
+			uint xOrigin;
+			uint yOrigin;
+			uint width;
+			uint height;
+			// background color?
+			void initialize(uint inputX, uint inputY, uint inputWidth, uint inputHeight);
+		} mapDisplay, statPanel, messageLog;
 		struct Message {
 			std::string messageText;
 			// text color?
@@ -36,12 +45,13 @@ class GameGUI {
 			~Message();
 		};
 		
-		unsigned int screenWidth;
-		unsigned int screenHeight;
-		std::string fontPath;
+		// would really prefer static pointers to data input sources...
+		uint windowWidth;
+		uint windowHeight;
+		uint statPanelWidthMinimum;
+		uint msgPanelWidthMinimum;
+		uint msgPanelHeightMinimum;
 		// need a list of Messages for the message log
-		unsigned int statPanelWidth;
-		unsigned int messagePanelHeight;
 };
 
 #endif // FRUPALGAME_SRC_GUI_HPP_INCLUDED

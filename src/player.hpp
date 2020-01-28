@@ -11,7 +11,7 @@
 
 //Update when tools are implemented
 const int TOOLCOUNT = 5;//global used for size of players tool array
-
+const int MAX = 20;
 using namespace std;
 
 struct Pos{

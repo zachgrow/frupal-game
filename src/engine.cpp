@@ -20,10 +20,6 @@ int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
 	if (argc >= 2) {
-		// Parse the command line options
-		// need to invent some command line options!
-		std::cerr << "*** No command line options are available at this time." << std::endl;
-		return 1; // Exit the program by throwing a generic error code
 		if (*argv[1] == '-') {
 			// Parse the command line options
 			// need to invent some command line options!
@@ -160,7 +156,7 @@ std::string GameEngine::generateBLTConfigString()
 {
 	// Generates a valid BearLibTerminal configuration string from our config
 	// Set the window title
-	std::string windowTitleOption="title='FRUPAL'";
+	std::string windowTitleOption="title=\'FRUPAL\'";
 	// Set the window dimensions
 	std::string windowSizeOption="size=";
 	windowSizeOption.append(to_string(screenWidth));

@@ -18,11 +18,7 @@ struct Pos{
   int x;
   int y;
   bool operator==(const Pos & other);//compare two positions(player and vendor)
-<<<<<<< HEAD
   friend ostream& operator<<(ostream& out, const Pos &pos);
-=======
-  ostream& operator<<(ostream& out, const Pos &pos);
->>>>>>> 453952b093c65c88a7b5e6407434b60a87cfc853
 };
 
 class Actor{//actor class acts as base class for player and vendor

@@ -17,7 +17,6 @@ void Vendor::action(){}
 Player::Player():money(0),energy(0){//default constructor
   position.x = 0;
   position.y = 0;
-  tools = new string[TOOLCOUNT];
 }
 
 Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy){//constructor to set given values

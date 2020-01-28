@@ -9,27 +9,60 @@ DESC Contains implementation of game engine as well as main()
 #include "tile.hpp"
 #include "player.hpp"
 #include "engine.hpp"
+#include <cstdlib>
+#include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
 #include <sstream>		// Object for conversion from std::string to input stream
 #include <fstream>		// Simple file input/output
 
-//#include <cstdio>
-//#include <vector>
+#define MAP_DIM 50
+#define HELP_INFO "Pass --help for help\n" \
+				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
+				  "      -H integer for health\n" \
+				  "      -M integer for money\n"
 
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
+	int health = -1;
+	int money = -1;
+	bool debug_mode = 0;
 	if (argc >= 2) {
-		if (*argv[1] == '-') {
-			// Parse the command line options
-			// need to invent some command line options!
-			std::cerr << "*** No command line options are available at this time.\n";
-			return 1; // Exit the program by throwing a generic error code
-		} else {
-			configFilePath = argv[1];
+		while (*argv != nullptr) {
+			if (std::strcmp(*argv, "--help") == 0) {
+				std::cout << HELP_INFO;
+				return EXIT_SUCCESS;
+			}
+			else if (std::strcmp(*argv, "--DEBUG_MODE") == 0) {
+				debug_mode = true;
+			}
+			else if (**argv == '-') {
+				switch ((*argv)[1]) {
+					case 'H':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						health = atoi(*argv);
+						break;
+					case 'M':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						money = atoi(*argv);
+						break;
+					default:
+						std::cerr << "Unknown argument exiting.\n";
+						return EXIT_FAILURE;
+				}
+			} else {
+				configFilePath = argv[1];
+			}
+			argv++; // Move to next arg
 		}
 	}
-	GameEngine engine;
+	GameEngine engine(health, money, debug_mode);
 	if (!engine.initialize(configFilePath)) { // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
 		std::cerr << "*** There was a problem loading the configuration." << std::endl;
@@ -44,13 +77,18 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine() noexcept :
+GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
 gameState(STARTUP),
+debug_mode(debug_mode),
 screenWidth(80),
-screenHeight(50)
+screenHeight(50),
+player(health, money, "")
 {
 	// The default constructor
 	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+	map.resize(MAP_DIM);
+	for (auto& i : map)
+		i.resize(MAP_DIM);
 }
 
 void GameEngine::loop()
@@ -97,8 +135,10 @@ bool GameEngine::initialize(const std::string& configFile)
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
-	std::random_device rd;
-	randomEng.seed(rd());
+	if (!debug_mode) {
+		std::random_device rd;
+		randomEng.seed(rd());
+	}
 
 	gameState = RUNNING;
 

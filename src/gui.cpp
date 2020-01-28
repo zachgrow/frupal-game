@@ -140,8 +140,12 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight) {
+//void GameGUI::initialize(uint maxWidth, uint maxHeight) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr) {
 	// Sets up a created GameGUI object to the runtime default configuration
+	// Obtain pointers to the game objects we want to display
+	playerObject = playerPtr;
+//	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
 	windowHeight = maxHeight;
@@ -219,8 +223,8 @@ void GameGUI::displayMap() {
 	// Display the currently-explored map
 	terminal_layer(2);// Move to the Terrain layer
 	// Get the size of the map
-//	uint mapWidth = gameMap->getWidth();
-//	uint mapHeight = gameMap->getHeight();
+//	uint mapWidth = worldMap->getWidth();
+//	uint mapHeight = worldMap->getHeight();
 	uint mapWidth = 30;
 	uint mapHeight = 30;
 	int mapViewHorizontalOffset = (mapDisplay.width - mapWidth) / 2;
@@ -244,27 +248,27 @@ void GameGUI::displayStatPanel() {
 	// Name
 	terminal_color("grey");
 	terminal_print(cursorXPosition, cursorYPosition, "Name:");
-	cursorXPosition += 15;
+	cursorXPosition += 16;
 	terminal_color("white");
-//	terminal_print(cursorXPosition, cursorYPosition, player->name);
-	terminal_print(cursorXPosition, cursorYPosition, "GENERIC");
+//	terminal_print(cursorXPosition, cursorYPosition, "GENERIC");
+	terminal_print(cursorXPosition, cursorYPosition, (playerObject->getName()).c_str());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 	// HP: Current / Maximum
-	terminal_color("light red");
-	terminal_print(cursorXPosition, cursorYPosition, "HP:");
+	terminal_color("light yellow");
+	terminal_print(cursorXPosition, cursorYPosition, "$$$$:");
 	//FIXME: How to do inline realignment?
-	cursorXPosition += 15;
-	terminal_color("red");
-	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
+	cursorXPosition += 16;
+	terminal_color("yellow");
+	terminal_printf(cursorXPosition, cursorYPosition, "$ %d", playerObject->getMoney());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 	// Energy: Current / Maximum
 	terminal_color("light blue");
 	terminal_print(cursorXPosition, cursorYPosition, "Energy:");
-	cursorXPosition += 15;
+	cursorXPosition += 16;
 	terminal_color("blue");
-	terminal_print(cursorXPosition, cursorYPosition, "CR/MX");
+	terminal_printf(cursorXPosition, cursorYPosition, "E %d", playerObject->getEnergy());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
 }

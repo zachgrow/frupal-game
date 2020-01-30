@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 	int money = -1;
 	bool debug_mode = 0;
 	if (argc >= 2) {
+		argv++;
 		while (*argv != nullptr) {
 			if (std::strcmp(*argv, "--help") == 0) {
 				std::cout << HELP_INFO;

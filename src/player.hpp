@@ -9,12 +9,14 @@
 #include<cstring>
 #include<cmath>
 #include<fstream>
+#include<set>
+#include<string>
 //Update when tools are implemented
 const int TOOLCOUNT = 5;//global used for size of players tool array
 const int MAX = 20;//global used for bounds checking
 const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
-
+typedef std::set<std::pair<std::string,int>> tools;
 struct Pos{
   int x;
   int y;
@@ -39,7 +41,7 @@ public:
 private:
   Pos position;
   //string tools[TOOLCOUNT];
-  set<pair<string,int>> tools;
+  tools list;
 };
 
 

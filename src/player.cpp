@@ -14,7 +14,7 @@ ostream& operator<<(ostream & out, const Pos & pos){
 Vendor::Vendor(){}
 void Vendor::action(){}
 void Vendor::displayTools(){
-  for(auto it=tools.begin(),it!=tools.end();++it){
+  for(auto it=list.begin(),it!=list.end();++it){
     cout << "Tool: " << it->first << " Cost: " << it->second << endl;
   }
 }
@@ -26,13 +26,16 @@ void Vendor::initialize(string file){
     return;
   }
   else{
-    string line;
-    while(getline(inFile,line)){
-      int mid = line.find(DEL);
-      string tool = line.substr(0,mid);
-      int cost = stoi(line.substr(mid,line.length()-mid));
-      tools.insert(make_pair(tool,cost));
-    }
+    try{
+      string line;
+      while(getline(inFile,line)){
+        int mid = line.find(DEL);
+        string tool = line.substr(0,mid);
+        int cost = stoi(line.substr(mid+1,line.length()-mid));
+        list.insert(make_pair(tool,cost));
+      }
+    }catch(invalid_agument &e){ cout << "Bad input" << endl;}
+    catch(out_of_range &e){cout << "out of range" << endl;}
   }
 }
 

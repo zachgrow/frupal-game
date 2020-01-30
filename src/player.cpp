@@ -7,12 +7,34 @@ bool Pos::operator==(const Pos & other){
   return x == other.x && y == other.y;
 }
 ostream& operator<<(ostream & out, const Pos & pos){
-  out << pos.x << ' ' << pos.y << endl;
+  out << "Current position[" << pos.x << ',' << pos.y << ']' << endl;
   return out;
 }
 
 Vendor::Vendor(){}
 void Vendor::action(){}
+void Vendor::displayTools(){
+  for(auto it=tools.begin(),it!=tools.end();++it){
+    cout << "Tool: " << it->first << " Cost: " << it->second << endl;
+  }
+}
+void Vendor::initialize(string file){
+  ifstream inFile;
+  inFile.open(file);
+  if(!inFile){
+    cerr << "Could not open file" << endl;
+    return;
+  }
+  else{
+    string line;
+    while(getline(inFile,line)){
+      int mid = line.find(DEL);
+      string tool = line.substr(0,mid);
+      int cost = stoi(line.substr(mid,line.length()-mid));
+      tools.insert(make_pair(tool,cost));
+    }
+  }
+}
 
 Player::Player():money(0),energy(0){//default constructor
   position.x = 0;

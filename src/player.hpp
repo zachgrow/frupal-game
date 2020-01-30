@@ -8,10 +8,11 @@
 #include<iostream>
 #include<cstring>
 #include<cmath>
-
+#include<fstream>
 //Update when tools are implemented
 const int TOOLCOUNT = 5;//global used for size of players tool array
-const int MAX = 20;
+const int MAX = 20;//global used for bounds checking
+const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
 
 struct Pos{
@@ -33,9 +34,12 @@ class Vendor : public Actor{
 public:
   Vendor();
   void action();
+  void initialize(string file);
+  void displayTools();
 private:
   Pos position;
-  string tools[TOOLCOUNT];
+  //string tools[TOOLCOUNT];
+  set<pair<string,int>> tools;
 };
 
 

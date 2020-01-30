@@ -66,11 +66,11 @@ int main(int argc, char** argv)
 	GameEngine engine(health, money, debug_mode);
 	if (!engine.initialize(configFilePath)) { // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
-		std::cerr << "*** There was a problem loading the configuration." << std::endl;
-		std::cerr << "*** The game will now exit." << std::endl;
+		std::cerr << "*** There was a problem loading the configuration.\n";
+		std::cerr << "*** The game will now exit.\n";
 		return 5; // Exit the program and throw a (different) error code
 	}
-	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
+	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
 	// Invoke the game loop
 	engine.loop();
 	// WHEN the player has closed the game:
@@ -127,7 +127,7 @@ bool GameEngine::initialize(const std::string& configFile)
 
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
-		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
 	}
 
@@ -158,7 +158,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 	std::ifstream config(inputFile); // Open the configuration file
 	if (!config) { // Was the config file opened successfully?
 		// If not, display an error and exit
-		std::cerr << "*** The configuration file could not be opened." << std::endl;
+		std::cerr << "*** The configuration file could not be opened." << "\n";
 		return false;
 	}
 	std::stringstream lineStream; // Allows parsing single lines by chars
@@ -185,7 +185,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 			} else if (configKey == "fontSize") {
 				terminalFontSize = std::stoul(configValue, nullptr, 0);
 			} else { // No matching config key was found!
-				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << std::endl;
+				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << "\n";
 			}
 		}
 	}

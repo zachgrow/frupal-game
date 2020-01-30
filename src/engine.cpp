@@ -108,6 +108,9 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
+
+			if (debug_mode)
+				print_debug_info();
 		}
 		// Write result
 		gui.update();
@@ -223,4 +226,41 @@ std::string GameEngine::generateBLTConfigString()
 	}
 	fullOptionString.append(";"); // Terminating character
 	return fullOptionString;
+}
+
+#if 0
+static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
+{
+	try {
+		return tiles.at(x).at(y);
+	}
+	catch (...) {
+		// This should be an invalid state.
+		return Tile();
+	}
+}
+#endif
+
+void GameEngine::print_debug_info() const
+{
+	// If debug_mode print debug info
+	// as comma deliminated list.
+	// First player health, player money,
+	// the eight tiles around player,
+	// and the tile under the player.
+	// maybe more?
+
+	// Visible tiles
+	// Need to figure out contents of tile class.
+#if 0
+	{
+		auto position = player.getPos();
+		auto center_pos  = tile_at(map, position.x, position.y);
+		auto upper_left  = tile_at(map, position.x+1, position.y+1);
+		auto upper       = tile_at(map, position.x, position.y+1);
+		auto upper_right = tile_at(map, position.x+1, position.y+1);
+		auto left        = tile_at(map, position.x+1, position.y);
+		auto right
+	}
+#endif
 }

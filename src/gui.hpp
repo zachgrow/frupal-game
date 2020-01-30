@@ -12,52 +12,54 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 #include <string>
 #include <vector>
 
-typedef unsigned int uint;
-
 class GameGUI {
-	public:
-		GameGUI();
-		~GameGUI();
-		// Initializes a GameGUI to initial state
-//		void initialize(uint maxWidth, uint maxHeight, Player* playerObject, GameMap worldMap);
-		void initialize(uint maxWidth, uint maxHeight, Player* playerObject);
-		void update(); // Polls the game state for changes in displayed info
-		void render(); // Draws the interface onto the screen
-		void testBLT(); // BearLibTerminal debugging/test function
-		// addMessage(string message); // Adds a string to the message log
-
 	private:
 		void drawGUIFrame();
 		void displayMap();
 		void displayStatPanel();
 		void displayMessageLog();
-		void drawHorizontalLine(uint x, uint y, int length);
-		void drawVerticalLine(uint x, uint y, int length);
+		void drawHorizontalLine(uint x, unsigned int y, int length);
+		void drawVerticalLine(uint x, unsigned int y, int length);
 		struct GUIPanel {
-			uint xOrigin;
-			uint yOrigin;
-			uint width;
-			uint height;
+			unsigned int xOrigin;
+			unsigned int yOrigin;
+			unsigned int width;
+			unsigned int height;
 			// background color?
-			void initialize(uint inputX, uint inputY, uint inputWidth, uint inputHeight);
+			void initialize(unsigned int inputX, unsigned int inputY, unsigned int inputWidth, unsigned int inputHeight);
 		} mapDisplay, statPanel, messageLog;
-		struct Message {
-			std::string messageText;
-			// text color?
-			Message(const std::string *inputText);
-			~Message();
+		struct MessageLog { // semantic wrapper around the message log object
+			std::vector<std::string> messageList;
+			int add(std::string newMessage); // Returns # of messages in log
+			uint size() { return messageList.size(); }
+			// probably need some kind of log culling function(s)
+			// NOTE: the message log is structured as a STACK, ie LIFO
 		};
 
 		// Pointers for data retrieval
 		Player* playerObject;
 //		GameMap* worldMap;
 		// Internal geometry information
-		uint windowWidth;
-		uint windowHeight;
-		uint statPanelWidthMinimum;
-		uint msgPanelWidthMinimum;
-		uint msgPanelHeightMinimum;
+		unsigned int windowWidth;
+		unsigned int windowHeight;
+		unsigned int statPanelWidthMinimum;
+		unsigned int msgPanelWidthMinimum;
+		unsigned int msgPanelHeightMinimum;
 		// need a list of Messages for the message log
+
+	public:
+		GameGUI();
+		~GameGUI();
+		// Initializes a GameGUI to initial state
+//		void initialize(uint maxWidth, uint maxHeight, Player* playerObject, GameMap worldMap);
+		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player* playerObject);
+		void update(); // Polls the game state for changes in displayed info
+		void render(); // Draws the interface onto the screen
+		void testBLT(); // BearLibTerminal debugging/test function
+		void testMessageLog();
+		// addMessage(string message); // Adds a string to the message log
+		MessageLog globalMsgLog;
+
 };
 
 #endif // FRUPALGAME_SRC_GUI_HPP_INCLUDED

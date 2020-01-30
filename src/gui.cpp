@@ -7,6 +7,7 @@ DESC Contains definitions of the GameGUI class, which displays the game
 
 #include "BearLibTerminal.h"
 #include "gui.hpp"
+#include "player.hpp"
 #include <iostream>
 #include <string>
 
@@ -238,6 +239,12 @@ void GameGUI::displayMap() {
 			terminal_put(cursorXPosition + echs, cursorYPosition + whye, '+');
 		}
 	}
+	// Display the player's location within the map
+	// Need to figure out some map offsets once that spec is available
+	terminal_layer(4);
+	terminal_color("lightest blue");
+	Pos playerPosn = playerObject->getPos();
+	terminal_put(playerPosn.x, playerPosn.y, '@');
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics
@@ -279,9 +286,15 @@ void GameGUI::displayMessageLog() {
 	int cursorYPosition = messageLog.yOrigin;
 	terminal_color("white"); // Default text color, can be overridden inline
 	// Display some example text for now
-	terminal_print(cursorXPosition, cursorYPosition++, "Hello FRUPAL!");
-	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
+//	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
+if (globalMsgLog.size() > 0) {
+		vector<string>::reverse_iterator msgLogIter = globalMsgLog.messageList.rbegin();
+		for (msgLogIter; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
+			terminal_print(cursorXPosition, cursorYPosition++, (*msgLogIter).c_str());
+		}
+	}
 }
+// **** Window Drawing Methods
 void GameGUI::drawHorizontalLine(unsigned int x, unsigned int y, int length) {
 	// Draws a horizontal line from the specified point
 	// Specifying a negative length will draw the line 'backwards'
@@ -316,6 +329,16 @@ void GameGUI::testBLT() {
 	terminal_print(1, 1, "Press Q or Alt+F4 to exit.");
 	terminal_refresh();
 }
+void GameGUI::testMessageLog() {
+	// Test function for the message log
+	string testMessage = "Log size: ";
+	testMessage.append(to_string(globalMsgLog.size() + 1));
+	testMessage.append("\n");
+	globalMsgLog.add(testMessage);
+//	globalMsgLog.add("Press Q or Alt+F4 to exit.");
+//	globalMsgLog.add("Or don't, it's not my job to tell you what to do.");
+
+}
 // **** GUIPanel Methods
 void GameGUI::GUIPanel::initialize(uint inputX, uint inputY, uint inputWidth, uint inputHeight) {
 	xOrigin = inputX;
@@ -336,3 +359,9 @@ height(inputHeight)
 
 }
 */
+// **** MessageLog Methods
+int GameGUI::MessageLog::add(string newMessage) {
+	// Adds the input string to the message log list
+	messageList.push_back(newMessage);
+	return messageList.size();
+}

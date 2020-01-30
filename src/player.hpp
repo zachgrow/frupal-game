@@ -56,7 +56,7 @@ public:
   int getMoney();//getter functions
   int getEnergy();
   string getName();
-  Pos getPos();
+  const Pos getPos();
 
   void display();//display function mostly for testing
   bool move(string inp);//changes the players position based on character input

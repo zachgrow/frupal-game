@@ -69,7 +69,7 @@ int Player::getEnergy(){
 string Player::getName(){
   return name;
 }
-Pos Player::getPos(){
+const Pos Player::getPos(){
   return position;
 }
 

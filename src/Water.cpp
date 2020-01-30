@@ -21,8 +21,3 @@ void Water::display()
     std::cout << this->c;
     return;
 }
-
-int Water::getColor()
-{
-    return 0;
-}

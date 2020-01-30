@@ -25,7 +25,3 @@ char Grass::getChar()
 {
     return this->c;
 }
-int Grass::getColor()
-{
-    return 0;
-}

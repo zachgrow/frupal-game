@@ -11,60 +11,69 @@ DESC Contains implementation of game engine as well as main()
 #include "engine.hpp"
 #include <cstdlib>
 #include <cstring>
-#include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
-#include <sstream>		// Object for conversion from std::string to input stream
-#include <fstream>		// Simple file input/output
+#include <iostream> // Provides access to stdin/stdout (cout, cerr, etc)
+#include <sstream>  // Object for conversion from std::string to input stream
+#include <fstream>  // Simple file input/output
 
 #define MAP_DIM 50
-#define HELP_INFO "Pass --help for help\n" \
+#define HELP_INFO "Pass --help for help\n"                                 \
 				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
-				  "      -H integer for health\n" \
+				  "      -H integer for health\n"                          \
 				  "      -M integer for money\n"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	std::string configFilePath = "config.txt";
 	int health = -1;
 	int money = -1;
 	bool debug_mode = 0;
-	if (argc >= 2) {
+	if (argc >= 2)
+	{
 		argv++;
-		while (*argv != nullptr) {
-			if (std::strcmp(*argv, "--help") == 0) {
+		while (*argv != nullptr)
+		{
+			if (std::strcmp(*argv, "--help") == 0)
+			{
 				std::cout << HELP_INFO;
 				return EXIT_SUCCESS;
 			}
-			else if (std::strcmp(*argv, "--DEBUG_MODE") == 0) {
+			else if (std::strcmp(*argv, "--DEBUG_MODE") == 0)
+			{
 				debug_mode = true;
 			}
-			else if (**argv == '-') {
-				switch ((*argv)[1]) {
-					case 'H':
-						if (std::string(*argv).size() == 2)
-							(*argv)++;
-						else
-							argv++;
-						health = atoi(*argv);
-						break;
-					case 'M':
-						if (std::string(*argv).size() == 2)
-							(*argv)++;
-						else
-							argv++;
-						money = atoi(*argv);
-						break;
-					default:
-						std::cerr << "Unknown argument exiting.\n";
-						return EXIT_FAILURE;
+			else if (**argv == '-')
+			{
+				switch ((*argv)[1])
+				{
+				case 'H':
+					if (std::string(*argv).size() == 2)
+						(*argv)++;
+					else
+						argv++;
+					health = atoi(*argv);
+					break;
+				case 'M':
+					if (std::string(*argv).size() == 2)
+						(*argv)++;
+					else
+						argv++;
+					money = atoi(*argv);
+					break;
+				default:
+					std::cerr << "Unknown argument exiting.\n";
+					return EXIT_FAILURE;
 				}
-			} else {
+			}
+			else
+			{
 				configFilePath = argv[1];
 			}
 			argv++; // Move to next arg
 		}
 	}
 	GameEngine engine(health, money, debug_mode);
-	if (!engine.initialize(configFilePath)) { // Try initializing the engine
+	if (!engine.initialize(configFilePath))
+	{ // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
 		std::cerr << "*** There was a problem loading the configuration.\n";
 		std::cerr << "*** The game will now exit.\n";
@@ -78,17 +87,16 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
-gameState(STARTUP),
-debug_mode(debug_mode),
-screenWidth(80),
-screenHeight(50),
-player(health, money, "")
+GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept : gameState(STARTUP),
+																		  debug_mode(debug_mode),
+																		  screenWidth(80),
+																		  screenHeight(50),
+																		  player(health, money, "")
 {
 	// The default constructor
 	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
 	map.resize(MAP_DIM);
-	for (auto& i : map)
+	for (auto &i : map)
 		i.resize(MAP_DIM);
 }
 
@@ -98,13 +106,16 @@ void GameEngine::loop()
 	// displaying anything onscreen
 	terminal_refresh();
 	// TK_CLOSE == true when the terminal window is closed
-	while (terminal_peek() != TK_CLOSE) { // _peek does not block if false (unlike _read)
+	while (terminal_peek() != TK_CLOSE)
+	{ // _peek does not block if false (unlike _read)
 		// Fetch player action
-		if (terminal_has_input()) { // Is there control input waiting?
+		if (terminal_has_input())
+		{ // Is there control input waiting?
 			// Perform action
 			// Parse the command input by reading it from terminal_
 			int inputKey = terminal_read();
-			if (inputKey == TK_Q) {
+			if (inputKey == TK_Q)
+			{
 				// Press Q to quit
 				break;
 			}
@@ -118,17 +129,19 @@ void GameEngine::loop()
 	};
 }
 
-bool GameEngine::initialize(const std::string& configFile)
+bool GameEngine::initialize(const std::string &configFile)
 {
 	// Sets up the initial game state; this is NOT in the constructor because
 	// we want to keep track of whether an error has arisen from the GameEngine
 	// class or some other sub-module of the system
-	if (!loadConfiguration(configFile)) { // Try loading the config file
+	if (!loadConfiguration(configFile))
+	{ // Try loading the config file
 		// If it didn't work, do not continue!
 		return false;
 	}
 
-	if (!terminal_open()) { // Try creating a BearLibTerminal instance
+	if (!terminal_open())
+	{ // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
 		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
@@ -136,10 +149,11 @@ bool GameEngine::initialize(const std::string& configFile)
 
 	gui.initialize(); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
-//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
+	//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
-	if (!debug_mode) {
+	if (!debug_mode)
+	{
 		std::random_device rd;
 		randomEng.seed(rd());
 	}
@@ -156,39 +170,53 @@ void GameEngine::terminate()
 	terminal_close(); // Halt the BearLibTerminal instance
 }
 
-bool GameEngine::loadConfiguration(const std::string& inputFile)
+bool GameEngine::loadConfiguration(const std::string &inputFile)
 {
 	std::ifstream config(inputFile); // Open the configuration file
-	if (!config) { // Was the config file opened successfully?
+	if (!config)
+	{ // Was the config file opened successfully?
 		// If not, display an error and exit
-		std::cerr << "*** The configuration file could not be opened." << "\n";
+		std::cerr << "*** The configuration file could not be opened."
+				  << "\n";
 		return false;
 	}
 	std::stringstream lineStream; // Allows parsing single lines by chars
-	std::string configLine; // Contains a whole line
-	std::string configKey; // Contains the configuration property to be set
-	std::string configValue; // Contains the new value for the config property
-	while (!config.eof()) { // Parse all lines in the config file
+	std::string configLine;		  // Contains a whole line
+	std::string configKey;		  // Contains the configuration property to be set
+	std::string configValue;	  // Contains the new value for the config property
+	while (!config.eof())
+	{								 // Parse all lines in the config file
 		getline(config, configLine); // Obtain a full line
-		lineStream.clear(); // Make sure the stream is empty
-		lineStream << configLine; // Put the config line into the stream
+		lineStream.clear();			 // Make sure the stream is empty
+		lineStream << configLine;	// Put the config line into the stream
 		// Break the stream into a key and its value at the '='
 		getline(lineStream, configKey, '=');
 		getline(lineStream, configValue);
 		// Find the matching configuration property and set its value
 		// FIXME: Include sanity checks on input values
 		// FIXME: Set up some kind of value defaults if anything's not set
-		if (configKey != "") { // Prevent trying blank lines (ie trailing lines)
-			if (configKey == "screenWidth") {
+		if (configKey != "")
+		{ // Prevent trying blank lines (ie trailing lines)
+			if (configKey == "screenWidth")
+			{
 				screenWidth = std::stoul(configValue, nullptr, 0);
-			} else if (configKey == "screenHeight") {
+			}
+			else if (configKey == "screenHeight")
+			{
 				screenHeight = std::stoul(configValue, nullptr, 0);
-			} else if (configKey == "font") {
+			}
+			else if (configKey == "font")
+			{
 				terminalFontPath = configValue;
-			} else if (configKey == "fontSize") {
+			}
+			else if (configKey == "fontSize")
+			{
 				terminalFontSize = std::stoul(configValue, nullptr, 0);
-			} else { // No matching config key was found!
-				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << "\n";
+			}
+			else
+			{ // No matching config key was found!
+				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game."
+						  << "\n";
 			}
 		}
 	}
@@ -200,9 +228,9 @@ std::string GameEngine::generateBLTConfigString()
 {
 	// Generates a valid BearLibTerminal configuration string from our config
 	// Set the window title
-	std::string windowTitleOption="title=\'FRUPAL\'";
+	std::string windowTitleOption = "title=\'FRUPAL\'";
 	// Set the window dimensions
-	std::string windowSizeOption="size=";
+	std::string windowSizeOption = "size=";
 	windowSizeOption.append(to_string(screenWidth));
 	windowSizeOption.append("x");
 	windowSizeOption.append(to_string(screenHeight));
@@ -217,7 +245,8 @@ std::string GameEngine::generateBLTConfigString()
 	fullOptionString.append(", ");
 	fullOptionString.append(windowSizeOption);
 	// Only add the font option if it has been specified
-	if (terminalFontPath != "") {
+	if (terminalFontPath != "")
+	{
 		// If we specify a font, we MUST also specify a size
 		fullOptionString.append("; font: ");
 		fullOptionString.append(terminalFontPath);

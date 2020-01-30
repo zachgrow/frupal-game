@@ -29,7 +29,3 @@ void Boulder::afterAction()
 {
     return;
 }
-int Boulder::getColor()
-{
-    return 0;
-}

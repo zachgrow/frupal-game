@@ -25,7 +25,3 @@ char Tree::getChar()
 {
     return this->c;
 }
-int Tree::getColor()
-{
-    return 0;
-}

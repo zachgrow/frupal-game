@@ -34,13 +34,8 @@ void Vendor::initialize(string file){
         int cost = stoi(line.substr(mid+1,line.length()-mid));
         list.insert(make_pair(tool,cost));
       }
-<<<<<<< HEAD
     }catch(std::invalid_argument const &e){ cout << "Bad input" << endl;}
     catch(std::out_of_range const &e){cout << "out of range" << endl;}
-=======
-    }catch(std::invalid_agument &e){ cout << "Bad input" << endl;}
-    catch(std::out_of_range &e){cout << "out of range" << endl;}
->>>>>>> b6bb3c620bc9d6db20e6de67eb757e12ded9b5f6
   }
 }
 

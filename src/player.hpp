@@ -11,13 +11,14 @@
 
 //Update when tools are implemented
 const int TOOLCOUNT = 5;//global used for size of players tool array
-
+const int MAX = 20;
 using namespace std;
 
 struct Pos{
   int x;
   int y;
   bool operator==(const Pos & other);//compare two positions(player and vendor)
+  friend ostream& operator<<(ostream& out, const Pos &pos);
 };
 
 class Actor{//actor class acts as base class for player and vendor
@@ -55,7 +56,7 @@ public:
   int getMoney();//getter functions
   int getEnergy();
   string getName();
-  Pos getPos();
+  const Pos getPos();
 
   void display();//display function mostly for testing
   bool move(string inp);//changes the players position based on character input

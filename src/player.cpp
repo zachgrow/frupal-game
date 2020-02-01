@@ -51,9 +51,20 @@ void Vendor::addTool(){
     list.insert(make_pair(tool,cost));
   }
 }
-std::pair<std::string,int> Vendor::getTool(std::string title){
-  if(list.find(title) != list.end())
-    return make_pair(list.find(title));
+int Vendor::getCost(string tool){
+  for(auto it = list.begin();it != list.end();++it){
+    if(tool.compare(it->first) == 0)
+      return it->second;
+  }
+  return 0;
+}
+std::pair<std::string,int> Vendor::getTool(std::string title,int cost){
+  auto it = list.find(make_pair(title,getCost(title)));
+  if(it != list.end())
+    return *it;
+  else{
+
+  }
 }
 
 Player::Player():money(0),energy(0){//default constructor
@@ -190,10 +201,13 @@ bool Player::move(string inp){//change the players position based on user input,
     else{
       //buy the tool from the vendor
       //Maybe this calls or gets called by vendor.action()
-      
+
       return true;
     }
   }
   bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it
-    return toolbelt.find(tool) != toolbelt.end();
+    auto it = toolbelt.find(tool);
+    if(it != toolbelt.end())
+      return true
+    return false;
   }

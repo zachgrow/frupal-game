@@ -9,34 +9,68 @@ DESC Contains implementation of game engine as well as main()
 #include "tile.hpp"
 #include "player.hpp"
 #include "engine.hpp"
+#include <cstdlib>
+#include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
 #include <sstream>		// Object for conversion from std::string to input stream
 #include <fstream>		// Simple file input/output
 
-//#include <cstdio>
-//#include <vector>
+#define MAP_DIM 50
+#define HELP_INFO "Pass --help for help\n" \
+				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
+				  "      -H integer for health\n" \
+				  "      -M integer for money\n"
 
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
+	int health = -1;
+	int money = -1;
+	bool debug_mode = 0;
 	if (argc >= 2) {
-		if (*argv[1] == '-') {
-			// Parse the command line options
-			// need to invent some command line options!
-			std::cerr << "*** No command line options are available at this time.\n";
-			return 1; // Exit the program by throwing a generic error code
-		} else {
-			configFilePath = argv[1];
+		argv++;
+		while (*argv != nullptr) {
+			if (std::strcmp(*argv, "--help") == 0) {
+				std::cout << HELP_INFO;
+				return EXIT_SUCCESS;
+			}
+			else if (std::strcmp(*argv, "--DEBUG_MODE") == 0) {
+				debug_mode = true;
+			}
+			else if (**argv == '-') {
+				switch ((*argv)[1]) {
+					case 'H':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						health = atoi(*argv);
+						break;
+					case 'M':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						money = atoi(*argv);
+						break;
+					default:
+						std::cerr << "Unknown argument exiting.\n";
+						return EXIT_FAILURE;
+				}
+			} else {
+				configFilePath = argv[1];
+			}
+			argv++; // Move to next arg
 		}
 	}
-	GameEngine engine;
+	GameEngine engine(health, money, debug_mode);
 	if (!engine.initialize(configFilePath)) { // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
-		std::cerr << "*** There was a problem loading the configuration." << std::endl;
-		std::cerr << "*** The game will now exit." << std::endl;
+		std::cerr << "*** There was a problem loading the configuration.\n";
+		std::cerr << "*** The game will now exit.\n";
 		return 5; // Exit the program and throw a (different) error code
 	}
-	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
+	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
 	// Invoke the game loop
 	engine.loop();
 	// WHEN the player has closed the game:
@@ -44,13 +78,18 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine() noexcept :
+GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
 gameState(STARTUP),
+debug_mode(debug_mode),
 screenWidth(80),
-screenHeight(50)
+screenHeight(50),
+player(health, money, "")
 {
 	// The default constructor
 	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+	map.resize(MAP_DIM);
+	for (auto& i : map)
+		i.resize(MAP_DIM);
 }
 
 void GameEngine::loop()
@@ -69,6 +108,9 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
+
+			if (debug_mode)
+				print_debug_info();
 		}
 		// Write result
 		gui.update();
@@ -88,7 +130,7 @@ bool GameEngine::initialize(const std::string& configFile)
 
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
-		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
 	}
 
@@ -97,8 +139,10 @@ bool GameEngine::initialize(const std::string& configFile)
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
-	std::random_device rd;
-	randomEng.seed(rd());
+	if (!debug_mode) {
+		std::random_device rd;
+		randomEng.seed(rd());
+	}
 
 	gameState = RUNNING;
 
@@ -117,7 +161,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 	std::ifstream config(inputFile); // Open the configuration file
 	if (!config) { // Was the config file opened successfully?
 		// If not, display an error and exit
-		std::cerr << "*** The configuration file could not be opened." << std::endl;
+		std::cerr << "*** The configuration file could not be opened." << "\n";
 		return false;
 	}
 	std::stringstream lineStream; // Allows parsing single lines by chars
@@ -144,7 +188,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 			} else if (configKey == "fontSize") {
 				terminalFontSize = std::stoul(configValue, nullptr, 0);
 			} else { // No matching config key was found!
-				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << std::endl;
+				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << "\n";
 			}
 		}
 	}
@@ -182,4 +226,41 @@ std::string GameEngine::generateBLTConfigString()
 	}
 	fullOptionString.append(";"); // Terminating character
 	return fullOptionString;
+}
+
+#if 0
+static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
+{
+	try {
+		return tiles.at(x).at(y);
+	}
+	catch (...) {
+		// This should be an invalid state.
+		return Tile();
+	}
+}
+#endif
+
+void GameEngine::print_debug_info() const
+{
+	// If debug_mode print debug info
+	// as comma deliminated list.
+	// First player health, player money,
+	// the eight tiles around player,
+	// and the tile under the player.
+	// maybe more?
+
+	// Visible tiles
+	// Need to figure out contents of tile class.
+#if 0
+	{
+		auto position = player.getPos();
+		auto center_pos  = tile_at(map, position.x, position.y);
+		auto upper_left  = tile_at(map, position.x+1, position.y+1);
+		auto upper       = tile_at(map, position.x, position.y+1);
+		auto upper_right = tile_at(map, position.x+1, position.y+1);
+		auto left        = tile_at(map, position.x+1, position.y);
+		auto right
+	}
+#endif
 }

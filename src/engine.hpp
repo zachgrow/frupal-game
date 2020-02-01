@@ -1,4 +1,4 @@
-/*   engine.cpp
+/*   engine.hpp
 DATE Jan 16 2020
 AUTH Josiah Baldwin, Zach Grow
 DESC Contains definitions of the GameEngine class
@@ -22,24 +22,26 @@ struct GameEngine
 		DEFEAT,
 		ERROR,
 	} gameState;
+	bool debug_mode;
 
 	unsigned int screenWidth; // Width of terminal in # of monospace chars
 	unsigned int screenHeight; // Height of terminal in # of monospace chars
 	int jewelsX;
 	int jewelsY;
-//	std::vector<std::vector<Tile>> map;
+	std::vector<std::vector<Tile>> map;
 	Player player;
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
 	std::mt19937 randomEng;
 
-	GameEngine() noexcept;	// Default constructor
+	GameEngine(int health, int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop
 	bool initialize(const std::string& configFile); // Initialize the engine's components
 	void terminate();		// Performs end-of-game cleanup before the engine itself is to be shutdown
 	bool loadConfiguration(const std::string& configFile); // Loads external config
 	std::string generateBLTConfigString(); // Generates a BearLibTerminal configuration string for terminal_set()
+	void print_debug_info() const;
 };
 
 #endif // FRUPALGAME_SRC_ENGINE_HPP_INCLUDED

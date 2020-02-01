@@ -39,6 +39,7 @@ public:
   void initialize(string file);
   void displayTools();
   void addTool();
+  std::pair<std::string,int> getTool(std::string title);
 private:
   Pos position;
   //string tools[TOOLCOUNT];
@@ -74,6 +75,7 @@ private:
   int energy;
   Pos position;
   string name;
-  string tools[TOOLCOUNT];
+  //string tools[TOOLCOUNT];
+  std:::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

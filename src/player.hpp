@@ -38,6 +38,7 @@ public:
   void action();
   void initialize(string file);
   void displayTools();
+  void addTool();
 private:
   Pos position;
   //string tools[TOOLCOUNT];

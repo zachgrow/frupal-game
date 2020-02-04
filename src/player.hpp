@@ -35,11 +35,13 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
-  void action();
+  void action(const Player &user);
   void initialize(string file);
   void displayTools();
   void addTool();
   int getCost(string tool);
+  const Pos getPos();
+  bool hasTool(string tool);
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
   Pos position;
@@ -68,8 +70,9 @@ public:
   const Pos getPos();
 
   void display();//display function mostly for testing
+  void displayTools();
   bool move(string inp);//changes the players position based on character input
-  bool buy(string tool);//ideally buys a tool if possible based on a character unique to each tool
+  bool buy(string tool, int cost);//ideally buys a tool if possible based on a character unique to each tool
   bool hasTool(string tool);
 private:
   int money;

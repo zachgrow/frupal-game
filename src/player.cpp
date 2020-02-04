@@ -12,12 +12,38 @@ ostream& operator<<(ostream & out, const Pos & pos){
 }
 
 Vendor::Vendor(){}
-void Vendor::action(){}
+void Vendor::action(const Player &user){
+  string inp;
+  cout << "Would you like to buy a tool? Y/N" << endl;
+  getline(cin,inp);
+  if(inp.compare('y')==0 || inp.compare('Y') == 0){
+    cout << "What tool would you like to buy?" << endl;
+    getline(cin,inp);
+    if(hasTool(inp)){
+      int cost = getCost(inp);
+      user.buy(inp,cost);
+    }
+    else{
+      cerr << "No tool by that name" << endl;
+      action(user);
+    }
+  }
+
+}
+bool Vendor::hasTool(string tool){
+  bool found = false;
+  for(auto it = list.begin();it != list.end();++it){
+    if(tool.compare(it->first) == 0)
+      found = true;
+  }
+  return found;
+}
 void Vendor::displayTools(){
   for(auto it=list.begin();it!=list.end();++it){
     cout << "Tool: " << it->first << " Cost: " << it->second << endl;
   }
 }
+const Pos Vendor::getPos(){return position;}
 void Vendor::initialize(string file){
   ifstream inFile;
   inFile.open(file);
@@ -93,6 +119,10 @@ Player::~Player(){
 void Player::display(){//displays the players class members
   cout << name << endl << money << endl
   << energy << endl << position.x << " " << position.y << endl;
+}
+void Player::displayTools(){
+  for(auto it = toolbelt.begin();it != toolbelt.end();++it)
+    cout << "Tool: " << *it << endl;
 }
 
 //setter functions for the class members
@@ -193,16 +223,21 @@ bool Player::move(string inp){//change the players position based on user input,
       return move(inp);
     }
   }
-  bool Player::buy(string tool){//buy tool from vendor
+  bool Player::buy(string tool,int cost){//buy tool from vendor
     if(hasTool(tool)){//check for tool
       cerr << "You already have this tool" << endl;
       return false;
     }
     else{
-      //buy the tool from the vendor
-      //Maybe this calls or gets called by vendor.action()
-
-      return true;
+      if(cost > money){
+        cerr << "You don't have enough money for that tool" << endl;
+        return false;
+      }
+      else{
+        money -= cost;
+        toolbelt.insert(tool);
+        return true;
+      }
     }
   }
   bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it

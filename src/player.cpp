@@ -208,6 +208,6 @@ bool Player::move(string inp){//change the players position based on user input,
   bool Player::hasTool(string tool){//Loop through the users tools to make sure they don't have it
     auto it = toolbelt.find(tool);
     if(it != toolbelt.end())
-      return true
+      return true;
     return false;
   }

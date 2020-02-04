@@ -29,7 +29,7 @@ void Vendor::action(Player &user){
     }
   }
   else{//user doesn't want a tool
-    user.action();
+    user.action(user);
   }
 }
 bool Vendor::hasTool(string tool){
@@ -156,7 +156,7 @@ const Pos Player::getPos(){
   return position;
 }
 
-void Player::action(const class Player & user){//player action takes user input and calls move or buy
+void Player::action(class Player & user){//player action takes user input and calls move or buy
   string inp;
   cout << "Where would you like to move?" << endl;
   getline(cin,inp);//get user input

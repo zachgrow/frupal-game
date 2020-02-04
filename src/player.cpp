@@ -14,21 +14,23 @@ ostream& operator<<(ostream & out, const Pos & pos){
 Vendor::Vendor(){}
 void Vendor::action(const Player &user){
   string inp;
-  cout << "Would you like to buy a tool? Y/N" << endl;
+  cout << "Would you like to buy a tool? Y/N" << endl;//prompt the user
   getline(cin,inp);
-  if(inp.compare('y')==0 || inp.compare('Y') == 0){
+  if(inp.compare("y")==0 || inp.compare("Y") == 0){
     cout << "What tool would you like to buy?" << endl;
     getline(cin,inp);
-    if(hasTool(inp)){
+    if(hasTool(inp)){//check if the tool exists
       int cost = getCost(inp);
       user.buy(inp,cost);
     }
-    else{
+    else{//tool doesn't exist
       cerr << "No tool by that name" << endl;
       action(user);
     }
   }
-
+  else{//user doesn't want a tool
+    user.action();
+  }
 }
 bool Vendor::hasTool(string tool){
   bool found = false;

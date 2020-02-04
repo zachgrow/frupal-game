@@ -174,7 +174,7 @@ void Player::action(class Player & user){//player action takes user input and ca
     cerr << "Please enter Move or Buy" << endl;
     action();//restart action
   }*/
-}
+
 
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
 //     Add energy cost based on tiles

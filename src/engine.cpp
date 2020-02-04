@@ -9,6 +9,7 @@ DESC Contains implementation of game engine as well as main()
 #include "tile.hpp"
 #include "player.hpp"
 #include "engine.hpp"
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
@@ -20,6 +21,10 @@ DESC Contains implementation of game engine as well as main()
 				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
 				  "      -H integer for health\n" \
 				  "      -M integer for money\n"
+#define LEFT  0
+#define UP    1
+#define RIGHT 2
+#define DOWN  3
 
 int main(int argc, char** argv)
 {
@@ -98,16 +103,44 @@ void GameEngine::loop()
 	// displaying anything onscreen
 	terminal_refresh();
 	// TK_CLOSE == true when the terminal window is closed
-	while (terminal_peek() != TK_CLOSE) { // _peek does not block if false (unlike _read)
+	bool keep_going = true;
+	while (terminal_peek() != TK_CLOSE && keep_going) { // _peek does not block if false (unlike _read)
 		// Fetch player action
 		if (terminal_has_input()) { // Is there control input waiting?
 			// Perform action
 			// Parse the command input by reading it from terminal_
 			int inputKey = terminal_read();
-			if (inputKey == TK_Q) {
-				// Press Q to quit
+			if (inputKey == TK_Q)
 				break;
+
+
+			switch (inputKey) {
+#if 0
+				case TK_Q:
+					// Send end message
+					keep_going = false;
+					break;
+#endif
+				case TK_A:
+				case TK_LEFT:
+					move_to_tile(LEFT);
+					break;
+				case TK_W:
+				case TK_UP:
+					move_to_tile(UP);
+					break;
+				case TK_D:
+				case TK_RIGHT:
+					move_to_tile(RIGHT);
+					break;
+				case TK_S:
+				case TK_DOWN:
+					move_to_tile(DOWN);
+					break;
+				default: break;
 			}
+			auto pos = player.getPos();
+			std::cout << pos.x << ' ' << pos.y << "\n";
 		}
 		// Write result
 		gui.update();
@@ -223,4 +256,28 @@ std::string GameEngine::generateBLTConfigString()
 	}
 	fullOptionString.append(";"); // Terminating character
 	return fullOptionString;
+}
+
+void GameEngine::move_to_tile(int direction)
+{
+	assert(direction >= LEFT && direction <= DOWN);
+
+	// Check if valid tile
+	// deduct energy int
+	switch (direction) {
+		case UP:
+			player.move("north");
+			break;
+		case LEFT:
+			player.move("west");
+			break;
+		case RIGHT:
+			player.move("east");
+			break;
+		case DOWN:
+			player.move("south");
+			break;
+		default:
+			break;
+	}
 }

@@ -41,6 +41,7 @@ struct GameEngine
 	void terminate();		// Performs end-of-game cleanup before the engine itself is to be shutdown
 	bool loadConfiguration(const std::string& configFile); // Loads external config
 	std::string generateBLTConfigString(); // Generates a BearLibTerminal configuration string for terminal_set()
+	void move_to_tile(int direction);
 };
 
 #endif // FRUPALGAME_SRC_ENGINE_HPP_INCLUDED

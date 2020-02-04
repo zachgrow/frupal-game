@@ -17,7 +17,7 @@ Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
 }
-void Vendor::action(Player &user){//when player position and vendor position are equal
+void Vendor::action(Player &user = new Player()){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
   cout << "Would you like to buy a tool? Y/N" << endl;//prompt the user
@@ -166,7 +166,7 @@ const Pos Player::getPos(){
   return position;
 }
 
-void Player::action(class Player & user){//player action takes user input and calls move or buy
+void Player::action(class Player & user = new Player()){//player action takes user input and calls move or buy
   string inp;
   cout << "Where would you like to move?" << endl;
   getline(cin,inp);//get user input

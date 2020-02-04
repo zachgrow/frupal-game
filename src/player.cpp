@@ -154,7 +154,7 @@ const Pos Player::getPos(){
   return position;
 }
 
-void Player::action(){//player action takes user input and calls move or buy
+void Player::action(const class Player & user){//player action takes user input and calls move or buy
   string inp;
   cout << "Where would you like to move?" << endl;
   getline(cin,inp);//get user input

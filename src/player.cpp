@@ -82,8 +82,11 @@ void Vendor::addTool(){//add tool based on user input
   getline(cin,tool);
   cout << "How much does your tool cost?" << endl;
   int cost;
-  cin >> cost;
-  if(cin.fail())//fails if cost input is out of range or not an int
+  string inp;
+  getline(cin,inp);
+  std::istringstream iss(inp);
+  iss >> cost;
+  if(cost < 0)
     cerr << "Bad input" << endl;
   else{
     list.insert(make_pair(tool,cost));

@@ -26,7 +26,7 @@ struct Pos{
 
 class Actor{//actor class acts as base class for player and vendor
 public:
-  virtual void action() = 0;
+  virtual void action(const Player& user) = 0;
 
 private:
 

@@ -26,7 +26,7 @@ struct Pos{
 
 class Actor{//actor class acts as base class for player and vendor
 public:
-  virtual void action(Player& user) = 0;
+  virtual void action(class Player& user) = 0;
 
 private:
 
@@ -35,7 +35,7 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
-  void action(Player &user);
+  void action(class Player &user);
   void initialize(string file);
   void displayTools();
   void addTool();
@@ -57,7 +57,7 @@ public:
   Player(const Player& user);
   ~Player();
 
-  void action(Player &user);//action will call relevant function
+  void action(class Player &user);//action will call relevant function
 
   void setName(string name);//setter functions
   void setMoney(int money);

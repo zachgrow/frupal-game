@@ -45,7 +45,6 @@ public:
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
   Pos position;
-  //string tools[TOOLCOUNT];
   tools list;
 };
 
@@ -79,7 +78,6 @@ private:
   int energy;
   Pos position;
   string name;
-  //string tools[TOOLCOUNT];
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

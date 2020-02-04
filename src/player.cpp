@@ -12,7 +12,7 @@ ostream& operator<<(ostream & out, const Pos & pos){
 }
 
 Vendor::Vendor(){}
-void Vendor::action(const Player &user){
+void Vendor::action(Player &user){
   string inp;
   cout << "Would you like to buy a tool? Y/N" << endl;//prompt the user
   getline(cin,inp);

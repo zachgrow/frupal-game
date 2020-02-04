@@ -12,8 +12,7 @@
 #include<set>
 #include<string>
 //Update when tools are implemented
-const int TOOLCOUNT = 5;//global used for size of players tool array
-const int MAX = 20;//global used for bounds checking
+const int MAX = 80;//global used for bounds checking
 const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
 typedef std::set<std::pair<std::string,int>> tools;
@@ -26,7 +25,7 @@ struct Pos{
 
 class Actor{//actor class acts as base class for player and vendor
 public:
-  virtual void action(class Player& user) = 0;
+  virtual void action(class Player& user = new Player()) = 0;
 
 private:
 
@@ -35,7 +34,7 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
-  void action(class Player &user);
+  void action(class Player &user = new Player());
   void initialize(string file);
   void displayTools();
   void addTool();
@@ -57,7 +56,7 @@ public:
   Player(const Player& user);
   ~Player();
 
-  void action(class Player &user);//action will call relevant function
+  void action(class Player &user = new Player());//action will call relevant function
 
   void setName(string name);//setter functions
   void setMoney(int money);

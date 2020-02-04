@@ -4,7 +4,8 @@
  */
 #include"player.hpp"
 bool Pos::operator==(const Pos & other){//compare two positions
-  //ideal use:if(player.getPos() == vendor.getPos()){vendor.action(player)}
+  //ideal use:Pos currPos = player.getPos();
+  //if(currPos == vendor.getPos()){vendor.action(player)}
   return x == other.x && y == other.y;
 }
 ostream& operator<<(ostream & out, const Pos & pos){//display position

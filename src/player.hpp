@@ -39,6 +39,7 @@ public:
   void initialize(string file);
   void displayTools();
   void addTool();
+  void setPos(int x,int y);
   int getCost(string tool);
   const Pos getPos();
   bool hasTool(string tool);

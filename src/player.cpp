@@ -12,7 +12,10 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   return out;
 }
 
-Vendor::Vendor(){}
+Vendor::Vendor(){
+  position.x = 0;
+  position.y = 0;
+}
 void Vendor::action(Player &user){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
@@ -41,6 +44,10 @@ bool Vendor::hasTool(string tool){//check the tools list for tool
       found = true;
   }
   return found;
+}
+void Vendor::setPos(int x, int y){
+  position.x = x;
+  position.y = y;
 }
 void Vendor::displayTools(){//display the vendor tools for user/testing
   for(auto it=list.begin();it!=list.end();++it){

@@ -23,6 +23,14 @@ DESC Contains implementation of game engine as well as main()
 
 int main(int argc, char **argv)
 {
+	//Map testing
+	auto Map = new Tile *[50, 50];
+	for (int i = 0; i < 50; i++)
+		for (int j = 0; j < 50; j++)
+		{
+			Map[i, j] = new Grass;
+		}
+	// Just testing
 	std::string configFilePath = "config.txt";
 	int health = -1;
 	int money = -1;

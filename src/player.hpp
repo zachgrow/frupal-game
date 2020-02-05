@@ -20,7 +20,7 @@ typedef std::set<std::pair<std::string,int>> tools;
 struct Pos{
   int x;
   int y;
-  bool operator==(const Pos & other);//compare two positions(player and vendor)
+  bool operator==(const Pos & other)const;//compare two positions(player and vendor)
   friend ostream& operator<<(ostream& out, const Pos &pos);
 };
 

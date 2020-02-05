@@ -3,9 +3,8 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
-bool Pos::operator==(const Pos & other){//compare two positions
-  //ideal use:Pos currPos = player.getPos();
-  //if(currPos == vendor.getPos()){vendor.action(player)}
+bool Pos::operator==(const Pos & other)const{//compare two positions
+  //ideal use:if(player.getPos() == vendor.getPos()){vendor.action(player)}
   return x == other.x && y == other.y;
 }
 ostream& operator<<(ostream & out, const Pos & pos){//display position

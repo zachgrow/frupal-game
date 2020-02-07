@@ -28,7 +28,7 @@ struct GameEngine
 	unsigned int screenHeight; // Height of terminal in # of monospace chars
 	int jewelsX;
 	int jewelsY;
-	std::vector<std::vector<Tile>> map;
+//  std::vector<std::vector<Tile>> map;
 	Player player;
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font

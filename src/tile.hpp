@@ -55,6 +55,7 @@ public:
     virtual void display();
     virtual void getAction();
     virtual void afterAction();
+	virtual char getChar();
 };
 struct Boulder : public Obstacle
 {

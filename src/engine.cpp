@@ -87,9 +87,9 @@ player(health, money, "")
 {
 	// The default constructor
 	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
-	map.resize(MAP_DIM);
-	for (auto& i : map)
-		i.resize(MAP_DIM);
+//	map.resize(MAP_DIM);
+//	for (auto& i : map)
+//		i.resize(MAP_DIM);
 }
 
 void GameEngine::loop()
@@ -228,7 +228,8 @@ std::string GameEngine::generateBLTConfigString()
 	return fullOptionString;
 }
 
-#if 0
+/*
+//#if 0
 static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
 {
 	try {
@@ -239,7 +240,8 @@ static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
 		return Tile();
 	}
 }
-#endif
+//#endif
+*/
 
 void GameEngine::print_debug_info() const
 {

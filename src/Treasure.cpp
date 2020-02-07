@@ -1,4 +1,5 @@
 #include "tile.hpp"
+#include <iostream>
 
 Treasure::Treasure()
 {

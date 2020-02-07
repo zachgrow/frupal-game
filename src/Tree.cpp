@@ -1,4 +1,6 @@
 #include "tile.hpp"
+#include <iostream>
+
 Tree::Tree()
 {
     this->c = '|';

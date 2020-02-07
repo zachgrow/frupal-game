@@ -1,4 +1,6 @@
 #include "tile.hpp"
+#include <iostream>
+
 Grass::Grass()
 {
     c = '.';

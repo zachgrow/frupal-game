@@ -21,6 +21,8 @@ DESC Contains implementation of game engine as well as main()
 				  "      -H integer for health\n" \
 				  "      -M integer for money\n"
 
+std::mt19937 GameEngine::randomEng (47);
+
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
@@ -87,9 +89,9 @@ player(health, money, "")
 {
 	// The default constructor
 	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
-	map.resize(MAP_DIM);
-	for (auto& i : map)
-		i.resize(MAP_DIM);
+//	map.resize(MAP_DIM);
+//	for (auto& i : map)
+//		i.resize(MAP_DIM);
 }
 
 void GameEngine::loop()
@@ -134,15 +136,19 @@ bool GameEngine::initialize(const std::string& configFile)
 		return false;
 	}
 
+//	worldMap.generateMap(MAP_DIM, MAP_DIM);
+	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
 	gui.initialize(); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
-	if (!debug_mode) {
+/*	if (!debug_mode) {
 		std::random_device rd;
 		randomEng.seed(rd());
-	}
+	} else {
+		randomEng.seed(47);
+	}*/
 
 	gameState = RUNNING;
 
@@ -228,7 +234,13 @@ std::string GameEngine::generateBLTConfigString()
 	return fullOptionString;
 }
 
-#if 0
+int GameEngine::getRandomValue(int minimum, int maximum) {
+	// Generates and returns a random integer value in the specified range
+	return (randomEng() % maximum) + minimum;
+}
+
+/*
+//#if 0
 static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
 {
 	try {
@@ -239,7 +251,8 @@ static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
 		return Tile();
 	}
 }
-#endif
+//#endif
+*/
 
 void GameEngine::print_debug_info() const
 {

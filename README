@@ -8,16 +8,21 @@ DIRECTORY STRUCTURE
 	lib/		Contains precompiled library objects.
 	src/		Contains the source code and objects of the game.
 
+HOW TO SEND A MESSAGE TO THE MESSAGE LOG
+	Call the function GameGUI::addMessage(string messageText) on the engine.gui object. You may need to obtain a pointer to the GUI from the engine in order to resolve scope issues if you are doing this from your own method. You may format the text inline with a few tags, like so:
+
+	"[color=red]dying[/color] hobgoblin" to apply a color to a section of text
+	"a[+]^" to combine two characters into one: the former produces a symbol resembling â
 
 COLOR CODE FORMAT
 Colors for messages and glyphs may be specified in one of three ways:
-	- as a "[brightness] hue" keyword:
+STRING	- as a "[brightness] hue" keyword:
 	"light red", "green", "darkest blue"
 	
-	- as a hexadecimal value, #RRGGBB or #AARRGGBB (AA = alpha value of color shade)
+INT	- as a hexadecimal value, #RRGGBB or #AARRGGBB (AA = alpha value of color shade)
 	#990099 = purple, #44FFFFFF = darker grey
 
-	- as a comma-separated RGB string, R,G,B or A,R,G,B
+STRING	- as a comma-separated RGB string, R,G,B or A,R,G,B
 	128,255,255,0 = brown
 
 INPUT HANDLING

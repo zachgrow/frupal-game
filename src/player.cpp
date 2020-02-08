@@ -104,6 +104,7 @@ std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return 
     return *it;
   else{
     cerr << "Tool could not be found" << endl;
+    return make_pair("NULL",0);
   }
 }
 

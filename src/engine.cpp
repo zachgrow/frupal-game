@@ -5,9 +5,6 @@ DESC Contains implementation of game engine as well as main()
 */
 
 #include "BearLibTerminal.h"
-#include "gui.hpp"
-#include "tile.hpp"
-#include "player.hpp"
 #include "engine.hpp"
 #include <cstdlib>
 #include <cstring>
@@ -15,7 +12,7 @@ DESC Contains implementation of game engine as well as main()
 #include <sstream>		// Object for conversion from std::string to input stream
 #include <fstream>		// Simple file input/output
 
-#define MAP_DIM 50
+#define MAP_DIM 20
 #define HELP_INFO "Pass --help for help\n" \
 				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
 				  "      -H integer for health\n" \
@@ -88,11 +85,8 @@ screenHeight(50),
 player(health, money, "")
 {
 	// The default constructor
-//	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
-	gui = GameGUI();
-//	map.resize(MAP_DIM);
-//	for (auto& i : map)
-//		i.resize(MAP_DIM);
+	gui = GameGUI(); // Create a GUI instance
+	player.setPos(MAP_DIM/2, MAP_DIM/2); // Move the player onto the map
 }
 
 void GameEngine::loop()
@@ -137,14 +131,13 @@ bool GameEngine::initialize(const std::string& configFile)
 		return false;
 	}
 
-//	worldMap.generateMap(MAP_DIM, MAP_DIM);
 	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
-	gui.initialize(screenWidth, screenHeight, &player); // Initialize the GUI's state
-//	gui.initialize(screenWidth, screenHeight, player, worldMap); // Initialize the GUI's state
+	gui.initialize(screenWidth, screenHeight, &player, &worldMap); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
+//	The RNG is seeded as part of its instantiation call as a static obj
 /*	if (!debug_mode) {
 		std::random_device rd;
 		randomEng.seed(rd());
@@ -241,7 +234,8 @@ int GameEngine::getRandomValue(int minimum, int maximum) {
 	return (randomEng() % maximum) + minimum;
 }
 
-/*
+/* This function disabled in favor of removing dependency on Tile class to
+ * within GameMap class; please use GameMap access methods
 //#if 0
 static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
 {

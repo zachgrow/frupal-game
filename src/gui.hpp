@@ -7,7 +7,7 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 #ifndef FRUPALGAME_SRC_GUI_HPP_INCLUDED
 #define FRUPALGAME_SRC_GUI_HPP_INCLUDED
 
-#include "tile.hpp"
+#include "map.hpp"
 #include "player.hpp"
 #include <string>
 #include <vector>
@@ -27,8 +27,7 @@ class GameGUI {
 		GameGUI();
 		~GameGUI();
 		// Initializes a GameGUI to initial state
-//		void initialize(uint maxWidth, uint maxHeight, Player* playerObject, GameMap worldMap);
-		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player* playerObject);
+		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player* playerPtr, GameMap* mapPtr);
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
@@ -54,10 +53,12 @@ class GameGUI {
 
 		// Pointers for data retrieval
 		Player* playerObject;
-//		GameMap* worldMap;
+		GameMap* mapObject;
 		// Internal geometry information
 		unsigned int windowWidth;
 		unsigned int windowHeight;
+		unsigned int mapViewportWidth;
+		unsigned int mapViewportHeight;
 		unsigned int statPanelWidthMinimum;
 		unsigned int msgPanelWidthMinimum;
 		unsigned int msgPanelHeightMinimum;

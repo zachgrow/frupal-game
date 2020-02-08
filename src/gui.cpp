@@ -6,8 +6,9 @@ DESC Contains definitions of the GameGUI class, which displays the game
 */
 
 #include "BearLibTerminal.h"
-#include "gui.hpp"
+#include "map.hpp"
 #include "player.hpp"
+#include "gui.hpp"
 #include <iostream>
 #include <string>
 
@@ -141,20 +142,20 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-//void GameGUI::initialize(uint maxWidth, uint maxHeight) {
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr, GameMap* mapPtr) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
+	mapObject = mapPtr;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
 	windowHeight = maxHeight;
 	// Calculate the dimensions of the map display
-	uint mapDisplayWidth = ((windowWidth - statPanelWidthMinimum - 3) < msgPanelWidthMinimum ? msgPanelWidthMinimum : (windowWidth - statPanelWidthMinimum - 3));
-	uint mapDisplayHeight = (windowHeight - msgPanelHeightMinimum - 3);
+	mapViewportWidth = ((windowWidth - statPanelWidthMinimum - 3) < msgPanelWidthMinimum ? msgPanelWidthMinimum : (windowWidth - statPanelWidthMinimum - 3));
+	mapViewportHeight = (windowHeight - msgPanelHeightMinimum - 3);
 	// Create the individual panel objects
-	mapDisplay.initialize(1, 1, mapDisplayWidth, mapDisplayHeight);
+	mapDisplay.initialize(1, 1, mapViewportWidth, mapViewportHeight);
 	statPanel.initialize((windowWidth - statPanelWidthMinimum + 1), 1, statPanelWidthMinimum, (windowHeight - 2));
 	messageLog.initialize(2, (windowHeight - msgPanelHeightMinimum), msgPanelWidthMinimum, msgPanelHeightMinimum);
 }
@@ -224,27 +225,45 @@ void GameGUI::displayMap() {
 	// Display the currently-explored map
 	terminal_layer(2);// Move to the Terrain layer
 	// Get the size of the map
-//	uint mapWidth = worldMap->getWidth();
-//	uint mapHeight = worldMap->getHeight();
-	uint mapWidth = 30;
-	uint mapHeight = 30;
-	int mapViewHorizontalOffset = (mapDisplay.width - mapWidth) / 2;
-	int mapViewVerticalOffset = (mapDisplay.height - mapHeight) / 2;
-	int cursorXPosition = mapViewHorizontalOffset + mapDisplay.xOrigin;
-	int cursorYPosition = mapViewVerticalOffset + mapDisplay.yOrigin;
-	// Display a test pattern for now
+	uint mapWidth = mapObject->getWidth();
+	uint mapHeight = mapObject->getHeight();
+//	clog << "Detected map dims: " << mapWidth << "x" << mapHeight << endl;
+//	clog << "Map offsets: " << mapViewHorizontalOffset << "x" << mapViewVerticalOffset << endl;
+	int mapViewHorizontalOffset = 0;
+	int mapViewVerticalOffset = 0;
+	if (mapWidth < mapViewportWidth) {
+		mapViewHorizontalOffset = (mapViewportWidth - mapWidth) / 2;
+	}
+	if (mapHeight < mapViewportHeight) {
+		mapViewVerticalOffset = (mapViewportHeight - mapHeight) / 2;
+	}
+	uint cursorXOrigin = mapViewHorizontalOffset + mapDisplay.xOrigin;
+	uint cursorYOrigin = mapViewVerticalOffset + mapDisplay.yOrigin;
+	/*
+	// Display a test pattern
 	terminal_color("darker green");
 	for (uint echs = 0; echs < mapWidth; echs++) {
 		for (uint whye = 0; whye < mapHeight; whye++) {
 			terminal_put(cursorXPosition + echs, cursorYPosition + whye, '+');
 		}
+	}*/
+	// Display the map
+	for (uint xIndex = 0; xIndex < mapWidth; xIndex++) {
+		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
+			// Set the background first
+			terminal_layer(0);
+//			terminal_bkcolor(mapObject->getTileColorAt(xIndex, yIndex));
+			terminal_bkcolor("darkest green");
+			terminal_color("darker green");
+//			clog << "Placing char at " << (cursorXOrigin + xIndex) << ", " << (cursorYOrigin + yIndex) << endl;
+			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
+		}
 	}
 	// Display the player's location within the map
-	// Need to figure out some map offsets once that spec is available
 	terminal_layer(4);
 	terminal_color("lightest blue");
 	Pos playerPosn = playerObject->getPos();
-	terminal_put(playerPosn.x, playerPosn.y, '@');
+	terminal_put(playerPosn.x + mapViewHorizontalOffset, playerPosn.y + mapViewVerticalOffset, '@');
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics

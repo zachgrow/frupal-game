@@ -4,8 +4,8 @@ AUTH Zach Grow
 DESC Implements the GameMap class and its associated methods
 */
 
-#include "engine.hpp"
 #include "map.hpp"
+#include "engine.hpp"
 #include "tile.hpp"
 #include <iostream>
 

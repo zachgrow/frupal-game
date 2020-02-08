@@ -95,7 +95,7 @@ int GameMap::getTileColorAt(unsigned int x, unsigned int y)
 int GameMap::getTerrainCostAt(unsigned int x, unsigned int y)
 {
 	// Returns the terrain cost of the tile at the specified location
-	//	return mapArray[x][y]->getTerrainCost();
+	//return mapArray[x][y]->getTerrainCost();
 	return 0;
 }
 

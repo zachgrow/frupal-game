@@ -289,7 +289,7 @@ void GameGUI::displayMessageLog() {
 //	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
 if (globalMsgLog.size() > 0) {
 		vector<string>::reverse_iterator msgLogIter = globalMsgLog.messageList.rbegin();
-		for (msgLogIter; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
+		for ( ; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
 			terminal_print(cursorXPosition, cursorYPosition++, (*msgLogIter).c_str());
 		}
 	}

@@ -88,7 +88,8 @@ screenHeight(50),
 player(health, money, "")
 {
 	// The default constructor
-	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+//	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+	gui = GameGUI();
 //	map.resize(MAP_DIM);
 //	for (auto& i : map)
 //		i.resize(MAP_DIM);
@@ -138,7 +139,8 @@ bool GameEngine::initialize(const std::string& configFile)
 
 //	worldMap.generateMap(MAP_DIM, MAP_DIM);
 	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
-	gui.initialize(); // Initialize the GUI's state
+	gui.initialize(screenWidth, screenHeight, &player); // Initialize the GUI's state
+//	gui.initialize(screenWidth, screenHeight, player, worldMap); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state

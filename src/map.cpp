@@ -4,6 +4,7 @@ AUTH Zach Grow
 DESC Implements the GameMap class and its associated methods
 */
 
+#include "engine.hpp"
 #include "map.hpp"
 #include "tile.hpp"
 #include <iostream>
@@ -22,11 +23,12 @@ GameMap::~GameMap() {
 	// The destructor
 	delete [] mapArray;
 }
-bool GameMap::generateMap(const uint inputWidth, const uint inputHeight) {
+//bool GameMap::generateMap(const uint inputWidth, const uint inputHeight, const GameEngine* engine) {
+bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inputHeight, int (*rng)(int, int)) {
 	// Generates a new map, given a rectangular size
 	// Do nothing and return FALSE if a map has already been created
 	if (this->mapWidth != 0 || this->mapHeight != 0) {
-		cerr << "ERROR: Cannot overwrite existing map data.\n";
+		cerr << "ERROR: Map object already exists.\n";
 		return false;
 	}
 	// Simple map generation scheme: roll 1d20 and choose a Tile type:
@@ -43,6 +45,7 @@ bool GameMap::generateMap(const uint inputWidth, const uint inputHeight) {
 	for (uint mapXIndex = 0; mapXIndex < inputWidth; mapXIndex++) {
 		for (uint mapYIndex = 0; mapYIndex < inputHeight; mapYIndex++) {
 			// roll the dice
+			randomValue = rng(1, 20);
 			uint mapCoordinate = mapXIndex * mapWidth + mapYIndex;
 			if (randomValue <= 8) {
 				// add Rock tile

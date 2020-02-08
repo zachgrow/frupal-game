@@ -34,7 +34,8 @@ struct GameEngine
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
-	std::mt19937 randomEng;
+	static int getRandomValue(int minimum, int maximum);
+	static std::mt19937 randomEng;
 
 	GameEngine(int health, int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop

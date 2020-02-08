@@ -8,7 +8,7 @@ DESC Contains definitions of the GameEngine class
 
 #include "gui.hpp"
 #include "player.hpp"
-#include "tile.hpp"
+#include "map.hpp"
 #include <string>		// String object for text
 #include <random>
 #include <vector>
@@ -29,6 +29,7 @@ struct GameEngine
 	int jewelsX;
 	int jewelsY;
 //  std::vector<std::vector<Tile>> map;
+	GameMap worldMap;
 	Player player;
 	GameGUI gui;			// Pointer to the game interface object
 	std::string terminalFontPath; // Contains relative path to the terminal font

@@ -22,3 +22,7 @@ void Water::display()
     std::cout << this->c;
     return;
 }
+char Water::getChar()
+{
+	return c;
+}

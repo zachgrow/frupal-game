@@ -134,6 +134,7 @@ bool GameEngine::initialize(const std::string& configFile)
 		return false;
 	}
 
+	worldMap.generateMap(MAP_DIM, MAP_DIM);
 	gui.initialize(); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;

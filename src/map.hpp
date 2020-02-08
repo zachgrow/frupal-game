@@ -12,18 +12,18 @@ DESC Defines the GameMap class, which contains and manages map objects
 class GameMap {
 	public:
 		GameMap();
-//		~GameMap();
-		bool generateMap(unsigned int inputWidth, unsigned int inputHeight);
+		~GameMap();
+		bool generateMap(const unsigned int inputWidth, const unsigned int inputHeight);
 		Tile* getTileAt(unsigned int x, unsigned int y);
 		char getTileSymbolAt(unsigned int x, unsigned int y);
 		int getTileColorAt(unsigned int x, unsigned int y);
 		int getTerrainCostAt(unsigned int x, unsigned int y);
 
 	private:
-		//array of Tiles
 		unsigned int mapWidth;
 		unsigned int mapHeight;
-		Tile* mapArray;
+		Tile** mapArray;
+		void debugDumpMap();
 
 };
 #endif //FRUPALGAME_SRC_MAP_HPP_INCLUDED

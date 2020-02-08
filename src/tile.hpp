@@ -18,7 +18,7 @@ public:
     void display();
     Grass();
     Grass(char c, int r, int g, int b);
-    ~Grass();
+//    ~Grass();
     char getChar();
 };
 class Water : public Tile

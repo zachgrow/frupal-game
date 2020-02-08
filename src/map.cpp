@@ -12,22 +12,23 @@ DESC Implements the GameMap class and its associated methods
 typedef unsigned int uint;
 using namespace std;
 
-GameMap::GameMap() :
-mapWidth(0),
-mapHeight(0),
-mapArray(nullptr)
-{	// The default ctor
-
+GameMap::GameMap() : mapWidth(0),
+					 mapHeight(0),
+					 mapArray(nullptr)
+{ // The default ctor
 }
-GameMap::~GameMap() {
+GameMap::~GameMap()
+{
 	// The destructor
-	delete [] mapArray;
+	delete[] mapArray;
 }
 //bool GameMap::generateMap(const uint inputWidth, const uint inputHeight, const GameEngine* engine) {
-bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inputHeight, int (*rng)(int, int)) {
+bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inputHeight, int (*rng)(int, int))
+{
 	// Generates a new map, given a rectangular size
 	// Do nothing and return FALSE if a map has already been created
-	if (this->mapWidth != 0 || this->mapHeight != 0) {
+	if (this->mapWidth != 0 || this->mapHeight != 0)
+	{
 		cerr << "ERROR: Map object already exists.\n";
 		return false;
 	}
@@ -38,27 +39,36 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 	// 15-20	Grass
 	mapWidth = inputWidth;
 	mapHeight = inputHeight;
-	mapArray = new Tile*[mapWidth * mapHeight];
+	mapArray = new Tile *[mapWidth * mapHeight];
 	// Specific values are accessed as mapArray[x * mapWidth + y]
 	uint randomValue = 0;
 	clog << "Generating new map with dims " << mapWidth << "x" << mapHeight << "\n";
-	for (uint mapXIndex = 0; mapXIndex < inputWidth; mapXIndex++) {
-		for (uint mapYIndex = 0; mapYIndex < inputHeight; mapYIndex++) {
+	for (uint mapXIndex = 0; mapXIndex < inputWidth; mapXIndex++)
+	{
+		for (uint mapYIndex = 0; mapYIndex < inputHeight; mapYIndex++)
+		{
 			// roll the dice
 			randomValue = rng(1, 20);
 			uint mapCoordinate = mapXIndex * mapWidth + mapYIndex;
-			if (randomValue <= 8) {
+			if (randomValue <= 8)
+			{
 				// add Rock tile
-//				mapArray[mapCoordinate] = new Rock;
+				//				mapArray[mapCoordinate] = new Rock;
 				mapArray[mapCoordinate] = new Grass;
-			} else if (randomValue <= 12) {
+			}
+			else if (randomValue <= 12)
+			{
 				// add Dirt tile
-//				mapArray[mapCoordinate] = new Dirt;
+				//				mapArray[mapCoordinate] = new Dirt;
 				mapArray[mapCoordinate] = new Grass;
-			} else if (randomValue <= 15) {
+			}
+			else if (randomValue <= 15)
+			{
 				// add Water tile
 				mapArray[mapCoordinate] = new Water;
-			} else {
+			}
+			else
+			{
 				// add a Rock tile in all other cases
 				mapArray[mapCoordinate] = new Grass;
 			}
@@ -66,32 +76,39 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 	}
 	return true;
 }
-Tile* GameMap::getTileAt(unsigned int x, unsigned int y) {
+Tile *GameMap::getTileAt(unsigned int x, unsigned int y)
+{
 	// Returns a pointer to a specific tile in the array
 	return mapArray[x * mapWidth + y];
 }
-char GameMap::getTileSymbolAt(unsigned int x, unsigned int y) {
+char GameMap::getTileSymbolAt(unsigned int x, unsigned int y)
+{
 	// Returns the symbol of the tile at the specified location
 	return mapArray[x * mapWidth + y]->getChar();
 }
-int GameMap::getTileColorAt(unsigned int x, unsigned int y) {
+int GameMap::getTileColorAt(unsigned int x, unsigned int y)
+{
 	// Returns the color of the tile at the specified location
-//	return mapArray[x][y]->getColor();
+	//	return mapArray[x][y]->getColor();
 	return 0xFFBB00BB;
 }
-int GameMap::getTerrainCostAt(unsigned int x, unsigned int y) {
+int GameMap::getTerrainCostAt(unsigned int x, unsigned int y)
+{
 	// Returns the terrain cost of the tile at the specified location
-//	return mapArray[x][y]->getTerrainCost();
+	//	return mapArray[x][y]->getTerrainCost();
 	return 0;
 }
 
 // DEBUGGING FUNCTIONS
-void GameMap::debugDumpMap() {
+void GameMap::debugDumpMap()
+{
 	// Iterates across the mapArray object and writes lines to clog that
 	// indicate the pattern of tiles within the array
 	clog << "Doing a dump of the map tiles:\n";
-	for (uint xIndex = 0; xIndex < mapWidth; xIndex++) {
-		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
+	for (uint xIndex = 0; xIndex < mapWidth; xIndex++)
+	{
+		for (uint yIndex = 0; yIndex < mapHeight; yIndex++)
+		{
 			clog << mapArray[xIndex * mapWidth + yIndex]->getChar();
 		}
 		clog << endl;

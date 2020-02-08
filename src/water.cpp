@@ -3,26 +3,53 @@
 
 Water::Water()
 {
-    c = '~';
-    r = 0;
-    g = 0;
-    b = 256;
+
+    this->symbol = '.';
+    this->color = 14;
+    this->movementCost = 1;
+    this->obstructMovement = false;
+    this->hasBeenSeen = false;
 }
-Water::Water(char c, int r, int g, int b)
+Water::Water(char c, int color)
 {
-    this->c = c;
-    this->r = r;
-    this->g = g;
-    this->b = b;
-    this->status = false;
+    this->symbol = c;
+    this->color = color;
+    this->movementCost = 1;
+    this->obstructMovement = false;
+    this->hasBeenSeen = false;
 }
 void Water::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
-    std::cout << this->c;
+    std::cout << this->symbol;
     return;
 }
 char Water::getChar()
 {
-	return c;
+    return this->symbol;
+}
+
+int Water::getColor()
+{
+    return this->color;
+}
+void Water::setTerrainCost(int cost)
+{
+    this->movementCost = cost;
+}
+int Water::getTerrainCost()
+{
+    return this->movementCost;
+}
+bool Water::obstructs()
+{
+    return this->obstructMovement;
+}
+void Water::setObstruction()
+{
+    this->obstructMovement = !obstructMovement;
+}
+bool Water::wasObserved()
+{
+    return hasBeenSeen;
 }

@@ -1,54 +1,52 @@
 #include "tile.hpp"
-#include <iostream>
-
-Grass::Grass()
+Mud::Mud()
 {
     this->symbol = '.';
-    this->color = 10;
-    this->movementCost = 1;
+    this->color = 52;
+    this->movementCost = 2;
     this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
-Grass::Grass(char c, int color)
+Mud::Mud(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 1;
-    this->obstructMovement = false;
+    this->movementCost = 2;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
-void Grass::display()
+void Mud::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Grass::getChar()
+char Mud::getChar()
 {
     return this->symbol;
 }
 
-int Grass::getColor()
+int Mud::getColor()
 {
-    return this->symbol;
+    return this->color;
 }
-void Grass::setTerrainCost(int cost)
+void Mud::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Grass::getTerrainCost()
+int Mud::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Grass::obstructs()
+bool Mud::obstructs()
 {
     return this->obstructMovement;
 }
-void Grass::setObstruction()
+void Mud::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Grass::wasObserved()
+bool Mud::wasObserved()
 {
     return hasBeenSeen;
 }

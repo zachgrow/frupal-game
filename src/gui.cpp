@@ -223,7 +223,6 @@ void GameGUI::drawGUIFrame() {
 }
 void GameGUI::displayMap() {
 	// Display the currently-explored map
-	terminal_layer(2);// Move to the Terrain layer
 	// Get the size of the map
 	uint mapWidth = mapObject->getWidth();
 	uint mapHeight = mapObject->getHeight();
@@ -252,16 +251,18 @@ void GameGUI::displayMap() {
 		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
 			// Set the background first
 			terminal_layer(0);
-//			terminal_bkcolor(mapObject->getTileColorAt(xIndex, yIndex));
-			terminal_bkcolor("darkest green");
-			terminal_color("darker green");
-//			clog << "Placing char at " << (cursorXOrigin + xIndex) << ", " << (cursorYOrigin + yIndex) << endl;
+			uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
+			terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
+			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+			// Draw the terrain symbols
+			terminal_layer(2); // Move to the terrain layer
+			terminal_color(tileColor);
 			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
 		}
 	}
 	// Display the player's location within the map
 	terminal_layer(4);
-	terminal_color("lightest blue");
+	terminal_color("lightest blue"); // no way to obtain player color yet
 	Pos playerPosn = playerObject->getPos();
 	terminal_put(playerPosn.x + mapViewHorizontalOffset, playerPosn.y + mapViewVerticalOffset, '@');
 }

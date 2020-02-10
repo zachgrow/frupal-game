@@ -35,7 +35,6 @@ struct GameEngine
 	int jewelsX;
 	int jewelsY;
 	GameMap worldMap;
-	std::vector<int> tile_energy_costs_;
 	Player player;
 	GameGUI gui;
 	std::string terminalFontPath; // Contains relative path to the terminal font

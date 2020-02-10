@@ -256,10 +256,35 @@ void GameEngine::move_direction(directions dir)
 {
 	assert(dir >= UP && dir <= DOWN);
 	const char* directions[] = { "North", "West", "East", "South"};
+	auto position = player.getPos();
 
-	// Check if valid tile
+	switch (dir) {
+		case UP:
+			position.y -= 1;
+			break;
+		case LEFT:
+			position.x -= 1;
+			break;
+		case RIGHT:
+			position.x += 1;
+			break;
+		case DOWN:
+			position.y += 1;
+			break;
+		default: break;
+	}
+
+	try {
+		// Check if valid tile
+		if (!worldMap.getTileAt(position.x, position.y))
+			throw 0;
 #if 0
-	player.setEnergy(player.getEnergy() - tile_energy_cost[tile_id]);
+		player.setEnergy(player.getEnergy() - worldMap.getTerrainCostAt());
 #endif
-	player.move(directions[dir]);
+		player.move(directions[dir]);
+	}
+	catch (...) {
+		int basic_energy_deduct = 666;
+		player.setEnergy(player.getEnergy() - basic_energy_deduct);
+	}
 }

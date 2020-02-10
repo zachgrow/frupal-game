@@ -14,6 +14,13 @@ DESC Contains definitions of the GameEngine class
 
 struct GameEngine
 {
+	enum directions {
+		UP,
+		LEFT,
+		RIGHT,
+		DOWN
+	};
+
 	enum GameState {
 		STARTUP,
 		RUNNING,
@@ -28,6 +35,7 @@ struct GameEngine
 	int jewelsX;
 	int jewelsY;
 	GameMap worldMap;
+	std::vector<int> tile_energy_costs_;
 	Player player;
 	GameGUI gui;
 	std::string terminalFontPath; // Contains relative path to the terminal font
@@ -41,7 +49,8 @@ struct GameEngine
 	void terminate();		// Performs end-of-game cleanup before the engine itself is to be shutdown
 	bool loadConfiguration(const std::string& configFile); // Loads external config
 	std::string generateBLTConfigString(); // Generates a BearLibTerminal configuration string for terminal_set()
-	void print_debug_info() const;
+
+	void move_direction(directions dir);
 };
 
 #endif // FRUPALGAME_SRC_ENGINE_HPP_INCLUDED

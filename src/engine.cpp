@@ -6,6 +6,7 @@ DESC Contains implementation of game engine as well as main()
 
 #include "BearLibTerminal.h"
 #include "engine.hpp"
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
@@ -106,8 +107,25 @@ void GameEngine::loop()
 				break;
 			}
 
-			if (debug_mode)
-				print_debug_info();
+			switch (inputKey) {
+				case TK_A:
+				case TK_LEFT:
+					move_direction(LEFT);
+					break;
+				case TK_W:
+				case TK_UP:
+					move_direction(UP);
+					break;
+				case TK_S:
+				case TK_DOWN:
+					move_direction(DOWN);
+					break;
+				case TK_D:
+				case TK_RIGHT:
+					move_direction(RIGHT);
+					break;
+				default: break;
+			}
 		}
 		// Write result
 		gui.update();
@@ -234,42 +252,14 @@ int GameEngine::getRandomValue(int minimum, int maximum) {
 	return (randomEng() % maximum) + minimum;
 }
 
-/* This function disabled in favor of removing dependency on Tile class to
- * within GameMap class; please use GameMap access methods
-//#if 0
-static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
+void GameEngine::move_direction(directions dir)
 {
-	try {
-		return tiles.at(x).at(y);
-	}
-	catch (...) {
-		// This should be an invalid state.
-		return Tile();
-	}
-}
-//#endif
-*/
+	assert(dir >= UP && dir <= DOWN);
+	const char* directions[] = { "North", "West", "East", "South"};
 
-void GameEngine::print_debug_info() const
-{
-	// If debug_mode print debug info
-	// as comma deliminated list.
-	// First player health, player money,
-	// the eight tiles around player,
-	// and the tile under the player.
-	// maybe more?
-
-	// Visible tiles
-	// Need to figure out contents of tile class.
+	// Check if valid tile
 #if 0
-	{
-		auto position = player.getPos();
-		auto center_pos  = tile_at(map, position.x, position.y);
-		auto upper_left  = tile_at(map, position.x+1, position.y+1);
-		auto upper       = tile_at(map, position.x, position.y+1);
-		auto upper_right = tile_at(map, position.x+1, position.y+1);
-		auto left        = tile_at(map, position.x+1, position.y);
-		auto right
-	}
+	player.setEnergy(player.getEnergy() - tile_energy_cost[tile_id]);
 #endif
+	player.move(directions[dir]);
 }

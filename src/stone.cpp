@@ -1,54 +1,53 @@
 #include "tile.hpp"
-#include <iostream>
 
-Water::Water()
+Stone::Stone()
 {
-    this->symbol = '~';
-    this->color = 0xBB00009C;
-    this->movementCost = 1;
+    this->symbol = 'O';
+    this->color = 0xBBC0C0C0;
+    this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-Water::Water(char c, int color)
+Stone::Stone(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 1;
+    this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-void Water::display()
+void Stone::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Water::getChar()
+char Stone::getChar()
 {
     return this->symbol;
 }
 
-int Water::getColor()
+int Stone::getColor()
 {
     return this->color;
 }
-void Water::setTerrainCost(int cost)
+void Stone::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Water::getTerrainCost()
+int Stone::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Water::obstructs()
+bool Stone::obstructs()
 {
     return this->obstructMovement;
 }
-void Water::setObstruction()
+void Stone::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Water::wasObserved()
+bool Stone::wasObserved()
 {
     return hasBeenSeen;
 }

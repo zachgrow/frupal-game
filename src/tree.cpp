@@ -1,54 +1,53 @@
 #include "tile.hpp"
-#include <iostream>
 
-Water::Water()
+Tree::Tree()
 {
-    this->symbol = '~';
-    this->color = 0xBB00009C;
-    this->movementCost = 1;
+    this->symbol = 'T';
+    this->color = 0xBB556B2F;
+    this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-Water::Water(char c, int color)
+Tree::Tree(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 1;
+    this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-void Water::display()
+void Tree::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Water::getChar()
+char Tree::getChar()
 {
     return this->symbol;
 }
 
-int Water::getColor()
+int Tree::getColor()
 {
     return this->color;
 }
-void Water::setTerrainCost(int cost)
+void Tree::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Water::getTerrainCost()
+int Tree::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Water::obstructs()
+bool Tree::obstructs()
 {
     return this->obstructMovement;
 }
-void Water::setObstruction()
+void Tree::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Water::wasObserved()
+bool Tree::wasObserved()
 {
     return hasBeenSeen;
 }

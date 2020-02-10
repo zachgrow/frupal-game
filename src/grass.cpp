@@ -3,27 +3,52 @@
 
 Grass::Grass()
 {
-    c = '.';
-    r = 0;
-    g = 255;
-    b = 0;
-    status = false;
+    this->symbol = '.';
+    this->color = 0xBB006400;
+    this->movementCost = 1;
+    this->obstructMovement = true;
+    this->hasBeenSeen = false;
 }
-Grass::Grass(char c, int r, int g, int b)
+Grass::Grass(char c, int color)
 {
-    this->c = c;
-    this->r = r;
-    this->g = g;
-    this->b = b;
-    this->status = false;
+    this->symbol = c;
+    this->color = color;
+    this->movementCost = 1;
+    this->obstructMovement = false;
+    this->hasBeenSeen = false;
 }
 void Grass::display()
 {
-    //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE),this->color);
-    std::cout << this->c << ' ';
+    //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
+    std::cout << this->symbol;
     return;
 }
 char Grass::getChar()
 {
-    return this->c;
+    return this->symbol;
+}
+
+int Grass::getColor()
+{
+    return this->color;
+}
+void Grass::setTerrainCost(int cost)
+{
+    this->movementCost = cost;
+}
+int Grass::getTerrainCost()
+{
+    return this->movementCost;
+}
+bool Grass::obstructs()
+{
+    return this->obstructMovement;
+}
+void Grass::setObstruction()
+{
+    this->obstructMovement = !obstructMovement;
+}
+bool Grass::wasObserved()
+{
+    return hasBeenSeen;
 }

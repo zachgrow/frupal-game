@@ -1,54 +1,52 @@
 #include "tile.hpp"
-#include <iostream>
-
-Water::Water()
+Mud::Mud()
 {
-    this->symbol = '~';
-    this->color = 0xBB00009C;
-    this->movementCost = 1;
-    this->obstructMovement = false;
+    this->symbol = '.';
+    this->color = 0xBB8B4513;
+    this->movementCost = 2;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
-Water::Water(char c, int color)
+Mud::Mud(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 1;
-    this->obstructMovement = false;
+    this->movementCost = 2;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
-void Water::display()
+void Mud::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Water::getChar()
+char Mud::getChar()
 {
     return this->symbol;
 }
 
-int Water::getColor()
+int Mud::getColor()
 {
     return this->color;
 }
-void Water::setTerrainCost(int cost)
+void Mud::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Water::getTerrainCost()
+int Mud::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Water::obstructs()
+bool Mud::obstructs()
 {
     return this->obstructMovement;
 }
-void Water::setObstruction()
+void Mud::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Water::wasObserved()
+bool Mud::wasObserved()
 {
     return hasBeenSeen;
 }

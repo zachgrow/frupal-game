@@ -49,6 +49,7 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 		{
 			// roll the dice
 			randomValue = rng(1, 20);
+//			clog << "randomValue: " << randomValue << endl;
 			uint mapCoordinate = mapXIndex * mapWidth + mapYIndex;
 			if (randomValue <= 8)
 			{
@@ -89,14 +90,13 @@ char GameMap::getTileSymbolAt(unsigned int x, unsigned int y)
 int GameMap::getTileColorAt(unsigned int x, unsigned int y)
 {
 	// Returns the color of the tile at the specified location
-	//	return mapArray[x][y]->getColor();
-	return 0xFFBB00BB;
+//	clog << "Color at " << x << ", " << y << " is " << mapArray[x * mapWidth + y]->getColor() << endl;
+	return mapArray[x * mapWidth + y]->getColor();
 }
 int GameMap::getTerrainCostAt(unsigned int x, unsigned int y)
 {
 	// Returns the terrain cost of the tile at the specified location
-	//return mapArray[x][y]->getTerrainCost();
-	return 0;
+	return mapArray[x * mapWidth + y]->getTerrainCost();
 }
 
 // DEBUGGING FUNCTIONS

@@ -1,52 +1,53 @@
 #include "tile.hpp"
-Mud::Mud()
+
+Stone::Stone()
 {
-    this->symbol = '.';
-    this->color = 52;
-    this->movementCost = 2;
-    this->obstructMovement = true;
+    this->symbol = 'O';
+    this->color = 0xBBC0C0C0;
+    this->movementCost = 0;
+    this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-Mud::Mud(char c, int color)
+Stone::Stone(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 2;
-    this->obstructMovement = true;
+    this->movementCost = 0;
+    this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-void Mud::display()
+void Stone::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Mud::getChar()
+char Stone::getChar()
 {
     return this->symbol;
 }
 
-int Mud::getColor()
+int Stone::getColor()
 {
     return this->color;
 }
-void Mud::setTerrainCost(int cost)
+void Stone::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Mud::getTerrainCost()
+int Stone::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Mud::obstructs()
+bool Stone::obstructs()
 {
     return this->obstructMovement;
 }
-void Mud::setObstruction()
+void Stone::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Mud::wasObserved()
+bool Stone::wasObserved()
 {
     return hasBeenSeen;
 }

@@ -9,7 +9,6 @@ DESC Defines the GameMap class, which contains and manages map objects
 
 #include "tile.hpp"
 
-<<<<<<< HEAD
 class GameMap
 {
 public:
@@ -21,19 +20,8 @@ public:
 	char getTileSymbolAt(unsigned int x, unsigned int y);
 	int getTileColorAt(unsigned int x, unsigned int y);
 	int getTerrainCostAt(unsigned int x, unsigned int y);
-=======
-class GameMap {
-	public:
-		GameMap();
-		~GameMap();
-		bool generateMap(const unsigned int inputWidth, const unsigned int inputHeight, int (*rng)(int, int));
-		Tile* getTileAt(unsigned int x, unsigned int y);
-		char getTileSymbolAt(unsigned int x, unsigned int y);
-		int getTileColorAt(unsigned int x, unsigned int y);
-		int getTerrainCostAt(unsigned int x, unsigned int y);
-		unsigned int getWidth() { return mapWidth; }
-		unsigned int getHeight() { return mapHeight; }
->>>>>>> master
+	unsigned int getWidth() { return mapWidth; }
+	unsigned int getHeight() { return mapHeight; }
 
 private:
 	unsigned int mapWidth;

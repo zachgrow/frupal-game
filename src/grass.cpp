@@ -4,7 +4,7 @@
 Grass::Grass()
 {
     this->symbol = '.';
-    this->color = 10;
+    this->color = 0xBB006400;
     this->movementCost = 1;
     this->obstructMovement = true;
     this->hasBeenSeen = false;
@@ -30,7 +30,7 @@ char Grass::getChar()
 
 int Grass::getColor()
 {
-    return this->symbol;
+    return this->color;
 }
 void Grass::setTerrainCost(int cost)
 {

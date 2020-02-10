@@ -3,9 +3,8 @@
 
 Water::Water()
 {
-
-    this->symbol = '.';
-    this->color = 14;
+    this->symbol = '~';
+    this->color = 0xBB00009C;
     this->movementCost = 1;
     this->obstructMovement = false;
     this->hasBeenSeen = false;

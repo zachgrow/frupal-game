@@ -3,7 +3,7 @@
 Tree::Tree()
 {
     this->symbol = 'T';
-    this->color = 2;
+    this->color = 0xBB556B2F;
     this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
@@ -29,7 +29,7 @@ char Tree::getChar()
 
 int Tree::getColor()
 {
-    return this->symbol;
+    return this->color;
 }
 void Tree::setTerrainCost(int cost)
 {

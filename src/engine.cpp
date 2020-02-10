@@ -14,7 +14,7 @@ DESC Contains implementation of game engine as well as main()
 
 #define MAP_DIM 20
 #define HELP_INFO "Pass --help for help\n" \
-				  "     --DEBUG_MODE to log actions, (disables scoring)\n" \
+				  "     --DEBUG_MODE to default random seed, (disables scoring)\n" \
 				  "      -H integer for health\n" \
 				  "      -M integer for money\n"
 
@@ -105,9 +105,6 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
-
-			if (debug_mode)
-				print_debug_info();
 		}
 		// Write result
 		gui.update();
@@ -138,12 +135,12 @@ bool GameEngine::initialize(const std::string& configFile)
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
 //	The RNG is seeded as part of its instantiation call as a static obj
-/*	if (!debug_mode) {
+	if (!debug_mode) {
 		std::random_device rd;
 		randomEng.seed(rd());
 	} else {
 		randomEng.seed(47);
-	}*/
+	}
 
 	gameState = RUNNING;
 
@@ -230,46 +227,6 @@ std::string GameEngine::generateBLTConfigString()
 }
 
 int GameEngine::getRandomValue(int minimum, int maximum) {
-	// Generates and returns a random integer value in the specified range
-	return (randomEng() % maximum) + minimum;
-}
-
-/* This function disabled in favor of removing dependency on Tile class to
- * within GameMap class; please use GameMap access methods
-//#if 0
-static Tile tile_at(const std::vector<std::vector<Tile>>& tiles, int x, int y)
-{
-	try {
-		return tiles.at(x).at(y);
-	}
-	catch (...) {
-		// This should be an invalid state.
-		return Tile();
-	}
-}
-//#endif
-*/
-
-void GameEngine::print_debug_info() const
-{
-	// If debug_mode print debug info
-	// as comma deliminated list.
-	// First player health, player money,
-	// the eight tiles around player,
-	// and the tile under the player.
-	// maybe more?
-
-	// Visible tiles
-	// Need to figure out contents of tile class.
-#if 0
-	{
-		auto position = player.getPos();
-		auto center_pos  = tile_at(map, position.x, position.y);
-		auto upper_left  = tile_at(map, position.x+1, position.y+1);
-		auto upper       = tile_at(map, position.x, position.y+1);
-		auto upper_right = tile_at(map, position.x+1, position.y+1);
-		auto left        = tile_at(map, position.x+1, position.y);
-		auto right
-	}
-#endif
+	std::uniform_int_distribution<int> dist(minimum, maximum);
+	return dist(randomEng);
 }

@@ -26,6 +26,8 @@ struct Pos{
 
 class Actor{//actor class acts as base class for player and vendor
 public:
+  Actor();
+  ~Actor();
   virtual void action(class Player& user) = 0;
   const Pos getPos();
   void setPos(int x,int y);
@@ -35,8 +37,7 @@ public:
   void setSymbol(char symbol);
   string getName();
   void setName(string name);
-  Actor();
-  ~Actor();
+
 
 protected:
   string name;
@@ -50,6 +51,7 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
+  ~Vendor();
   void action(class Player &user);
   void initialize(string file);
   void displayTools();
@@ -89,6 +91,7 @@ public:
   bool move(string inp);//changes the players position based on character input
   bool buy(string tool, int cost);//ideally buys a tool if possible based on a character unique to each tool
   bool hasTool(string tool);
+  void addJewel();
 private:
   unsigned int money;
   unsigned int energy;

@@ -11,6 +11,20 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   out << "Current position[" << pos.x << ',' << pos.y << ']' << endl;
   return out;
 }
+Actor::Actor(){}
+void Actor::setPos(int x, int y){
+  position.x = x;
+  position.y = y;
+}
+const Pos Actor::getPos(){return position;}
+void Actor::setName(string name){
+  this->name = name;
+}
+void Actor::setName(string name){
+  this->name = name;
+}
+string Actor::getName(){return name;}
+
 
 Vendor::Vendor(){
   position.x = 0;
@@ -45,16 +59,16 @@ bool Vendor::hasTool(string tool){//check the tools list for tool
   }
   return found;
 }
-void Vendor::setPos(int x, int y){
+/*void Vendor::setPos(int x, int y){
   position.x = x;
   position.y = y;
-}
+}*/
 void Vendor::displayTools(){//display the vendor tools for user/testing
   for(auto it=list.begin();it!=list.end();++it){
     cout << "Tool: " << it->first << " Cost: " << it->second << endl;
   }
 }
-const Pos Vendor::getPos(){return position;}
+//const Pos Vendor::getPos(){return position;}
 void Vendor::initialize(string file){//read tools from a file with format tool#cost one tool per line
   ifstream inFile;
   inFile.open(file);
@@ -141,19 +155,19 @@ void Player::displayTools(){
 }
 
 //setter functions for the class members
-void Player::setName(string name){
+/*void Player::setName(string name){
   this->name = name;
-}
+}*/
 void Player::setMoney(int money){
   this->money = money;
 }
 void Player::setEnergy(int energy){
   this->energy = energy;
 }
-void Player::setPos(int x, int y){
+/*void Player::setPos(int x, int y){
   position.x = x;
   position.y = y;
-}
+}*/
 
 //getter functions
 int Player::getMoney(){
@@ -162,12 +176,12 @@ int Player::getMoney(){
 int Player::getEnergy(){
   return energy;
 }
-string Player::getName(){
+/*string Player::getName(){
   return name;
-}
-const Pos Player::getPos(){
+}*/
+/*const Pos Player::getPos(){
   return position;
-}
+}*/
 
 void Player::action(class Player & user){//player action takes user input and calls move or buy
   string inp;

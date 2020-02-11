@@ -27,7 +27,22 @@ struct Pos{
 class Actor{//actor class acts as base class for player and vendor
 public:
   virtual void action(class Player& user) = 0;
+  const Pos getPos();
+  void setPos(int x,int y);
+  int getColor();
+  void setColor(int val);
+  char getSymbol();
+  void setSymbol(char symbol);
+  string getName();
+  void setName(string name);
+  Actor();
+  ~Actor();
 
+protected:
+  string name;
+  char symbol;
+  Pos position;
+  int color;
 private:
 
 };
@@ -39,13 +54,13 @@ public:
   void initialize(string file);
   void displayTools();
   void addTool();
-  void setPos(int x,int y);
+  //void setPos(int x,int y);
   int getCost(string tool);
-  const Pos getPos();
+  //const Pos getPos();
   bool hasTool(string tool);
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
-  Pos position;
+//  Pos position;
   tools list;
 };
 
@@ -59,15 +74,15 @@ public:
 
   void action(class Player &user);//action will call relevant function
 
-  void setName(string name);//setter functions
+  //void setName(string name);//setter functions
   void setMoney(int money);
   void setEnergy(int energy);
-  void setPos(int x, int y);
+  //void setPos(int x, int y);
 
   int getMoney();//getter functions
   int getEnergy();
-  string getName();
-  const Pos getPos();
+  //string getName();
+  //const Pos getPos();
 
   void display();//display function mostly for testing
   void displayTools();
@@ -75,10 +90,10 @@ public:
   bool buy(string tool, int cost);//ideally buys a tool if possible based on a character unique to each tool
   bool hasTool(string tool);
 private:
-  int money;
-  int energy;
-  Pos position;
-  string name;
+  unsigned int money;
+  unsigned int energy;
+  unsigned int jewels;
+  //Pos position;
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

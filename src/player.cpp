@@ -12,24 +12,25 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   return out;
 }
 Actor::Actor(){}
+Actor::~Actor(){}
 void Actor::setPos(int x, int y){
   position.x = x;
   position.y = y;
 }
-const Pos Actor::getPos(){return position;}
-void Actor::setName(string name){
-  this->name = name;
-}
-void Actor::setName(string name){
-  this->name = name;
-}
-string Actor::getName(){return name;}
+void Actor::setName(string name){ this->name = name;}
+void Actor::setColor(int val){color = val;}
+void Actor::setSymbol(char symbol){this->symbol = symbol;}
 
+string Actor::getName(){return name;}
+const Pos Actor::getPos(){return position;}
+int Actor::getColor(){return color;}
+char Actor::getSymbol(){return symbol;}
 
 Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
 }
+Vendor::~Vendor(){}
 void Vendor::action(Player &user){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
@@ -59,10 +60,7 @@ bool Vendor::hasTool(string tool){//check the tools list for tool
   }
   return found;
 }
-/*void Vendor::setPos(int x, int y){
-  position.x = x;
-  position.y = y;
-}*/
+
 void Vendor::displayTools(){//display the vendor tools for user/testing
   for(auto it=list.begin();it!=list.end();++it){
     cout << "Tool: " << it->first << " Cost: " << it->second << endl;
@@ -154,20 +152,14 @@ void Player::displayTools(){
     cout << "Tool: " << *it << endl;
 }
 
-//setter functions for the class members
-/*void Player::setName(string name){
-  this->name = name;
-}*/
+//setter functions
 void Player::setMoney(int money){
   this->money = money;
 }
 void Player::setEnergy(int energy){
   this->energy = energy;
 }
-/*void Player::setPos(int x, int y){
-  position.x = x;
-  position.y = y;
-}*/
+
 
 //getter functions
 int Player::getMoney(){
@@ -176,12 +168,6 @@ int Player::getMoney(){
 int Player::getEnergy(){
   return energy;
 }
-/*string Player::getName(){
-  return name;
-}*/
-/*const Pos Player::getPos(){
-  return position;
-}*/
 
 void Player::action(class Player & user){//player action takes user input and calls move or buy
   string inp;
@@ -262,3 +248,4 @@ bool Player::move(string inp){//change the players position based on user input,
       return true;
     return false;
   }
+  void Player::addJewel(){++jewels;}

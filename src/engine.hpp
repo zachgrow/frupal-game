@@ -6,12 +6,11 @@ DESC Contains definitions of the GameEngine class
 #ifndef FRUPALGAME_SRC_ENGINE_HPP_INCLUDED
 #define FRUPALGAME_SRC_ENGINE_HPP_INCLUDED
 
-#include "gui.hpp"
+#include "map.hpp"
 #include "player.hpp"
-#include "tile.hpp"
+#include "gui.hpp"
 #include <string>		// String object for text
 #include <random>
-#include <vector>
 
 struct GameEngine
 {
@@ -28,12 +27,13 @@ struct GameEngine
 	unsigned int screenHeight; // Height of terminal in # of monospace chars
 	int jewelsX;
 	int jewelsY;
-	std::vector<std::vector<Tile>> map;
+	GameMap worldMap;
 	Player player;
-	GameGUI gui;			// Pointer to the game interface object
+	GameGUI gui;
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
-	std::mt19937 randomEng;
+	static int getRandomValue(int minimum, int maximum);
+	static std::mt19937 randomEng;
 
 	GameEngine(int health, int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop

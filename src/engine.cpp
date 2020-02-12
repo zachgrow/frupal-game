@@ -5,46 +5,79 @@ DESC Contains implementation of game engine as well as main()
 */
 
 #include "BearLibTerminal.h"
-#include "gui.hpp"
-#include "tile.hpp"
-#include "player.hpp"
 #include "engine.hpp"
+#include <cstdlib>
+#include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
 #include <sstream>		// Object for conversion from std::string to input stream
 #include <fstream>		// Simple file input/output
 
-//#include <cstdio>
-//#include <vector>
+#define MAP_DIM 20
+#define HELP_INFO "Pass --help for help\n" \
+				  "     --DEBUG_MODE to default random seed, (disables scoring)\n" \
+				  "      -H integer for health\n" \
+				  "      -M integer for money\n"
+
+std::mt19937 GameEngine::randomEng (47);
 
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
+	int health = -1;
+	int money = -1;
+	bool debug_mode = 0;
 	if (argc >= 2) {
-		// Parse the command line options
-		// need to invent some command line options!
-		std::cerr << "*** No command line options are available at this time." << std::endl;
-		return 1; // Exit the program by throwing a generic error code
-		if (*argv[1] == '-') {
-			// Parse the command line options
-			// need to invent some command line options!
-			std::cerr << "*** No command line options are available at this time.\n";
-			return 1; // Exit the program by throwing a generic error code
-		} else {
-			configFilePath = argv[1];
+		argv++;
+		while (*argv != nullptr) {
+			if (std::strcmp(*argv, "--help") == 0) {
+				std::cout << HELP_INFO;
+				return EXIT_SUCCESS;
+			}
+			else if (std::strcmp(*argv, "--DEBUG_MODE") == 0) {
+				debug_mode = true;
+			}
+			else if (**argv == '-') {
+				switch ((*argv)[1]) {
+					case 'H':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						health = atoi(*argv);
+						break;
+					case 'M':
+						if (std::string(*argv).size() == 2)
+							(*argv)++;
+						else
+							argv++;
+						money = atoi(*argv);
+						break;
+					default:
+						std::cerr << "Unknown argument exiting.\n";
+						return EXIT_FAILURE;
+				}
+			} else {
+				configFilePath = argv[1];
+			}
+			argv++; // Move to next arg
 		}
 	}
-	GameEngine engine;
+	GameEngine engine(health, money, debug_mode);
 	if (!engine.initialize(configFilePath)) { // Try initializing the engine
 		// If it didn't work for some reason, say so and exit
-		std::cerr << "*** There was a problem loading the configuration." << std::endl;
-		std::cerr << "*** The game will now exit." << std::endl;
+		std::cerr << "*** There was a problem loading the configuration.\n";
+		std::cerr << "*** The game will now exit.\n";
 		return 5; // Exit the program and throw a (different) error code
 	}
+<<<<<<< HEAD
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
 	//Create map object 
 	Tile [][50] map = new Tile [50][50];
 	//Invoke obstacle set function
 	
+=======
+	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
+>>>>>>> master
 	// Invoke the game loop
 	engine.loop();
 	// WHEN the player has closed the game:
@@ -52,13 +85,16 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine() noexcept :
+GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
 gameState(STARTUP),
+debug_mode(debug_mode),
 screenWidth(80),
-screenHeight(50)
+screenHeight(50),
+player(health, money, "")
 {
 	// The default constructor
-	gui = GameGUI(screenHeight, screenWidth); // Create a GUI instance
+	gui = GameGUI(); // Create a GUI instance
+	player.setPos(MAP_DIM/2, MAP_DIM/2); // Move the player onto the map
 }
 
 void GameEngine::loop()
@@ -96,17 +132,23 @@ bool GameEngine::initialize(const std::string& configFile)
 
 	if (!terminal_open()) { // Try creating a BearLibTerminal instance
 		// If it didn't work, send an error message to stderr
-		std::cerr << "*** GUI: There was a problem starting BearLibTerminal." << endl;
+		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
 	}
 
-	gui.initialize(); // Initialize the GUI's state
+	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
+	gui.initialize(screenWidth, screenHeight, &player, &worldMap); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 
-	std::random_device rd;
-	randomEng.seed(rd());
+//	The RNG is seeded as part of its instantiation call as a static obj
+	if (!debug_mode) {
+		std::random_device rd;
+		randomEng.seed(rd());
+	} else {
+		randomEng.seed(47);
+	}
 
 	gameState = RUNNING;
 
@@ -125,7 +167,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 	std::ifstream config(inputFile); // Open the configuration file
 	if (!config) { // Was the config file opened successfully?
 		// If not, display an error and exit
-		std::cerr << "*** The configuration file could not be opened." << std::endl;
+		std::cerr << "*** The configuration file could not be opened." << "\n";
 		return false;
 	}
 	std::stringstream lineStream; // Allows parsing single lines by chars
@@ -152,7 +194,7 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 			} else if (configKey == "fontSize") {
 				terminalFontSize = std::stoul(configValue, nullptr, 0);
 			} else { // No matching config key was found!
-				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << std::endl;
+				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << "\n";
 			}
 		}
 	}
@@ -164,7 +206,7 @@ std::string GameEngine::generateBLTConfigString()
 {
 	// Generates a valid BearLibTerminal configuration string from our config
 	// Set the window title
-	std::string windowTitleOption="title='FRUPAL'";
+	std::string windowTitleOption="title=\'FRUPAL\'";
 	// Set the window dimensions
 	std::string windowSizeOption="size=";
 	windowSizeOption.append(to_string(screenWidth));
@@ -190,4 +232,9 @@ std::string GameEngine::generateBLTConfigString()
 	}
 	fullOptionString.append(";"); // Terminating character
 	return fullOptionString;
+}
+
+int GameEngine::getRandomValue(int minimum, int maximum) {
+	std::uniform_int_distribution<int> dist(minimum, maximum);
+	return dist(randomEng);
 }

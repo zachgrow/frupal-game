@@ -226,7 +226,7 @@ bool Player::move(string inp){//change the players position based on user input,
       return move(inp);
     }
   }
-  bool Player::buy(string tool,int cost){//buy tool from vendor
+  bool Player::buy(string tool,unsigned int cost){//buy tool from vendor
     if(hasTool(tool)){//check for tool
       cerr << "You already have this tool" << endl;
       return false;
@@ -254,6 +254,6 @@ bool Player::move(string inp){//change the players position based on user input,
     if(it != toolbelt.end())
       toolbelt.erase(it);
     else
-      cerr << "You don't have that tool" << end;
+      cerr << "You don't have that tool" << endl;
   }
   void Player::addJewel(){++jewels;}

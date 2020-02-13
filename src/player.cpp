@@ -157,10 +157,10 @@ void Player::displayTools(){
 }
 
 //setter functions
-void Player::setMoney(int money){
+void Player::setMoney(unsigned int money){
   this->money = money;
 }
-void Player::setEnergy(int energy){
+void Player::setEnergy(unsigned int energy){
   this->energy = energy;
 }
 bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement

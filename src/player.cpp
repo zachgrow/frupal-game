@@ -163,7 +163,14 @@ void Player::setMoney(int money){
 void Player::setEnergy(int energy){
   this->energy = energy;
 }
-
+bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement
+  //returns false if player has run out of energy ideally ending the game
+  if(energy - cost > 0){
+    energy -= cost;
+    return true;
+  }
+  return false;
+}
 
 //getter functions
 int Player::getMoney(){

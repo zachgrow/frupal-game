@@ -76,8 +76,9 @@ public:
 
   void action(class Player &user);//action will call relevant function
 
-  void setMoney(int money);//setter functions
-  void setEnergy(int energy);
+  void setMoney(unsigned int money);//setter functions
+  void setEnergy(unsigned int energy);
+  bool deductEnergy(unsigned int cost);//Reduce player energy on movement
 
   int getMoney();//getter functions
   int getEnergy();

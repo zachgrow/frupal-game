@@ -49,7 +49,7 @@ void Vendor::action(Player &user){//when player position and vendor position are
     }
   }
   else{//user doesn't want a tool
-    user.action(user);
+    //user.action(user);
   }
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
@@ -135,6 +135,7 @@ Player::Player(const Player& user){//copy constructor
   this->name = user.name;
   money = user.money;
   energy = user.energy;
+  jewels = user.jewels;
   position.x = user.position.x;
   position.y = user.position.y;
   toolbelt = user.toolbelt;
@@ -247,5 +248,12 @@ bool Player::move(string inp){//change the players position based on user input,
     if(it != toolbelt.end())
       return true;
     return false;
+  }
+  void Player::dropTool(string tool){//Removes tool from toolbelt
+    auto it = toolbelt.find(tool);
+    if(it != toolbelt.end())
+      toolbelt.erase(it);
+    else
+      cerr << "You don't have that tool" << end;
   }
   void Player::addJewel(){++jewels;}

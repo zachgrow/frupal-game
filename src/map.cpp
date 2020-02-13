@@ -49,7 +49,7 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 		{
 			// roll the dice
 			randomValue = rng(1, 20);
-//			clog << "randomValue: " << randomValue << endl;
+			//			clog << "randomValue: " << randomValue << endl;
 			uint mapCoordinate = mapXIndex * mapWidth + mapYIndex;
 			if (randomValue <= 8)
 			{
@@ -90,7 +90,7 @@ char GameMap::getTileSymbolAt(unsigned int x, unsigned int y)
 int GameMap::getTileColorAt(unsigned int x, unsigned int y)
 {
 	// Returns the color of the tile at the specified location
-//	clog << "Color at " << x << ", " << y << " is " << mapArray[x * mapWidth + y]->getColor() << endl;
+	//	clog << "Color at " << x << ", " << y << " is " << mapArray[x * mapWidth + y]->getColor() << endl;
 	return mapArray[x * mapWidth + y]->getColor();
 }
 int GameMap::getTerrainCostAt(unsigned int x, unsigned int y)
@@ -113,4 +113,14 @@ void GameMap::debugDumpMap()
 		}
 		clog << endl;
 	}
+}
+void GameMap::updateMap(Pos playerpos)
+{
+	int size = 1; // Size of telescope, 1 for 1 cell around, 2 for 2 cell around, this define in player inventory
+	for (int i = -size; i <= size; i++)
+		for (int j = -size; j <= size; j++)
+		{
+			if (mapArray[playerpos.x * (mapWidth + i) + playerpos.y + j] != NULL)
+				mapArray[playerpos.x * (mapWidth + i) + playerpos.y + j]->setObserved();
+		}
 }

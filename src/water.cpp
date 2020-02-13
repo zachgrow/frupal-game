@@ -52,3 +52,7 @@ bool Water::wasObserved()
 {
     return hasBeenSeen;
 }
+void Water::setObserved()
+{
+    this->hasBeenSeen = true;
+}

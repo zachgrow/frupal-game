@@ -51,3 +51,7 @@ bool Stone::wasObserved()
 {
     return hasBeenSeen;
 }
+void Stone::setObserved()
+{
+    this->hasBeenSeen = true;
+}

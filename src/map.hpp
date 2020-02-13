@@ -8,7 +8,7 @@ DESC Defines the GameMap class, which contains and manages map objects
 #define FRUPALGAME_SRC_MAP_HPP_INCLUDED
 
 #include "tile.hpp"
-
+#include "player.hpp"
 class GameMap
 {
 public:
@@ -22,6 +22,7 @@ public:
 	int getTerrainCostAt(unsigned int x, unsigned int y);
 	unsigned int getWidth() { return mapWidth; }
 	unsigned int getHeight() { return mapHeight; }
+	void updateMap(Pos playerpos); // reveal oject surround player
 
 private:
 	unsigned int mapWidth;

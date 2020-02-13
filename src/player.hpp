@@ -82,7 +82,7 @@ public:
   void display();//display function mostly for testing
   void displayTools();//displays the tools the user has
   bool move(string inp);//changes the players position based on Direction(North etc.)
-  bool buy(string tool, int cost);//checks cost then adds tool to toolbelt and subtracts from money
+  bool buy(string tool, unsigned int cost);//checks cost then adds tool to toolbelt and subtracts from money
   bool hasTool(string tool);//searches toolbelt for argument returns true if found
   void dropTool(string tool);//removes the arguement from toolbelt
   void addJewel();//incriment jewels

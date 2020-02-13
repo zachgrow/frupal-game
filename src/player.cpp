@@ -103,6 +103,9 @@ void Vendor::addTool(){//add tool based on user input
     list.insert(make_pair(tool,cost));
   }
 }
+void Vendor::addTool(string name,unsigned int cost){
+  list.insert(make_pair(name,cost));
+}
 int Vendor::getCost(string tool){//return the cost of a tool based on name
   for(auto it = list.begin();it != list.end();++it){
     if(tool.compare(it->first) == 0)

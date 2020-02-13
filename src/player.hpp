@@ -28,16 +28,18 @@ class Actor{//actor class acts as base class for player and vendor
 public:
   Actor();
   ~Actor();
+
   virtual void action(class Player& user) = 0;
-  const Pos getPos();
-  void setPos(int x,int y);
-  int getColor();
+
+  void setPos(int x,int y);//setter
   void setColor(int val);
-  char getSymbol();
   void setSymbol(char symbol);
-  string getName();
   void setName(string name);
 
+  string getName();//getter
+  char getSymbol();
+  int getColor();
+  const Pos getPos();
 
 protected:
   string name;
@@ -53,11 +55,12 @@ public:
   Vendor();
   ~Vendor();
   void action(class Player &user);
-  void initialize(string file);
-  void displayTools();
-  void addTool();
-  int getCost(string tool);
-  bool hasTool(string tool);
+  void initialize(string file);//read tools from file where each line is tool#cost
+  void displayTools();//display the tools
+  void addTool();//add tool based on user input
+  void addTool(string name,unsigned int cost);//add tool based on arguments
+  int getCost(string tool);//return the cost of tool
+  bool hasTool(string tool);//return true if tool is in list
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
   tools list;

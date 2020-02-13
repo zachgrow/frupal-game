@@ -56,13 +56,10 @@ public:
   void initialize(string file);
   void displayTools();
   void addTool();
-  //void setPos(int x,int y);
   int getCost(string tool);
-  //const Pos getPos();
   bool hasTool(string tool);
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
-//  Pos position;
   tools list;
 };
 
@@ -76,27 +73,23 @@ public:
 
   void action(class Player &user);//action will call relevant function
 
-  //void setName(string name);//setter functions
-  void setMoney(int money);
+  void setMoney(int money);//setter functions
   void setEnergy(int energy);
-  //void setPos(int x, int y);
 
   int getMoney();//getter functions
   int getEnergy();
-  //string getName();
-  //const Pos getPos();
 
   void display();//display function mostly for testing
-  void displayTools();
-  bool move(string inp);//changes the players position based on character input
-  bool buy(string tool, int cost);//ideally buys a tool if possible based on a character unique to each tool
-  bool hasTool(string tool);
-  void addJewel();
+  void displayTools();//displays the tools the user has
+  bool move(string inp);//changes the players position based on Direction(North etc.)
+  bool buy(string tool, int cost);//checks cost then adds tool to toolbelt and subtracts from money
+  bool hasTool(string tool);//searches toolbelt for argument returns true if found
+  void dropTool(string tool);//removes the arguement from toolbelt
+  void addJewel();//incriment jewels
 private:
   unsigned int money;
   unsigned int energy;
   unsigned int jewels;
-  //Pos position;
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

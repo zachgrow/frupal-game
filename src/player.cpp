@@ -37,8 +37,7 @@ Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
 }
-Vendor::Vendor(const Vendor& other){
-  Actor(other);
+Vendor::Vendor(const Vendor& other):Actor(other){
   list = other.list;
 }
 Vendor::~Vendor(){}
@@ -145,8 +144,7 @@ Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energ
   position.y = 0;
 
 }
-Player::Player(const Player& user){//copy constructor
-  Actor(user);
+Player::Player(const Player& user):Actor(user){//copy constructor
   money = user.money;
   energy = user.energy;
   jewels = user.jewels;

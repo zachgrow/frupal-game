@@ -27,6 +27,7 @@ struct Pos{
 class Actor{//actor class acts as base class for player and vendor
 public:
   Actor();
+  Actor(const Actor& other);
   ~Actor();
 
   virtual void action(class Player& user) = 0;
@@ -53,6 +54,7 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
+  Vendor(const Vendor& other);
   ~Vendor();
   void action(class Player &user);
   void initialize(string file);//read tools from file where each line is tool#cost

@@ -12,6 +12,13 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   return out;
 }
 Actor::Actor(){}
+Actor::Actor(const Actor& other){
+  name = other.name;
+  position.x = other.position.x;
+  position.y = other.position.y;
+  symbol = other.symbol;
+  color = other.color;
+}
 Actor::~Actor(){}
 void Actor::setPos(int x, int y){
   position.x = x;
@@ -29,6 +36,10 @@ char Actor::getSymbol(){return symbol;}
 Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
+}
+Vendor::Vendor(const Vendor& other){
+  Actor(other);
+  list = other.list;
 }
 Vendor::~Vendor(){}
 void Vendor::action(Player &user){//when player position and vendor position are equal
@@ -135,12 +146,10 @@ Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energ
 
 }
 Player::Player(const Player& user){//copy constructor
-  this->name = user.name;
+  Actor(user);
   money = user.money;
   energy = user.energy;
   jewels = user.jewels;
-  position.x = user.position.x;
-  position.y = user.position.y;
   toolbelt = user.toolbelt;
 }
 

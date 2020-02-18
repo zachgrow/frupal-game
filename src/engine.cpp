@@ -106,6 +106,9 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
+
+			// Check with input parser
+			inputParser.checkAndParseInput(inputKey);
 		}
 		// Write result
 		gui.update();

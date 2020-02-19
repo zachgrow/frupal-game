@@ -279,7 +279,7 @@ bool Player::move(string inp){//change the players position based on user input,
     auto it = toolbelt.find(tool);
     if(it != toolbelt.end()){
       toolbelt.erase(it);
-      if(*it.compare("binoculars") == 0)
+      if((*it).compare("binoculars") == 0)//check if the tool is binoculars
         visibility = 1;
     }
     else

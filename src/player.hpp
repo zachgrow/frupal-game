@@ -98,7 +98,7 @@ private:
   unsigned int money;
   unsigned int energy;
   unsigned int jewels;
-  unsigned int visibility;
+  unsigned int visibility;//used for updating map
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

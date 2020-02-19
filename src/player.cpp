@@ -133,12 +133,12 @@ std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return 
   }
 }
 
-Player::Player():money(0),energy(0){//default constructor
+Player::Player():money(0),energy(0),jewels(0),visibility(1){//default constructor
   position.x = 0;
   position.y = 0;
 }
 
-Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy){//constructor to set given values
+Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy),visibility(1){//constructor to set given values
   this->name = name;
   position.x = 0;
   position.y = 0;
@@ -149,6 +149,7 @@ Player::Player(const Player& user):Actor(user){//copy constructor
   energy = user.energy;
   jewels = user.jewels;
   toolbelt = user.toolbelt;
+  visibility = user.visibility;
 }
 
 Player::~Player(){
@@ -170,6 +171,9 @@ void Player::setMoney(unsigned int money){
 void Player::setEnergy(unsigned int energy){
   this->energy = energy;
 }
+void Player::setVis(unsigned int vis){
+  visibility = vis;
+}
 bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement
   //returns false if player has run out of energy ideally ending the game
   if(energy - cost > 0){
@@ -185,6 +189,9 @@ int Player::getMoney(){
 }
 int Player::getEnergy(){
   return energy;
+}
+int Player::getVis(){
+  return visibility;
 }
 
 void Player::action(class Player & user){//player action takes user input and calls move or buy
@@ -256,6 +263,8 @@ bool Player::move(string inp){//change the players position based on user input,
       else{
         money -= cost;//decrease money
         toolbelt.insert(tool);//add the tool
+        if(tool.compare("binoculars") == 0)
+          visibility = 2;
         return true;
       }
     }
@@ -268,8 +277,11 @@ bool Player::move(string inp){//change the players position based on user input,
   }
   void Player::dropTool(string tool){//Removes tool from toolbelt
     auto it = toolbelt.find(tool);
-    if(it != toolbelt.end())
+    if(it != toolbelt.end()){
       toolbelt.erase(it);
+      if(*it.compare("binoculars") == 0)
+        visibility = 1;
+    }
     else
       cerr << "You don't have that tool" << endl;
   }

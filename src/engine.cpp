@@ -83,7 +83,7 @@ debug_mode(debug_mode),
 screenWidth(80),
 screenHeight(50),
 player(health, money, ""),
-inputParser(player)
+inputParser(player, worldMap)
 {
 	// The default constructor
 	gui = GameGUI(); // Create a GUI instance

@@ -81,9 +81,11 @@ public:
   void setMoney(unsigned int money);//setter functions
   void setEnergy(unsigned int energy);
   bool deductEnergy(unsigned int cost);//Reduce player energy on movement
+  void setVis(unsigned int vis);
 
   int getMoney();//getter functions
   int getEnergy();
+  int getVis();
 
   void display();//display function mostly for testing
   void displayTools();//displays the tools the user has
@@ -96,6 +98,7 @@ private:
   unsigned int money;
   unsigned int energy;
   unsigned int jewels;
+  unsigned int visibility;
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

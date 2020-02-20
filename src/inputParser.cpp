@@ -16,17 +16,23 @@ InputParser::InputParser(Player& player, GameMap& map)
 	game_map_ = &map;
 }
 
-bool isValidDirection(int x, int y, Player* player)
+static bool isValidDirection(int x, int y, Player* player, GameMap* map)
 {
+	// TODO Make checking.
+	return true;
 }
 
-static void testAndSet(int direction, Player* player)
+static void testAndSet(int direction, Player* player, GameMap* map)
 {
 	switch (direction) {
 		case UP:
+			break;
 		case LEFT:
+			break;
 		case RIGHT:
+			break;
 		case DOWN:
+			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";
 			break;
@@ -35,5 +41,24 @@ static void testAndSet(int direction, Player* player)
 
 void InputParser::checkAndParseInput(int key_stroke)
 {
+	switch (key_stroke) {
+		case TK_UP:
+		case TK_W:
+			testAndSet(UP, player_, game_map_);
+			break;
+		case TK_LEFT:
+		case TK_A:
+			testAndSet(LEFT, player_, game_map_);
+			break;
+		case TK_RIGHT:
+		case TK_D:
+			testAndSet(RIGHT, player_, game_map_);
+			break;
+		case TK_DOWN:
+		case TK_S:
+			testAndSet(DOWN, player_, game_map_);
+			break;
+		default: break;
+	}
 }
 

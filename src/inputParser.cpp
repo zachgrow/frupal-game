@@ -24,14 +24,23 @@ static bool isValidDirection(int x, int y, Player* player, GameMap* map)
 
 static void testAndSet(int direction, Player* player, GameMap* map)
 {
+	auto pos = player->getPos();
 	switch (direction) {
 		case UP:
+			if (isValidDirection(pos.x, pos.y - 1, player, map))
+				player->move("north");
 			break;
 		case LEFT:
+			if (isValidDirection(pos.x - 1, pos.y, player, map))
+				player->move("west");
 			break;
 		case RIGHT:
+			if (isValidDirection(pos.x + 1, pos.y, player, map))
+				player->move("east");
 			break;
 		case DOWN:
+			if (isValidDirection(pos.x, pos.y + 1, player, map))
+				player->move("south");
 			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";

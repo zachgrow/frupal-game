@@ -28,19 +28,19 @@ static void testAndSet(int direction, Player* player, GameMap* map)
 	switch (direction) {
 		case UP:
 			if (isValidDirection(pos.x, pos.y - 1, player, map))
-				player->move("north");
+				player->move("west");
 			break;
 		case LEFT:
 			if (isValidDirection(pos.x - 1, pos.y, player, map))
-				player->move("west");
+				player->move("north");
 			break;
 		case RIGHT:
 			if (isValidDirection(pos.x + 1, pos.y, player, map))
-				player->move("east");
+				player->move("south");
 			break;
 		case DOWN:
 			if (isValidDirection(pos.x, pos.y + 1, player, map))
-				player->move("south");
+				player->move("east");
 			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";

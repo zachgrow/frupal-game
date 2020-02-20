@@ -1,6 +1,7 @@
 
 #include "inputParser.hpp"
 #include "player.hpp"
+#include "map.hpp"
 #include <iostream>
 #include <BearLibTerminal.h>
 
@@ -16,36 +17,48 @@ InputParser::InputParser(Player& player, GameMap& map)
 	game_map_ = &map;
 }
 
-static bool isValidDirection(int x, int y, Player* player, GameMap* map)
+static int isValidDirection(int x, int y, Player* player, GameMap* map)
 {
-	// TODO Make checking.
+	if (x < 0 || y < 0 || x < map->getWidth() || y < map->getHeight())
+		return false;
 	return true;
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)
 {
 	auto pos = player->getPos();
+	int x, y;
 	switch (direction) {
 		case UP:
-			if (isValidDirection(pos.x, pos.y - 1, player, map))
+			x = pos.x;
+			y = pos.y - 1;
+			if (isValidDirection(x, y, player, map))
 				player->move("west");
 			break;
 		case LEFT:
-			if (isValidDirection(pos.x - 1, pos.y, player, map))
+			x = pos.x - 1;
+			y = pos.y;
+			if (isValidDirection(x, y, player, map))
 				player->move("north");
 			break;
 		case RIGHT:
-			if (isValidDirection(pos.x + 1, pos.y, player, map))
+			x = pos.x + 1;
+			y = pos.y;
+			if (isValidDirection(x, y, player, map))
 				player->move("south");
 			break;
 		case DOWN:
-			if (isValidDirection(pos.x, pos.y + 1, player, map))
+			x = pos.x;
+			y = pos.y + 1;
+			if (isValidDirection(x, y, player, map))
 				player->move("east");
 			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";
 			break;
 	}
+
+	player->setEnergy(player->getEnergy() - map->getTerrainCostAt(x, y));
 }
 
 void InputParser::checkAndParseInput(int key_stroke)

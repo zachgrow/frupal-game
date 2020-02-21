@@ -82,7 +82,8 @@ gameState(STARTUP),
 debug_mode(debug_mode),
 screenWidth(80),
 screenHeight(50),
-player(health, money, "")
+player(health, money, ""),
+inputParser(player, worldMap)
 {
 	// The default constructor
 	gui = GameGUI(); // Create a GUI instance
@@ -105,6 +106,9 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
+
+			// Check with input parser
+			inputParser.checkAndParseInput(inputKey);
 		}
 		// Write result
 		gui.update();

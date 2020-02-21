@@ -9,6 +9,7 @@ DESC Contains definitions of the GameEngine class
 #include "map.hpp"
 #include "player.hpp"
 #include "gui.hpp"
+#include "inputParser.hpp"
 #include <string>		// String object for text
 #include <random>
 
@@ -32,6 +33,7 @@ struct GameEngine
 	GameGUI gui;
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
+	InputParser inputParser;
 	static int getRandomValue(int minimum, int maximum);
 	static std::mt19937 randomEng;
 

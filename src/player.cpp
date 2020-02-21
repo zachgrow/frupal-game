@@ -11,11 +11,36 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   out << "Current position[" << pos.x << ',' << pos.y << ']' << endl;
   return out;
 }
+Actor::Actor(){}
+Actor::Actor(const Actor& other){
+  name = other.name;
+  position.x = other.position.x;
+  position.y = other.position.y;
+  symbol = other.symbol;
+  color = other.color;
+}
+Actor::~Actor(){}
+void Actor::setPos(int x, int y){
+  position.x = x;
+  position.y = y;
+}
+void Actor::setName(string name){ this->name = name;}
+void Actor::setColor(int val){color = val;}
+void Actor::setSymbol(char symbol){this->symbol = symbol;}
+
+string Actor::getName(){return name;}
+const Pos Actor::getPos(){return position;}
+int Actor::getColor(){return color;}
+char Actor::getSymbol(){return symbol;}
 
 Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
 }
+Vendor::Vendor(const Vendor& other):Actor(other){
+  list = other.list;
+}
+Vendor::~Vendor(){}
 void Vendor::action(Player &user){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
@@ -34,7 +59,7 @@ void Vendor::action(Player &user){//when player position and vendor position are
     }
   }
   else{//user doesn't want a tool
-    user.action(user);
+    //user.action(user);
   }
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
@@ -45,16 +70,13 @@ bool Vendor::hasTool(string tool){//check the tools list for tool
   }
   return found;
 }
-void Vendor::setPos(int x, int y){
-  position.x = x;
-  position.y = y;
-}
+
 void Vendor::displayTools(){//display the vendor tools for user/testing
   for(auto it=list.begin();it!=list.end();++it){
     cout << "Tool: " << it->first << " Cost: " << it->second << endl;
   }
 }
-const Pos Vendor::getPos(){return position;}
+//const Pos Vendor::getPos(){return position;}
 void Vendor::initialize(string file){//read tools from a file with format tool#cost one tool per line
   ifstream inFile;
   inFile.open(file);
@@ -91,6 +113,9 @@ void Vendor::addTool(){//add tool based on user input
     list.insert(make_pair(tool,cost));
   }
 }
+void Vendor::addTool(string name,unsigned int cost){
+  list.insert(make_pair(name,cost));
+}
 int Vendor::getCost(string tool){//return the cost of a tool based on name
   for(auto it = list.begin();it != list.end();++it){
     if(tool.compare(it->first) == 0)
@@ -108,24 +133,23 @@ std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return 
   }
 }
 
-Player::Player():money(0),energy(0){//default constructor
+Player::Player():money(0),energy(0),jewels(0),visibility(1){//default constructor
   position.x = 0;
   position.y = 0;
 }
 
-Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy){//constructor to set given values
+Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy),visibility(1){//constructor to set given values
   this->name = name;
   position.x = 0;
   position.y = 0;
 
 }
-Player::Player(const Player& user){//copy constructor
-  this->name = user.name;
+Player::Player(const Player& user):Actor(user){//copy constructor
   money = user.money;
   energy = user.energy;
-  position.x = user.position.x;
-  position.y = user.position.y;
+  jewels = user.jewels;
   toolbelt = user.toolbelt;
+  visibility = user.visibility;
 }
 
 Player::~Player(){
@@ -140,19 +164,23 @@ void Player::displayTools(){
     cout << "Tool: " << *it << endl;
 }
 
-//setter functions for the class members
-void Player::setName(string name){
-  this->name = name;
-}
-void Player::setMoney(int money){
+//setter functions
+void Player::setMoney(unsigned int money){
   this->money = money;
 }
-void Player::setEnergy(int energy){
+void Player::setEnergy(unsigned int energy){
   this->energy = energy;
 }
-void Player::setPos(int x, int y){
-  position.x = x;
-  position.y = y;
+void Player::setVis(unsigned int vis){
+  visibility = vis;
+}
+bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement
+  //returns false if player has run out of energy ideally ending the game
+  if(energy - cost > 0){
+    energy -= cost;
+    return true;
+  }
+  return false;
 }
 
 //getter functions
@@ -162,11 +190,8 @@ int Player::getMoney(){
 int Player::getEnergy(){
   return energy;
 }
-string Player::getName(){
-  return name;
-}
-const Pos Player::getPos(){
-  return position;
+int Player::getVis(){
+  return visibility;
 }
 
 void Player::action(class Player & user){//player action takes user input and calls move or buy
@@ -225,7 +250,7 @@ bool Player::move(string inp){//change the players position based on user input,
       return move(inp);
     }
   }
-  bool Player::buy(string tool,int cost){//buy tool from vendor
+  bool Player::buy(string tool,unsigned int cost){//buy tool from vendor
     if(hasTool(tool)){//check for tool
       cerr << "You already have this tool" << endl;
       return false;
@@ -238,6 +263,8 @@ bool Player::move(string inp){//change the players position based on user input,
       else{
         money -= cost;//decrease money
         toolbelt.insert(tool);//add the tool
+        if(tool.compare("binoculars") == 0)
+          visibility = 2;
         return true;
       }
     }
@@ -248,3 +275,14 @@ bool Player::move(string inp){//change the players position based on user input,
       return true;
     return false;
   }
+  void Player::dropTool(string tool){//Removes tool from toolbelt
+    auto it = toolbelt.find(tool);
+    if(it != toolbelt.end()){
+      toolbelt.erase(it);
+      if((*it).compare("binoculars") == 0)//check if the tool is binoculars
+        visibility = 1;
+    }
+    else
+      cerr << "You don't have that tool" << endl;
+  }
+  void Player::addJewel(){++jewels;}

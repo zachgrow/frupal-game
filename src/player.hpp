@@ -26,8 +26,27 @@ struct Pos{
 
 class Actor{//actor class acts as base class for player and vendor
 public:
+  Actor();
+  Actor(const Actor& other);
+  ~Actor();
+
   virtual void action(class Player& user) = 0;
 
+  void setPos(int x,int y);//setter
+  void setColor(int val);
+  void setSymbol(char symbol);
+  void setName(string name);
+
+  string getName();//getter
+  char getSymbol();
+  int getColor();
+  const Pos getPos();
+
+protected:
+  string name;
+  char symbol;
+  Pos position;
+  int color;
 private:
 
 };
@@ -35,17 +54,17 @@ private:
 class Vendor : public Actor{
 public:
   Vendor();
+  Vendor(const Vendor& other);
+  ~Vendor();
   void action(class Player &user);
-  void initialize(string file);
-  void displayTools();
-  void addTool();
-  void setPos(int x,int y);
-  int getCost(string tool);
-  const Pos getPos();
-  bool hasTool(string tool);
+  void initialize(string file);//read tools from file where each line is tool#cost
+  void displayTools();//display the tools
+  void addTool();//add tool based on user input
+  void addTool(string name,unsigned int cost);//add tool based on arguments
+  int getCost(string tool);//return the cost of tool
+  bool hasTool(string tool);//return true if tool is in list
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
-  Pos position;
   tools list;
 };
 
@@ -59,26 +78,27 @@ public:
 
   void action(class Player &user);//action will call relevant function
 
-  void setName(string name);//setter functions
-  void setMoney(int money);
-  void setEnergy(int energy);
-  void setPos(int x, int y);
+  void setMoney(unsigned int money);//setter functions
+  void setEnergy(unsigned int energy);
+  bool deductEnergy(unsigned int cost);//Reduce player energy on movement
+  void setVis(unsigned int vis);
 
   int getMoney();//getter functions
   int getEnergy();
-  string getName();
-  const Pos getPos();
+  int getVis();
 
   void display();//display function mostly for testing
-  void displayTools();
-  bool move(string inp);//changes the players position based on character input
-  bool buy(string tool, int cost);//ideally buys a tool if possible based on a character unique to each tool
-  bool hasTool(string tool);
+  void displayTools();//displays the tools the user has
+  bool move(string inp);//changes the players position based on Direction(North etc.)
+  bool buy(string tool, unsigned int cost);//checks cost then adds tool to toolbelt and subtracts from money
+  bool hasTool(string tool);//searches toolbelt for argument returns true if found
+  void dropTool(string tool);//removes the arguement from toolbelt
+  void addJewel();//incriment jewels
 private:
-  int money;
-  int energy;
-  Pos position;
-  string name;
+  unsigned int money;
+  unsigned int energy;
+  unsigned int jewels;
+  unsigned int visibility;//used for updating map
   std::set<std::string> toolbelt;
 };
 #endif //FRUPALGAME_SRC_PLAYER_HPP_INCLUDED

@@ -51,3 +51,6 @@ bool Tree::wasObserved()
 {
     return hasBeenSeen;
 }
+void Tree::setObserved(){
+	this->hasBeenSeen=true;
+}

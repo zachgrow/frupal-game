@@ -117,9 +117,4 @@ void GameMap::debugDumpMap()
 void GameMap::updateMap(Pos player, int visibility){
 if(visibility==NULL)
 	visibility =0;
-for(int i=-visibility;i<=visibility;i++)
-	for(int j=-visibility;j<=visibility;j++)
-	{if(mapArray[player.x*(mapWidth+i)+player.y+j]!=NULL)
-	mapArray[player.x*(mapWidth+i)+player.y+j]->setObserved();
-	}
 }

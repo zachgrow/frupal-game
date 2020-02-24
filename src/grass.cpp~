@@ -1,56 +1,54 @@
 #include "tile.hpp"
+#include <iostream>
 
-Stone::Stone()
+Grass::Grass()
 {
-    this->symbol = 'O';
-    this->color = 0xBBC0C0C0;
-    this->movementCost = 0;
-    this->obstructMovement = false;
+    this->symbol = '.';
+    this->color = 0xBB006400;
+    this->movementCost = 1;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
-Stone::Stone(char c, int color)
+Grass::Grass(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 0;
+    this->movementCost = 1;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-void Stone::display()
+void Grass::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Stone::getChar()
+char Grass::getChar()
 {
     return this->symbol;
 }
 
-int Stone::getColor()
+int Grass::getColor()
 {
     return this->color;
 }
-void Stone::setTerrainCost(int cost)
+void Grass::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Stone::getTerrainCost()
+int Grass::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Stone::obstructs()
+bool Grass::obstructs()
 {
     return this->obstructMovement;
 }
-void Stone::setObstruction()
+void Grass::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Stone::wasObserved()
+bool Grass::wasObserved()
 {
     return hasBeenSeen;
-}
-void Stone::setObserved(){
-	this->hasBeenSeen=true;
 }

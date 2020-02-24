@@ -1,14 +1,14 @@
 #include "tile.hpp"
 
-Stone::Stone()
+Tree::Tree()
 {
-    this->symbol = 'O';
-    this->color = 0xBBC0C0C0;
+    this->symbol = 'T';
+    this->color = 0xBB556B2F;
     this->movementCost = 0;
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-Stone::Stone(char c, int color)
+Tree::Tree(char c, int color)
 {
     this->symbol = c;
     this->color = color;
@@ -16,41 +16,38 @@ Stone::Stone(char c, int color)
     this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
-void Stone::display()
+void Tree::display()
 {
     //SetConsoleTextAttribute(GetStdHandle(STD_INPUT_HANDLE), this->color);
     std::cout << this->symbol;
     return;
 }
-char Stone::getChar()
+char Tree::getChar()
 {
     return this->symbol;
 }
 
-int Stone::getColor()
+int Tree::getColor()
 {
     return this->color;
 }
-void Stone::setTerrainCost(int cost)
+void Tree::setTerrainCost(int cost)
 {
     this->movementCost = cost;
 }
-int Stone::getTerrainCost()
+int Tree::getTerrainCost()
 {
     return this->movementCost;
 }
-bool Stone::obstructs()
+bool Tree::obstructs()
 {
     return this->obstructMovement;
 }
-void Stone::setObstruction()
+void Tree::setObstruction()
 {
     this->obstructMovement = !obstructMovement;
 }
-bool Stone::wasObserved()
+bool Tree::wasObserved()
 {
     return hasBeenSeen;
-}
-void Stone::setObserved(){
-	this->hasBeenSeen=true;
 }

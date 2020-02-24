@@ -155,6 +155,5 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
-    void setObserved();
 };
 #endif // FRUPALGAME_SRC_TILE_HPP_INCLUDED

@@ -95,6 +95,8 @@ void GameEngine::loop()
 	// BLT display explicitly requires an initial call to _refresh() prior to
 	// displaying anything onscreen
 	terminal_refresh();
+	worldMap.updateMap(player.getPos(), player.getVis());
+	gui.render();
 	// TK_CLOSE == true when the terminal window is closed
 	while (terminal_peek() != TK_CLOSE) { // _peek does not block if false (unlike _read)
 		// Fetch player action
@@ -106,9 +108,9 @@ void GameEngine::loop()
 				// Press Q to quit
 				break;
 			}
-
 			// Check with input parser
 			inputParser.checkAndParseInput(inputKey);
+			worldMap.updateMap(player.getPos(), player.getVis());
 		}
 		// Write result
 		gui.update();

@@ -13,7 +13,7 @@
 #include<string>
 #include<sstream>
 //Update when tools are implemented
-const int MAX = 80;//global used for bounds checking
+const int MAX = 20;//global used for bounds checking
 const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
 typedef std::set<std::pair<std::string,int>> tools;

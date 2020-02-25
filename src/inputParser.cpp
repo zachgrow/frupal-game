@@ -19,46 +19,51 @@ InputParser::InputParser(Player& player, GameMap& map)
 
 static int isValidDirection(int x, int y, Player* player, GameMap* map)
 {
-	if (x < 0 || y < 0 || x < map->getWidth() || y < map->getHeight())
-		return false;
-	return true;
+	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight()) {
+		std::cerr << x << ' ' << y << ' ' << map->getWidth() << ' ' << map->getHeight() << '\n';
+		std::cerr << "Out of range(" << x << ',' << y << ")\n";
+		return 0;
+	}
+	return 1;
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)
 {
 	auto pos = player->getPos();
 	int x, y;
+	int energy_deduction;
+	const char* direction_str[] = {
+		"north",
+		"west",
+		"south",
+		"east",
+	};
 	switch (direction) {
 		case UP:
 			x = pos.x;
 			y = pos.y - 1;
-			if (isValidDirection(x, y, player, map))
-				player->move("west");
 			break;
 		case LEFT:
 			x = pos.x - 1;
 			y = pos.y;
-			if (isValidDirection(x, y, player, map))
-				player->move("north");
 			break;
 		case RIGHT:
 			x = pos.x + 1;
 			y = pos.y;
-			if (isValidDirection(x, y, player, map))
-				player->move("south");
 			break;
 		case DOWN:
 			x = pos.x;
 			y = pos.y + 1;
-			if (isValidDirection(x, y, player, map))
-				player->move("east");
 			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";
 			break;
 	}
 
-	player->setEnergy(player->getEnergy() - map->getTerrainCostAt(x, y));
+	if ((energy_deduction = isValidDirection(x, y, player, map)))
+		player->move(direction_str[direction]);
+
+	player->setEnergy(player->getEnergy() - energy_deduction);
 }
 
 void InputParser::checkAndParseInput(int key_stroke)

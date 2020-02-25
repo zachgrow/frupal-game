@@ -13,7 +13,7 @@ public:
     virtual bool obstructs() = 0;
     virtual void setObstruction() = 0;
     virtual bool wasObserved() = 0;
-    virtual void setObserved()=0;
+    virtual void setObserved() = 0;
 
 private:
     char symbol;
@@ -97,7 +97,6 @@ private:
     int movementCost;
     bool obstructMovement;
     bool hasBeenSeen;
-    void setObserved();
 
 public:
     Mud();

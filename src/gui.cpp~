@@ -261,7 +261,6 @@ void GameGUI::displayMap() {
 			terminal_color(tileColor);
 			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));}
 			else {
-			terminal_layer(0);
 			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
 			}
 		}

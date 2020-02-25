@@ -13,6 +13,7 @@ public:
     virtual bool obstructs() = 0;
     virtual void setObstruction() = 0;
     virtual bool wasObserved() = 0;
+    virtual void setObserved() = 0;
 
 private:
     char symbol;
@@ -41,6 +42,7 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 class Water : public Tile
 {
@@ -62,6 +64,7 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 struct Tree : public Tile
 {
@@ -83,6 +86,7 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 
 struct Mud : public Tile
@@ -105,6 +109,7 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 
 struct Stone : public Tile
@@ -127,6 +132,7 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 struct QuickSand : public Tile
 {
@@ -148,5 +154,6 @@ public:
     bool obstructs();
     void setObstruction();
     bool wasObserved();
+    void setObserved();
 };
 #endif // FRUPALGAME_SRC_TILE_HPP_INCLUDED

@@ -249,15 +249,24 @@ void GameGUI::displayMap() {
 	// Display the map
 	for (uint xIndex = 0; xIndex < mapWidth; xIndex++) {
 		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
-			// Set the background first
-			terminal_layer(0);
-			uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
-			terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
-			// Draw the terrain symbols
-			terminal_layer(2); // Move to the terrain layer
-			terminal_color(tileColor);
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
+			if (mapObject->getObserved(xIndex, yIndex)) { // Has the player seen this tile before?
+				// Set the background first
+				terminal_layer(0);
+				uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
+				terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+				// Draw the terrain symbols
+				terminal_layer(2); // Move to the terrain layer
+				terminal_color(tileColor);
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
+			} else {
+				terminal_layer(0);
+				terminal_bkcolor("black");
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+				terminal_layer(2); // Move to the terrain layer
+				terminal_color("black");
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+			}
 		}
 	}
 	// Display the player's location within the map
@@ -298,6 +307,10 @@ void GameGUI::displayStatPanel() {
 	terminal_printf(cursorXPosition, cursorYPosition, "E %d", playerObject->getEnergy());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
+	terminal_color("white");
+	terminal_print(cursorXPosition, cursorYPosition, "Location:");
+	cursorXPosition += 10;
+	terminal_printf(cursorXPosition, cursorYPosition, "%d, %d", playerObject->getPos().x, playerObject->getPos().y);
 }
 void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen

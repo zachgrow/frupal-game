@@ -114,3 +114,14 @@ void GameMap::debugDumpMap()
 		clog << endl;
 	}
 }
+void GameMap::updateMap(Pos player, int visibility){
+for(int i=-visibility;i<=visibility;i++)
+	for(int j=-visibility;j<=visibility;j++){
+		if((player.x + i - 1) * mapWidth + (player.y + j - 1) < (mapWidth * mapHeight)){
+			mapArray[(player.x + i - 1) * mapWidth + (player.y + j - 1)]->setObserved();
+		}
+	}
+}
+bool GameMap::getObserved(unsigned int x, unsigned int y){
+	return mapArray[x * mapWidth + y]->wasObserved();
+}

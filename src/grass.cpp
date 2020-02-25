@@ -52,3 +52,6 @@ bool Grass::wasObserved()
 {
     return hasBeenSeen;
 }
+void Grass::setObserved(){
+	this->hasBeenSeen=true;
+}

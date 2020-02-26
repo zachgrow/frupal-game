@@ -17,14 +17,21 @@ InputParser::InputParser(Player& player, GameMap& map)
 	game_map_ = &map;
 }
 
-static int isValidDirection(int x, int y, Player* player, GameMap* map)
+static bool isValidDirection(int x, int y, Player* player, GameMap* map, int& deduction)
 {
 	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight()) {
-		std::cerr << x << ' ' << y << ' ' << map->getWidth() << ' ' << map->getHeight() << '\n';
 		std::cerr << "Out of range(" << x << ',' << y << ")\n";
-		return 0;
+		deduction = 0;
+		return false;
 	}
-	return 1;
+
+	deduction = map->getTerrainCostAt(x, y);
+
+//	if (!player->hasTool("boat") && 
+
+	std::cerr << deduction << "\n";
+
+	return true;
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)
@@ -60,7 +67,7 @@ static void testAndSet(int direction, Player* player, GameMap* map)
 			break;
 	}
 
-	if ((energy_deduction = isValidDirection(x, y, player, map)))
+	if (isValidDirection(x, y, player, map, energy_deduction))
 		player->move(direction_str[direction]);
 
 	player->setEnergy(player->getEnergy() - energy_deduction);

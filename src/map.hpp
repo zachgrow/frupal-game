@@ -25,6 +25,7 @@ public:
 	unsigned int getHeight() { return mapHeight; }
 	void updateMap(Pos player, int visibility);
 	bool getObserved(unsigned int x, unsigned int y);
+	bool getObstruct(unsigned int x, unsigned int y);
 private:
 	unsigned int mapWidth;
 	unsigned int mapHeight;

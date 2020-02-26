@@ -117,11 +117,16 @@ void GameMap::debugDumpMap()
 void GameMap::updateMap(Pos player, int visibility){
 for(int i=-visibility;i<=visibility;i++)
 	for(int j=-visibility;j<=visibility;j++){
-		if((player.x + i - 1) * mapWidth + (player.y + j - 1) < (mapWidth * mapHeight)){
-			mapArray[(player.x + i - 1) * mapWidth + (player.y + j - 1)]->setObserved();
+		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)){
+			mapArray[(player.x + i ) * mapWidth + (player.y + j )]->setObserved();
 		}
 	}
 }
 bool GameMap::getObserved(unsigned int x, unsigned int y){
 	return mapArray[x * mapWidth + y]->wasObserved();
+}
+bool GameMap::getObstruct(unsigned int x, unsigned int y){
+	if(x<0 ||y<0||x>=mapWidth||y>=mapHeight)
+	return false;
+	return mapArray[x * mapWidth + y]->obstructs();
 }

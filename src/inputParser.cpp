@@ -19,6 +19,7 @@ InputParser::InputParser(Player& player, GameMap& map)
 
 static bool isValidDirection(int x, int y, Player* player, GameMap* map, int& deduction)
 {
+<<<<<<< HEAD
 	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight()) {
 		std::cerr << "Out of range(" << x << ',' << y << ")\n";
 		deduction = 0;
@@ -32,6 +33,10 @@ static bool isValidDirection(int x, int y, Player* player, GameMap* map, int& de
 	std::cerr << deduction << "\n";
 
 	return true;
+=======
+	
+	return map->getObstruct(x,y);
+>>>>>>> fix almost map bugs, add object block player and bounderies of the map, and player is not placed at the right position
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)

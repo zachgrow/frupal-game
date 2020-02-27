@@ -19,18 +19,22 @@ InputParser::InputParser(Player& player, GameMap& map)
 
 static bool isValidDirection(int x, int y, Player* player, GameMap* map, int& deduction)
 {
+	// Is the player attempting to move outside the literal map bounds?
 	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight()) {
 		std::cerr << "Out of range(" << x << ',' << y << ")\n";
 		deduction = 0;
 		return false;
 	}
 
+	// Get the energy cost of the tile that the player will be moving into
 	deduction = map->getTerrainCostAt(x, y);
 
+	// If the player does not have a boat and the destination is water...
 	if (!player->hasTool("boat") && map->getTileAt(x, y)->getTile() == 1)
 		return false;
 
-	return true;
+	// Otherwise, check to see if the destination is obstructed somehow
+	return map->getObstruct(x,y);
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)

@@ -49,7 +49,7 @@ static void testAndSet(int direction, Player* player, GameMap* map)
 	}
 }
 
-void InputParser::checkAndParseInput(int key_stroke)
+bool InputParser::checkAndParseInput(int key_stroke)
 {
 	switch (key_stroke) {
 		case TK_UP:
@@ -68,7 +68,12 @@ void InputParser::checkAndParseInput(int key_stroke)
 		case TK_S:
 			testAndSet(DOWN, player_, game_map_);
 			break;
+		case TK_Q:
+			return false;
 		default: break;
 	}
+
+	previous_value_ = key_stroke;
+	return true;
 }
 

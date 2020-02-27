@@ -104,12 +104,11 @@ void GameEngine::loop()
 			// Perform action
 			// Parse the command input by reading it from terminal_
 			int inputKey = terminal_read();
-			if (inputKey == TK_Q) {
-				// Press Q to quit
-				break;
-			}
+
 			// Check with input parser
-			inputParser.checkAndParseInput(inputKey);
+			if (inputParser.checkAndParseInput(inputKey))
+				break;
+
 			worldMap.updateMap(player.getPos(), player.getVis());
 		}
 		// Write result

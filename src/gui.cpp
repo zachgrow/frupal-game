@@ -269,12 +269,11 @@ void GameGUI::displayMap() {
 			}
 		}
 	}
-	
 	// Display the player's location within the map
 	terminal_layer(4);
 	terminal_color("lightest blue"); // no way to obtain player color yet
 	Pos playerPosn = playerObject->getPos();
-	terminal_put(playerPosn.x+1 + mapViewHorizontalOffset, playerPosn.y +1+ mapViewVerticalOffset, '@');
+	terminal_put(playerPosn.x + cursorXOrigin, playerPosn.y + cursorYOrigin, '@');
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics

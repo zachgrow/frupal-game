@@ -1,6 +1,7 @@
 
 #include "inputParser.hpp"
 #include "player.hpp"
+#include "map.hpp"
 #include <iostream>
 #include <BearLibTerminal.h>
 
@@ -18,8 +19,8 @@ InputParser::InputParser(Player& player, GameMap& map)
 
 static bool isValidDirection(int x, int y, Player* player, GameMap* map)
 {
-	// TODO Make checking.
-	return true;
+	
+	return map->getObstruct(x,y);
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)

@@ -19,7 +19,7 @@ InputParser::InputParser(Player& player, GameMap& map)
 
 static bool isValidDirection(int x, int y, Player* player, GameMap* map)
 {
-	
+	//cout<<map->getTile(x,y)<<endl;
 	return map->getObstruct(x,y);
 }
 

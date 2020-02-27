@@ -36,6 +36,7 @@ char Actor::getSymbol(){return symbol;}
 Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
+  setSymbol('V');
 }
 Vendor::Vendor(const Vendor& other):Actor(other){
   list = other.list;
@@ -48,6 +49,7 @@ void Vendor::action(Player &user){//when player position and vendor position are
   getline(cin,inp);
   if(inp.compare("y")==0 || inp.compare("Y") == 0){
     cout << "What tool would you like to buy?" << endl;
+    displayTools();
     getline(cin,inp);
     if(hasTool(inp)){//check if the tool exists
       if(!user.buy(inp,getCost(inp)))//buy the tool: fails if player doesn't have enough money
@@ -176,7 +178,7 @@ void Player::setVis(unsigned int vis){
 }
 bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement
   //returns false if player has run out of energy ideally ending the game
-  if(energy - cost > 0){
+  if(cost >= 0 && energy - cost > 0){
     energy -= cost;
     return true;
   }
@@ -256,7 +258,7 @@ bool Player::move(string inp){//change the players position based on user input,
       return false;
     }
     else{
-      if(cost > money){//check cost of tool
+      if(cost > money || money < 0){//check cost of tool
         cerr << "You don't have enough money for that tool" << endl;
         return false;
       }

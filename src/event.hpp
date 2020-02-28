@@ -96,4 +96,54 @@ class troll : public Event
         Pos position;
 };
 
+class Mud_Event : public Event
+{
+    public:
+        void greeting();
+        bool mud_boots();
+    private:
+        Pos position;
+
+};
+
+class Tree_Event : public Event
+{
+    public:
+        void greeting();
+        bool chop();
+    private:
+        Pos position;
+
+};
+
+class Rock_Event : public Event
+{
+    public:
+        void greeting();
+        bool mud();
+    private:
+        Pos position;
+
+};
+
+class Quicksand_Event : public Event
+{
+    public:
+        void greeting();
+        bool quicksand();
+    private:
+        Pos position;
+
+};
+
+class Water_Event : public Event
+{
+    public:
+        void greeting();
+        bool boating();
+    private:
+        Pos position;
+
+};
+
 #endif

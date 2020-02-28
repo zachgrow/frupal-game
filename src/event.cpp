@@ -13,18 +13,21 @@ Event::Event()
 void Event::greeting()
 {
     cout<<"Uh-Oh You've run into a little trouble " <<endl;
+    return; 
 }
 
 void back_track::greeting()
 {
      cout<<"Uh-Oh You've run into a little trouble " <<endl;
      cout<<"You got caught in a mudslide and got moved back 3 spaces" <<endl;
+     return;
 }
 
 void back_track::react_to_player()
 {
     greeting();
     move_player();
+    return;
 }
 
 bool back_track::move_player()
@@ -61,12 +64,14 @@ void wind_storm::greeting()
 {
      cout<<"Uh-Oh You've run into a little trouble " <<endl;
      cout<<"You got caught in a tornado that lifted you up and dropped you 3 spaces away" <<endl;
+     return;
 }
 
 void wind_storm::react_to_player()
 {
     greeting();
     move_player();
+    return;
 }
 
 bool wind_storm::move_player()
@@ -103,6 +108,7 @@ void binoculars::greeting()
 {
      cout<<"You sumbled upon an old pair of binoculars " <<endl;
      cout<<"These can be used to see further ahead and watch out for upcomming obstacles" <<endl;
+     return;
     
 }
 
@@ -110,6 +116,7 @@ void binoculars::react_to_player()
 {
     greeting();
     give_binoculars();
+    return;
 }
 
 bool binoculars::give_binoculars()
@@ -134,12 +141,14 @@ void greedy_tile::greeting()
 {
      cout<<"You look down to see that your money bag has a hole in it!" <<endl;
      cout<<"Looking down into you bag, you realize that all of your money is gone!" <<endl; 
+     return;
 }
 
 void greedy_tile::react_to_player()
 {
     greeting();
     take_money();
+    return;
 }
 
 bool greedy_tile::take_money()
@@ -153,12 +162,14 @@ void jackpot::greeting()
 {
      cout<<"Someone who came before you dropped their bag of money" <<endl;
      cout<<"Congrats! This is a big break. You double your money!" <<endl; 
+     return;
 }
 
 void jackpot::react_to_player()
 {
     greeting();
     give_money();
+    return;
 }
 
 bool jackpot::give_money()
@@ -174,11 +185,13 @@ void nap::greeting()
 {
      cout<<"Is that a hammock?" <<endl;
      cout<<"Congrats! Take a power nap and boost your energy by 50%" <<endl; 
+     return;
 }
 void nap::react_to_player()
 {
     greeting();
     take_nap();
+    return;
 }
 
 bool nap::take_nap()
@@ -193,12 +206,14 @@ void dehydration::greeting()
 {
      cout<<"You've been walking for a while" <<endl;
      cout<<"The elements are getting to you. Dehydration costs you half of your energy" <<endl; 
+     return;
 }
 
 void dehydration::react_to_player()
 {
     greeting();
     dehydrate();
+    return;
 }
 
 bool dehydration::dehydrate()
@@ -233,6 +248,7 @@ void troll::greeting()
 void troll::react_to_player()
 {
     greeting();
+    return;
 }
 
 bool troll::labor()
@@ -250,3 +266,90 @@ bool troll::steal_money()
     is_resolved= true;
     return 1;
 }
+
+void Mud_Event::greeting()
+{
+     cout<<"You've run into a some Mud" <<endl;
+     return;
+}
+
+void Mud_Event::react_to_player()
+{
+    greeting();
+    give_money();
+    return;
+}
+
+bool Mud_Event::mud_boots()
+{
+    //place holder for Mud action
+  
+    is_resolved = true;
+    return 1; 
+}
+
+void Tree_Event::greeting()
+{
+     cout<<"A Tree is blocking your path" <<endl;
+     return;
+}
+
+void Tree_Event::react_to_player()
+{
+    greeting();
+    chop();
+    return;
+}
+
+bool Tree_Event::chop()
+{
+    //place holder for accessing player
+    if(player.hasTool("AXE"))
+    {
+        cout<<"Using your axe you clear your path and continue on your way"
+        is_resolved = true;
+        return 1;
+    }
+    else
+    {
+        cout<<"You'll have to buy an Axe if you want to continue on this path";
+        Vendor tempVendor;
+        tempVendor.action(player);
+        is_resolved = true;
+        return 1 ;
+    }
+}
+
+void Water_Event::greeting()
+{
+    cout<<"You've come across a river" <<endl;
+    cout<<"You'll need a boat in order to cross" <<endl;
+    return;
+}
+
+void Water_Event::react_to_player()
+{
+    greeting();
+    boating();
+    return;
+}
+
+bool Water_Event::boating()
+{
+    //place holder for accessing player
+    if(player.hasTool("BOAT"))
+    {
+        cout<<"Using your boat, you cross the river safely and continue on your way"
+        is_resolved = true;
+        return 1;
+    }
+    else
+    {
+        cout<<"You'll have to buy an Boat if you want to continue on this path";
+        Vendor tempVendor;
+        tempVendor.action(player);
+        is_resolved = true;
+        return 1 ;
+    }
+}
+

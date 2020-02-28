@@ -16,21 +16,12 @@ public:
     virtual void setObserved() = 0;
     virtual int getTile()=0;
 
-<<<<<<< HEAD
-#include <string>
-#include <vector>
-
-class Tile {
-    public:
-    std::string obstacle;
-=======
 private:
     char symbol;
     int color;
     int movementCost;
     bool obstructMovement;
     bool hasBeenSeen;
->>>>>>> master
 };
 class Grass : public Tile
 {

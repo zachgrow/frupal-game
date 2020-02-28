@@ -2,7 +2,9 @@
 #include "player.hpp"
 #include <iostream>
 
-Player player;
+// Required for definition of a static member
+Player *Event::player = nullptr;
+void (*Event::writeMsg)(const std::string&);
 
 Event::Event()
 {
@@ -10,9 +12,20 @@ Event::Event()
     is_resolved = false; 
 }
 
+void Event::setPlayerPtr(Player *inputPlayer)
+{
+	Event::player = inputPlayer;
+}
+
+void Event::setMsgLogPtr(void (*writeMsgPtr)(const string&))
+{
+	Event::writeMsg = writeMsgPtr;
+}
+
 void Event::greeting()
 {
-    cout<<"Uh-Oh You've run into a little trouble " <<endl;
+//    cout<<"Uh-Oh You've run into a little trouble " <<endl;
+	writeMsg("Uh-Oh You've run into a little trouble ");
     return; 
 }
 
@@ -33,31 +46,37 @@ void Back_Track::react_to_player()
 bool Back_Track::move_player()
 {
     //Access to player position?
-    int x = player.position.x;
-    int y = player.position.y;
+//    int x = player->position.x;
+//    int y = player->position.y;
+	Pos position = player->getPos();
 
+	/*
     if(x-3 > 0)
     {
         //place holder for method to move player
-        player.setPos(x-3,y);
+        player->setPos(x-3,y);
         is_resolved= true;
         return 1;
     }
     if(x-2 > 0)
     {
-        player.setPos(x-2,y);
+        player->setPos(x-2,y);
         is_resolved= true;
         return 1;
     }
     if(x-1 > 0)
     {
-        player.setPos(x-1,y);
+        player->setPos(x-1,y);
         is_resolved= true;
         return 1;
     }
-    else 
+    else
+	{
         is_resolved= true;
         return 0;
+	}
+	*/
+	return true;
 }
 
 void Wind_Storm::greeting()
@@ -77,31 +96,37 @@ void Wind_Storm::react_to_player()
 bool Wind_Storm::move_player()
 {
     //Access to player position?
-    int x = player.position.x;
-    int y = player.position.y;
+//    int x = player->position.x;
+//    int y = player->position.y;
+	Pos position = player->getPos();
 
+	/*
     if(y-3 > 0)
     {
         //place holder for method to move player
-        player.setPos(x,y-3);
+        player->setPos(x,y-3);
         is_resolved= true;
         return 1;
     }
     if(y-2 > 0)
     {
-        player.setPos(x,y-2);
+        player->setPos(x,y-2);
         is_resolved= true;
         return 1;
     }
     if(y-1 > 0)
     {
-        player.setPos(x,y-1);
+        player->setPos(x,y-1);
         is_resolved= true;
         return 1;
     }
-    else 
+    else
+	{
         is_resolved= true;
         return 0;
+	}
+	*/
+	return true;
 }
 
 void Binoculars::greeting()
@@ -109,19 +134,18 @@ void Binoculars::greeting()
      cout<<"You sumbled upon an old pair of Binoculars " <<endl;
      cout<<"These can be used to see further ahead and watch out for upcomming obstacles" <<endl;
      return;
-    
 }
 
 void Binoculars::react_to_player()
 {
     greeting();
-    give_Binoculars();
+    give_binoculars();
     return;
 }
 
-bool Binoculars::give_Binoculars()
+bool Binoculars::give_binoculars()
 {
-    if(player.hasTool("Binoculars")==1)    
+    if(player->hasTool("Binoculars")==1)    
     {
         is_resolved= true;
         return 0;
@@ -131,16 +155,18 @@ bool Binoculars::give_Binoculars()
         //Find out how to add without cost 
         Vendor temp_vendor;
         int binocular_cost = temp_vendor.getCost("Binoculars");
-        player.setMoney(player.getMoney() + binocular_cost);
-        player.buy("Binoculars",binocular_cost);
+        player->setMoney(player->getMoney() + binocular_cost);
+        player->buy("Binoculars",binocular_cost);
         is_resolved= true;
         return 1;
     }
 }
 void Greedy_Tile::greeting()
 {
-     cout<<"You look down to see that your money bag has a hole in it!" <<endl;
-     cout<<"Looking down into you bag, you realize that all of your money is gone!" <<endl; 
+//     cout<<"You look down to see that your money bag has a hole in it!" <<endl;
+//     cout<<"Looking down into you bag, you realize that all of your money is gone!" <<endl; 
+     writeMsg("You look down to see that your money bag has a hole in it!");
+	 writeMsg("Looking down into you bag, you realize that all of your money is gone!");
      return;
 }
 
@@ -154,7 +180,7 @@ void Greedy_Tile::react_to_player()
 bool Greedy_Tile::take_money()
 {
     //place holder for accessing player
-    player.setMoney(0);
+    player->setMoney((player->getMoney() / 2));
     is_resolved= true;
     return 1; 
 }
@@ -175,8 +201,8 @@ void Jackpot::react_to_player()
 bool Jackpot::give_money()
 {
     //place holder for accessing player
-    int Jackpot = player.getMoney();
-    player.setMoney(Jackpot);
+    int Jackpot = player->getMoney();
+    player->setMoney(Jackpot);
     is_resolved = true;
     return 1; 
 }
@@ -190,14 +216,14 @@ void Nap::greeting()
 void Nap::react_to_player()
 {
     greeting();
-    take_Nap();
+    take_nap();
     return;
 }
 
-bool Nap::take_Nap()
+bool Nap::take_nap()
 {
-    int boost = player.getEnergy() *2;
-    player.setEnergy(boost);
+    int boost = player->getEnergy() *2;
+    player->setEnergy(boost);
     is_resolved = true;
     return 1; 
 }
@@ -218,8 +244,8 @@ void Dehydration::react_to_player()
 
 bool Dehydration::dehydrate()
 {
-    int loss = player.getEnergy()/2;
-    player.setEnergy(loss);
+    int loss = player->getEnergy()/2;
+    player->setEnergy(loss);
     is_resolved= true;
     return 1; 
 }
@@ -253,16 +279,16 @@ void Troll::react_to_player()
 
 bool Troll::labor()
 {
-    int loss = player.getEnergy()/2;
-    player.setEnergy(loss);
+    int loss = player->getEnergy()/2;
+    player->setEnergy(loss);
     is_resolved= true;
     return 1; 
 }
 
 bool Troll::steal_money()
 {
-    int left_overs = player.getMoney();
-    player.setMoney(left_overs);
+    int left_overs = player->getMoney();
+    player->setMoney(left_overs);
     is_resolved= true;
     return 1;
 }
@@ -276,7 +302,7 @@ void Mud_Event::greeting()
 void Mud_Event::react_to_player()
 {
     greeting();
-    give_money();
+//    give_money();
     return;
 }
 
@@ -304,18 +330,18 @@ void Tree_Event::react_to_player()
 bool Tree_Event::chop()
 {
     //place holder for accessing player
-    if(player.hasTool("AXE"))
+    if(player->hasTool("AXE"))
     {
-        cout<<"Using your axe you clear your path and continue on your way"
+        cout<<"Using your axe you clear your path and continue on your way";
         is_resolved = true;
         return 1;
     }
     else
     {
         cout<<"You'll have to buy an Axe if you want to continue on this path";
-        Vendor tempVendor;
-        tempVendor.action(player);
-        is_resolved = true;
+//        Vendor tempVendor;
+//        tempVendor.action(player);
+//        is_resolved = true;
         return 1 ;
     }
 }
@@ -337,18 +363,18 @@ void Water_Event::react_to_player()
 bool Water_Event::boating()
 {
     //place holder for accessing player
-    if(player.hasTool("BOAT"))
+    if(player->hasTool("BOAT"))
     {
-        cout<<"Using your boat, you cross the river safely and continue on your way"
+        cout<<"Using your boat, you cross the river safely and continue on your way";
         is_resolved = true;
         return 1;
     }
     else
     {
-        cout<<"You'll have to buy an Boat if you want to continue on this path";
-        Vendor tempVendor;
-        tempVendor.action(player);
-        is_resolved = true;
+//        cout<<"You'll have to buy an Boat if you want to continue on this path";
+//        Vendor tempVendor;
+//        tempVendor.action(player);
+//        is_resolved = true;
         return 1 ;
     }
 }

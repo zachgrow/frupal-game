@@ -14,11 +14,19 @@ DESC Implements the Obstacle class, which provide the physical representations
 class Obstacle : public Actor {
 	public:
 		Obstacle();
-		Obstacle(std::string inputName, char inputSymbol, Pos inputPosn, int inputColor);
-//		~Obstacle();
-		virtual void action(class Player& user);
+		Obstacle(std::string inputName, char inputSymbol, int xPos, int yPos, int inputColor);
+		virtual ~Obstacle();
+		virtual void action(class Player& user) = 0;
+		bool isActive() { return this->event->is_active; }
 	
-	private:
+	protected:
 		Event *event;
 };
+
+class Thief : public Obstacle {
+	public:
+		Thief(int xPos, int yPos);
+		void action(class Player& user);
+};
+
 #endif // FRUPALGAME_SRC_OBSTACLE_HPP_INCLUDED

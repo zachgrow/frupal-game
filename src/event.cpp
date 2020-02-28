@@ -16,21 +16,21 @@ void Event::greeting()
     return; 
 }
 
-void back_track::greeting()
+void Back_Track::greeting()
 {
      cout<<"Uh-Oh You've run into a little trouble " <<endl;
      cout<<"You got caught in a mudslide and got moved back 3 spaces" <<endl;
      return;
 }
 
-void back_track::react_to_player()
+void Back_Track::react_to_player()
 {
     greeting();
     move_player();
     return;
 }
 
-bool back_track::move_player()
+bool Back_Track::move_player()
 {
     //Access to player position?
     int x = player.position.x;
@@ -60,21 +60,21 @@ bool back_track::move_player()
         return 0;
 }
 
-void wind_storm::greeting()
+void Wind_Storm::greeting()
 {
      cout<<"Uh-Oh You've run into a little trouble " <<endl;
      cout<<"You got caught in a tornado that lifted you up and dropped you 3 spaces away" <<endl;
      return;
 }
 
-void wind_storm::react_to_player()
+void Wind_Storm::react_to_player()
 {
     greeting();
     move_player();
     return;
 }
 
-bool wind_storm::move_player()
+bool Wind_Storm::move_player()
 {
     //Access to player position?
     int x = player.position.x;
@@ -104,24 +104,24 @@ bool wind_storm::move_player()
         return 0;
 }
 
-void binoculars::greeting()
+void Binoculars::greeting()
 {
-     cout<<"You sumbled upon an old pair of binoculars " <<endl;
+     cout<<"You sumbled upon an old pair of Binoculars " <<endl;
      cout<<"These can be used to see further ahead and watch out for upcomming obstacles" <<endl;
      return;
     
 }
 
-void binoculars::react_to_player()
+void Binoculars::react_to_player()
 {
     greeting();
-    give_binoculars();
+    give_Binoculars();
     return;
 }
 
-bool binoculars::give_binoculars()
+bool Binoculars::give_Binoculars()
 {
-    if(player.hasTool("binoculars")==1)    
+    if(player.hasTool("Binoculars")==1)    
     {
         is_resolved= true;
         return 0;
@@ -130,71 +130,71 @@ bool binoculars::give_binoculars()
     {
         //Find out how to add without cost 
         Vendor temp_vendor;
-        int binocular_cost = temp_vendor.getCost("binoculars");
+        int binocular_cost = temp_vendor.getCost("Binoculars");
         player.setMoney(player.getMoney() + binocular_cost);
-        player.buy("binoculars",binocular_cost);
+        player.buy("Binoculars",binocular_cost);
         is_resolved= true;
         return 1;
     }
 }
-void greedy_tile::greeting()
+void Greedy_Tile::greeting()
 {
      cout<<"You look down to see that your money bag has a hole in it!" <<endl;
      cout<<"Looking down into you bag, you realize that all of your money is gone!" <<endl; 
      return;
 }
 
-void greedy_tile::react_to_player()
+void Greedy_Tile::react_to_player()
 {
     greeting();
     take_money();
     return;
 }
 
-bool greedy_tile::take_money()
+bool Greedy_Tile::take_money()
 {
     //place holder for accessing player
     player.setMoney(0);
     is_resolved= true;
     return 1; 
 }
-void jackpot::greeting()
+void Jackpot::greeting()
 {
      cout<<"Someone who came before you dropped their bag of money" <<endl;
      cout<<"Congrats! This is a big break. You double your money!" <<endl; 
      return;
 }
 
-void jackpot::react_to_player()
+void Jackpot::react_to_player()
 {
     greeting();
     give_money();
     return;
 }
 
-bool jackpot::give_money()
+bool Jackpot::give_money()
 {
     //place holder for accessing player
-    int jackpot = player.getMoney();
-    player.setMoney(jackpot);
+    int Jackpot = player.getMoney();
+    player.setMoney(Jackpot);
     is_resolved = true;
     return 1; 
 }
 
-void nap::greeting()
+void Nap::greeting()
 {
      cout<<"Is that a hammock?" <<endl;
-     cout<<"Congrats! Take a power nap and boost your energy by 50%" <<endl; 
+     cout<<"Congrats! Take a power Nap and boost your energy by 50%" <<endl; 
      return;
 }
-void nap::react_to_player()
+void Nap::react_to_player()
 {
     greeting();
-    take_nap();
+    take_Nap();
     return;
 }
 
-bool nap::take_nap()
+bool Nap::take_Nap()
 {
     int boost = player.getEnergy() *2;
     player.setEnergy(boost);
@@ -202,21 +202,21 @@ bool nap::take_nap()
     return 1; 
 }
 
-void dehydration::greeting()
+void Dehydration::greeting()
 {
      cout<<"You've been walking for a while" <<endl;
      cout<<"The elements are getting to you. Dehydration costs you half of your energy" <<endl; 
      return;
 }
 
-void dehydration::react_to_player()
+void Dehydration::react_to_player()
 {
     greeting();
     dehydrate();
     return;
 }
 
-bool dehydration::dehydrate()
+bool Dehydration::dehydrate()
 {
     int loss = player.getEnergy()/2;
     player.setEnergy(loss);
@@ -224,9 +224,9 @@ bool dehydration::dehydrate()
     return 1; 
 }
 
-void troll::greeting()
+void Troll::greeting()
 {
-    cout<<"You came across a nasty troll living on the island" <<endl;
+    cout<<"You came across a nasty Troll living on the island" <<endl;
     cout<<"In order to let you pass, he wants you to either give him half of your money or you must spend half of your energy helping him repair his hut" <<endl; 
     cout<<"Enter 'W' if you want to work, or 'M' if you want to pay him off"<<endl;
 	char response;	
@@ -245,13 +245,13 @@ void troll::greeting()
     
 }
 
-void troll::react_to_player()
+void Troll::react_to_player()
 {
     greeting();
     return;
 }
 
-bool troll::labor()
+bool Troll::labor()
 {
     int loss = player.getEnergy()/2;
     player.setEnergy(loss);
@@ -259,7 +259,7 @@ bool troll::labor()
     return 1; 
 }
 
-bool troll::steal_money()
+bool Troll::steal_money()
 {
     int left_overs = player.getMoney();
     player.setMoney(left_overs);

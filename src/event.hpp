@@ -22,7 +22,7 @@ private:
     void perform_outcome();
 };
 
-class back_track : public Event
+class Back_Track : public Event
 {
     public:
         void greeting();
@@ -31,7 +31,7 @@ class back_track : public Event
         Pos position;
 };
 
-class wind_storm : public Event
+class Wind_Storm : public Event
 {
     public:
         void greeting();
@@ -40,7 +40,7 @@ class wind_storm : public Event
         Pos position;
 };
 
-class binoculars : public Event 
+class Binoculars : public Event
 {
     public:
         void greeting();
@@ -49,7 +49,7 @@ class binoculars : public Event
         Pos position;
 };
 
-class greedy_tile: public Event
+class Greedy_Tile: public Event
 {
     public:
         void greeting();
@@ -58,7 +58,7 @@ class greedy_tile: public Event
         Pos position;
 };
 
-class jackpot : public Event
+class Jackpot : public Event
 {
     public:
         void greeting();
@@ -67,7 +67,7 @@ class jackpot : public Event
         Pos position;
 };
 
-class nap : public Event
+class Nap : public Event
 {
     public:
         void greeting();
@@ -76,7 +76,7 @@ class nap : public Event
         Pos position;
 };
 
-class dehydration : public Event
+class Dehydration : public Event
 {
     public:
         void greeting();
@@ -86,7 +86,7 @@ class dehydration : public Event
 
 };
 
-class troll : public Event
+class Troll : public Event
 {
     public:
         void greeting();

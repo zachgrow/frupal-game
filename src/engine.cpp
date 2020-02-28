@@ -69,7 +69,15 @@ int main(int argc, char** argv)
 		std::cerr << "*** The game will now exit.\n";
 		return 5; // Exit the program and throw a (different) error code
 	}
+<<<<<<< HEAD
+	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << std::endl;
+	//Create map object 
+	Tile [][50] map = new Tile [50][50];
+	//Invoke obstacle set function
+	
+=======
 	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
+>>>>>>> master
 	// Invoke the game loop
 	engine.loop();
 	// WHEN the player has closed the game:

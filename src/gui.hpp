@@ -21,7 +21,7 @@ class GameGUI {
 		GameGUI();
 		~GameGUI();
 		// Initializes a GameGUI to initial state
-		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles);
+		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles,Vendor *vendorPtr);
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
@@ -55,6 +55,7 @@ class GameGUI {
 		Player* playerObject;
 		GameMap* mapObject;
 		std::list<Obstacle*> *obstacleList;
+		Vendor * vendorObject;
 		// Internal geometry information
 		unsigned int windowWidth;
 		unsigned int windowHeight;

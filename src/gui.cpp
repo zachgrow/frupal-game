@@ -142,11 +142,12 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr, GameMap* mapPtr) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr, GameMap* mapPtr,Vendor* vendorPtr) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
 	mapObject = mapPtr;
+	vendorObject = vendorPtr;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -264,7 +265,9 @@ void GameGUI::displayMap() {
 	terminal_layer(4);
 	terminal_color("lightest blue"); // no way to obtain player color yet
 	Pos playerPosn = playerObject->getPos();
+	Pos vendorPosn = vendorObject->getPos();
 	terminal_put(playerPosn.x + mapViewHorizontalOffset, playerPosn.y + mapViewVerticalOffset, '@');
+	terminal_put(vendorPosn.x + mapViewHorizontalOffset, vendorPosn.y + mapViewVerticalOffset, 'V');
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics

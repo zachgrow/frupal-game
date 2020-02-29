@@ -60,9 +60,8 @@ void Vendor::action(Player &user){//when player position and vendor position are
       action(user);//restart action
     }
   }
-  else{//user doesn't want a tool
-    //user.action(user);
-  }
+  cout << "Please return to other terminal" << endl; 
+    
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
   bool found = false;

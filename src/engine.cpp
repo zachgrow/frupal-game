@@ -23,8 +23,8 @@ std::mt19937 GameEngine::randomEng (47);
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
-	int health = -1;
-	int money = -1;
+	unsigned int health = 0;
+	unsigned int money = 0;
 	bool debug_mode = 0;
 	if (argc >= 2) {
 		argv++;
@@ -40,16 +40,18 @@ int main(int argc, char** argv)
 				switch ((*argv)[1]) {
 					case 'H':
 						if (std::string(*argv).size() == 2)
-							(*argv)++;
+							(*argv) += 3;
 						else
-							argv++;
+							(*argv) += 2;
 						health = atoi(*argv);
 						break;
 					case 'M':
 						if (std::string(*argv).size() == 2)
-							(*argv)++;
-						else
-							argv++;
+							(*argv)+= 3;
+						else{
+							//argv++;
+							(*argv) += 2;
+						}
 						money = atoi(*argv);
 						break;
 					default:
@@ -77,19 +79,21 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
+GameEngine::GameEngine(unsigned int health,unsigned int money, bool debug_mode) noexcept :
 gameState(STARTUP),
 debug_mode(debug_mode),
 screenWidth(80),
 screenHeight(50),
-player(health, money, ""),
+player(money, health, ""),
 inputParser(player, worldMap)
 {
 	// The default constructor
 	gui = GameGUI(); // Create a GUI instance
+	srand(time(NULL));
 	player.setPos(MAP_DIM/2, MAP_DIM/2); // Move the player onto the map
+	vendor.setPos(rand() % MAP_DIM + 1,rand() % MAP_DIM+1); // Move the vendor onto the map
+	vendor.initialize("src/tools.txt");
 }
-
 void GameEngine::loop()
 {
 	// BLT display explicitly requires an initial call to _refresh() prior to
@@ -109,6 +113,9 @@ void GameEngine::loop()
 
 			// Check with input parser
 			inputParser.checkAndParseInput(inputKey);
+			if(vendor.getPos() == player.getPos())
+				vendor.action(player);
+
 		}
 		// Write result
 		gui.update();
@@ -133,7 +140,7 @@ bool GameEngine::initialize(const std::string& configFile)
 	}
 
 	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
-	gui.initialize(screenWidth, screenHeight, &player, &worldMap); // Initialize the GUI's state
+	gui.initialize(screenWidth, screenHeight, &player, &worldMap, &vendor); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state

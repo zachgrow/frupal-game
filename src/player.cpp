@@ -3,6 +3,11 @@
  * Desc: This file contains the imlimentation for the player class
  */
 #include"player.hpp"
+Pos::Pos() : x(0), y(0) {	}
+Pos::Pos(int inputX, int inputY) :
+	x(inputX),
+	y(inputY)
+{	}
 bool Pos::operator==(const Pos & other)const{//compare two positions
   //ideal use:if(player.getPos() == vendor.getPos()){vendor.action(player)}
   return x == other.x && y == other.y;
@@ -12,6 +17,18 @@ ostream& operator<<(ostream & out, const Pos & pos){//display position
   return out;
 }
 Actor::Actor(){}
+Actor::Actor(string newName, char newSymbol, int inputX, int inputY, int newColor) :
+	name(newName),
+	symbol(newSymbol),
+	position(inputX, inputY),
+	color(newColor)
+{	}
+Actor::Actor(string newName, char newSymbol, Pos newPosition, int newColor) :
+	name(newName),
+	symbol(newSymbol),
+	position(newPosition),
+	color(newColor)
+{	}
 Actor::Actor(const Actor& other){
   name = other.name;
   position.x = other.position.x;

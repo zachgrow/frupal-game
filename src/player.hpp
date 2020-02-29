@@ -18,6 +18,8 @@ const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
 typedef std::set<std::pair<std::string,int>> tools;
 struct Pos{
+  Pos();
+  Pos(int inputX, int inputY);
   int x;
   int y;
   bool operator==(const Pos & other)const;//compare two positions(player and vendor)
@@ -27,6 +29,8 @@ struct Pos{
 class Actor{//actor class acts as base class for player and vendor
 public:
   Actor();
+  Actor(string newName, char newSymbol, int inputX, int inputY, int newColor);
+  Actor(string newName, char newSymbol, Pos newPosition, int newColor);
   Actor(const Actor& other);
   ~Actor();
 

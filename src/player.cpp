@@ -54,6 +54,7 @@ Vendor::Vendor(){
   position.x = 0;
   position.y = 0;
   setSymbol('V');
+  initialize("src/tools.txt");
 }
 Vendor::Vendor(const Vendor& other):Actor(other){
   list = other.list;
@@ -302,5 +303,9 @@ bool Player::move(string inp){//change the players position based on user input,
     }
     else
       cerr << "You don't have that tool" << endl;
+  }
+  void Player::giveTool(string tool){//give the player a free tool
+    if(!hasTool(tool))
+      toolbelt.insert(tool);
   }
   void Player::addJewel(){++jewels;}

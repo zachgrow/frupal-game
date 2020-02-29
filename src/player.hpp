@@ -97,6 +97,7 @@ public:
   bool buy(string tool, unsigned int cost);//checks cost then adds tool to toolbelt and subtracts from money
   bool hasTool(string tool);//searches toolbelt for argument returns true if found
   void dropTool(string tool);//removes the arguement from toolbelt
+  void giveTool(string tool);//give the player a tool for free
   void addJewel();//incriment jewels
 private:
   unsigned int money;

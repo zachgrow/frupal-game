@@ -145,12 +145,13 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles,Vendor *vendorPtr) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
 	mapObject = mapPtr;
 	obstacleList = obstacles;
+	vendorObject = vendorPtr;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -404,7 +405,7 @@ yOrigin(inputY),
 width(inputWidth),
 height(inputHeight)
 {	// Constructs a GUIPanel from the supplied values
-	
+
 	// x and y refer to the upper-left origin point of the panel
 	// width and height are specified in number of terminal character spaces
 

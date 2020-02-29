@@ -9,11 +9,14 @@ DESC Contains definitions of the GameGUI class, which displays the game
 #include "map.hpp"
 #include "player.hpp"
 #include "gui.hpp"
+#include "obstacle.hpp"
 #include <iostream>
 #include <string>
+//#include <list>
 
 using namespace std;
-
+GameGUI::MessageLog GameGUI::globalMsgLog;
+vector<string> GameGUI::MessageLog::messageList;
 // **** GameGUI Methods
 /* *** A short guide to BearLibTerminal API - Jan 19 2020 (Zach)
 CALLED BY GameEngine: (ie do not call them here!)
@@ -148,6 +151,7 @@ void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr, GameM
 	playerObject = playerPtr;
 	mapObject = mapPtr;
 	vendorObject = vendorPtr;
+	obstacleList = obstacles;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -158,7 +162,7 @@ void GameGUI::initialize(uint maxWidth, uint maxHeight, Player* playerPtr, GameM
 	// Create the individual panel objects
 	mapDisplay.initialize(1, 1, mapViewportWidth, mapViewportHeight);
 	statPanel.initialize((windowWidth - statPanelWidthMinimum + 1), 1, statPanelWidthMinimum, (windowHeight - 2));
-	messageLog.initialize(2, (windowHeight - msgPanelHeightMinimum), msgPanelWidthMinimum, msgPanelHeightMinimum);
+	messageDisplay.initialize(2, (windowHeight - msgPanelHeightMinimum), msgPanelWidthMinimum, msgPanelHeightMinimum);
 }
 void GameGUI::update() {
 	// polls game state to see if any of the GUI elements need to change
@@ -177,6 +181,9 @@ void GameGUI::render() {
 	displayStatPanel();
 	drawGUIFrame();
 	terminal_refresh(); // Tell BLT to go ahead and update the display
+}
+void GameGUI::addMessage(const string& message) {
+	globalMsgLog.add(message);
 }
 /***	Box-Drawing Char Unicode Codepoints
 		topLeft		= 0x250C,
@@ -250,24 +257,50 @@ void GameGUI::displayMap() {
 	// Display the map
 	for (uint xIndex = 0; xIndex < mapWidth; xIndex++) {
 		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
-			// Set the background first
-			terminal_layer(0);
-			uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
-			terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
-			// Draw the terrain symbols
-			terminal_layer(2); // Move to the terrain layer
-			terminal_color(tileColor);
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
+			if (mapObject->getObserved(xIndex, yIndex)) { // Has the player seen this tile before?
+				// Set the background first
+				terminal_layer(0);
+				uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
+				terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+				// Draw the terrain symbols
+				terminal_layer(2); // Move to the terrain layer
+				terminal_color(tileColor);
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
+			} else {
+				terminal_layer(0);
+				terminal_bkcolor("black");
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+				terminal_layer(2); // Move to the terrain layer
+				terminal_color("black");
+				terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
+			}
 		}
 	}
 	// Display the player's location within the map
+	terminal_layer(5);
+	terminal_color(playerObject->getColor()); // no way to obtain player color yet
+	Pos actorPosn = playerObject->getPos();
+	terminal_put(actorPosn.x + cursorXOrigin, actorPosn.y + cursorYOrigin, playerObject->getSymbol());
+	// Display all of the game obstacles
 	terminal_layer(4);
+<<<<<<< HEAD
 	terminal_color("lightest blue"); // no way to obtain player color yet
 	Pos playerPosn = playerObject->getPos();
 	Pos vendorPosn = vendorObject->getPos();
 	terminal_put(playerPosn.x + mapViewHorizontalOffset, playerPosn.y + mapViewVerticalOffset, '@');
 	terminal_put(vendorPosn.x + mapViewHorizontalOffset, vendorPosn.y + mapViewVerticalOffset, 'V');
+=======
+	if (!obstacleList->empty()) {
+		for (auto obstIter = obstacleList->begin(); obstIter != obstacleList->end(); obstIter++) {
+			if ((*obstIter)->isActive()) {
+				terminal_color((*obstIter)->getColor());
+				actorPosn = (*obstIter)->getPos();
+				terminal_put(actorPosn.x + cursorXOrigin, actorPosn.y + cursorYOrigin, (*obstIter)->getSymbol());
+			}
+		}
+	}
+>>>>>>> 4d1729385272965e915aaa4b43fc5a682cca59b0
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics
@@ -301,19 +334,23 @@ void GameGUI::displayStatPanel() {
 	terminal_printf(cursorXPosition, cursorYPosition, "E %d", playerObject->getEnergy());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
+	terminal_color("white");
+	terminal_print(cursorXPosition, cursorYPosition, "Location:");
+	cursorXPosition += 10;
+	terminal_printf(cursorXPosition, cursorYPosition, "%d, %d", playerObject->getPos().x, playerObject->getPos().y);
 }
 void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen
 	// Obtain the starting position and set some defaults
-	int cursorXPosition = messageLog.xOrigin;
-	int cursorYPosition = messageLog.yOrigin;
+	int cursorXPosition = messageDisplay.xOrigin;
+	int cursorYPosition = messageDisplay.yOrigin;
 	terminal_color("white"); // Default text color, can be overridden inline
 	// Display some example text for now
-//	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
-if (globalMsgLog.size() > 0) {
+	if (globalMsgLog.size() > 0) {
 		vector<string>::reverse_iterator msgLogIter = globalMsgLog.messageList.rbegin();
 		for ( ; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
 			terminal_print(cursorXPosition, cursorYPosition++, (*msgLogIter).c_str());
+//			terminal_print_ext(cursorXPosition, cursorYPosition++, messageDisplay.width, messageDisplay.height, TK_ALIGN_DEFAULT, (*msgLogIter).c_str());
 		}
 	}
 }
@@ -383,7 +420,7 @@ height(inputHeight)
 }
 */
 // **** MessageLog Methods
-int GameGUI::MessageLog::add(string newMessage) {
+int GameGUI::MessageLog::add(const string& newMessage) {
 	// Adds the input string to the message log list
 	messageList.push_back(newMessage);
 	return messageList.size();

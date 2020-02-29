@@ -10,8 +10,10 @@ DESC Contains definitions of the GameEngine class
 #include "player.hpp"
 #include "gui.hpp"
 #include "inputParser.hpp"
+#include "obstacle.hpp"
 #include <string>		// String object for text
 #include <random>
+#include <list>
 
 struct GameEngine
 {
@@ -37,6 +39,8 @@ struct GameEngine
 	InputParser inputParser;
 	static int getRandomValue(int minimum, int maximum);
 	static std::mt19937 randomEng;
+	std::list<Obstacle*> obstacleList;
+	void addObstacles();
 
 	GameEngine(unsigned int health,unsigned int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop

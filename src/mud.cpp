@@ -50,3 +50,6 @@ bool Mud::wasObserved()
 {
     return hasBeenSeen;
 }
+void Mud::setObserved(){
+	this->hasBeenSeen=true;
+}

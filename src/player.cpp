@@ -50,7 +50,7 @@ const Pos Actor::getPos(){return position;}
 int Actor::getColor(){return color;}
 char Actor::getSymbol(){return symbol;}
 
-Vendor::Vendor(){
+Vendor::Vendor():isVisible(false){
   position.x = 0;
   position.y = 0;
   setSymbol('V');

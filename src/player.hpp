@@ -69,6 +69,7 @@ public:
   bool hasTool(string tool);//return true if tool is in list
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
+  bool isVisible;
   tools list;
 };
 

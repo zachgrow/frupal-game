@@ -51,19 +51,21 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 			randomValue = rng(1, 20);
 //			clog << "randomValue: " << randomValue << endl;
 			uint mapCoordinate = mapXIndex * mapWidth + mapYIndex;
-			if (randomValue <= 8)
+			if (randomValue <= 1)
 			{
 				// add Rock tile
 				//				mapArray[mapCoordinate] = new Rock;
-				mapArray[mapCoordinate] = new Grass;
+				mapArray[mapCoordinate] = new Stone;
 			}
-			else if (randomValue <= 12)
+			else if (randomValue <= 2)
 			{
-				// add Dirt tile
-				//				mapArray[mapCoordinate] = new Dirt;
-				mapArray[mapCoordinate] = new Grass;
+				mapArray[mapCoordinate] = new Tree;
 			}
-			else if (randomValue <= 15)
+			else if (randomValue <=5)
+			{
+				mapArray[mapCoordinate] = new Mud;				
+			}
+			else if (randomValue <= 6)
 			{
 				// add Water tile
 				mapArray[mapCoordinate] = new Water;
@@ -129,4 +131,15 @@ bool GameMap::getObstruct(unsigned int x, unsigned int y){
 	if(x<0 ||y<0||x>=mapWidth||y>=mapHeight)
 	return false;
 	return mapArray[x * mapWidth + y]->obstructs();
+}
+void GameMap::destroyTile(unsigned int x, unsigned int y){
+	free(mapArray[x*mapWidth +y]);
+	mapArray[x*mapWidth +y]= new Grass;
+	return;
+}
+void GameMap::generateImportantStuff(unsigned int x, unsigned int y){
+	for (int i = -1;i<=1;i++)
+	for(int j=-1;j<=1;j++)
+		if((x+i)*mapWidth + (y+j)<(mapWidth * mapHeight))
+			destroyTile(x+i,y+j);
 }

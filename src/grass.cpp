@@ -3,7 +3,7 @@
 
 Grass::Grass()
 {
-    this->symbol = '.';
+    this->symbol = ' ';
     this->color = 0xBB006400;
     this->movementCost = 1;
     this->obstructMovement = true;

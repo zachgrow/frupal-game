@@ -17,36 +17,64 @@ InputParser::InputParser(Player& player, GameMap& map)
 	game_map_ = &map;
 }
 
-static bool isValidDirection(int x, int y, Player* player, GameMap* map)
+static bool isValidDirection(int x, int y, Player* player, GameMap* map, int& deduction)
 {
-	
+	//cout<<map->getTile(x,y)<<endl;
+	// Is the player attempting to move outside the literal map bounds?
+	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight()) {
+		std::cerr << "Out of range(" << x << ',' << y << ")\n";
+		deduction = 0;
+		return false;
+	}
+
+	// Get the energy cost of the tile that the player will be moving into
+	deduction = map->getTerrainCostAt(x, y);
+
+	// If the player does not have a boat and the destination is water...
+	if (!player->hasTool("boat") && map->getTileAt(x, y)->getTile() == 1)
+		return false;
+
+	// Otherwise, check to see if the destination is obstructed somehow
 	return map->getObstruct(x,y);
 }
 
 static void testAndSet(int direction, Player* player, GameMap* map)
 {
 	auto pos = player->getPos();
+	int x, y;
+	int energy_deduction;
+	const char* direction_str[] = {
+		"north",
+		"west",
+		"south",
+		"east",
+	};
 	switch (direction) {
 		case UP:
-			if (isValidDirection(pos.x, pos.y - 1, player, map))
-				player->move("west");
+			x = pos.x;
+			y = pos.y - 1;
 			break;
 		case LEFT:
-			if (isValidDirection(pos.x - 1, pos.y, player, map))
-				player->move("north");
+			x = pos.x - 1;
+			y = pos.y;
 			break;
 		case RIGHT:
-			if (isValidDirection(pos.x + 1, pos.y, player, map))
-				player->move("south");
+			x = pos.x + 1;
+			y = pos.y;
 			break;
 		case DOWN:
-			if (isValidDirection(pos.x, pos.y + 1, player, map))
-				player->move("east");
+			x = pos.x;
+			y = pos.y + 1;
 			break;
 		default:
 			std::cerr << "Invalid argument passed to " << __func__ << "\n";
 			break;
 	}
+
+	if (isValidDirection(x, y, player, map, energy_deduction))
+		player->move(direction_str[direction]);
+
+	player->setEnergy(player->getEnergy() - energy_deduction);
 }
 
 bool InputParser::checkAndParseInput(int key_stroke)

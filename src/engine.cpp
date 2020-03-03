@@ -23,8 +23,8 @@ std::mt19937 GameEngine::randomEng (47);
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
-	int health = -1;
-	int money = -1;
+	int health = 100;
+	int money = 100;
 	bool debug_mode = 0;
 	if (argc >= 2) {
 		argv++;
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 		std::cerr << "*** The game will now exit.\n";
 		return 5; // Exit the program and throw a (different) error code
 	}
-	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
+//	std::cout << "Success! Width x height: " << engine.screenWidth << "x" << engine.screenHeight << "\n";
 	// Invoke the game loop
 	engine.loop();
 	// WHEN the player has closed the game:
@@ -111,6 +111,10 @@ void GameEngine::loop()
 
 			worldMap.updateMap(player.getPos(), player.getVis());
 		}
+		// Check the obstacle list to see if anything should trigger
+		for (auto obstIter = obstacleList.begin(); obstIter != obstacleList.end(); obstIter++) {
+			if ((*obstIter)->isActive()) (*obstIter)->action(player);
+		}
 		// Write result
 		gui.update();
 		gui.render();
@@ -132,13 +136,6 @@ bool GameEngine::initialize(const std::string& configFile)
 		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
 	}
-
-	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
-	gui.initialize(screenWidth, screenHeight, &player, &worldMap); // Initialize the GUI's state
-	std::string bltConfigString = generateBLTConfigString();
-//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
-	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
-
 //	The RNG is seeded as part of its instantiation call as a static obj
 	if (!debug_mode) {
 		std::random_device rd;
@@ -146,6 +143,19 @@ bool GameEngine::initialize(const std::string& configFile)
 	} else {
 		randomEng.seed(47);
 	}
+	player.setSymbol('@');
+	player.setColor(0xFFCC3300);
+	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
+	// Set the Event static variable for the player object
+	Event::setPlayerPtr(&player);
+	Event::setMsgLogPtr(gui.addMessage);
+	// add some obstacles to the map
+	addObstacles();
+	gui.initialize(screenWidth, screenHeight, &player, &worldMap, &obstacleList); // Initialize the GUI's state
+	std::string bltConfigString = generateBLTConfigString();
+//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
+	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
+	gui.addMessage("Press Q or Alt+F4 to quit.");
 
 	gameState = RUNNING;
 
@@ -157,6 +167,9 @@ void GameEngine::terminate()
 	// Performs closing-of-the-game methods before the engine itself shuts down
 	// If we wanted to save the game automatically, we could do so here
 	terminal_close(); // Halt the BearLibTerminal instance
+	for (auto obstIter = obstacleList.begin(); obstIter != obstacleList.end(); obstIter++) {
+		delete *obstIter;
+	}
 }
 
 bool GameEngine::loadConfiguration(const std::string& inputFile)
@@ -190,6 +203,10 @@ bool GameEngine::loadConfiguration(const std::string& inputFile)
 				terminalFontPath = configValue;
 			} else if (configKey == "fontSize") {
 				terminalFontSize = std::stoul(configValue, nullptr, 0);
+			} else if (configKey == "playerEnergy") {
+				player.setEnergy(std::stoul(configValue, nullptr, 0));
+			} else if (configKey == "playerMoney") {
+				player.setMoney(std::stoul(configValue, nullptr, 0));
 			} else { // No matching config key was found!
 				std::cerr << "*** Configuration key " << configKey << " is not recognized by the game." << "\n";
 			}
@@ -235,3 +252,42 @@ int GameEngine::getRandomValue(int minimum, int maximum) {
 	std::uniform_int_distribution<int> dist(minimum, maximum);
 	return dist(randomEng);
 }
+
+void GameEngine::addObstacles() {
+	// Simple method: choose some squares by picking random x, y values
+	// If the chosen location is a water tile, keep trying for a valid tile
+	// Certain event types are not allowed to appear too often:
+	// 1 Magic Jewel (always)
+	// 1 Binoculars
+	// 3 Nap
+	// 3 Dehydration
+	// 3 Greedy Tiles
+	// 3 Jackpots
+	// FIXME: This DOES NOT prevent multiple obstacles on the same tile!
+	uint obstacleCount = 12;
+	uint obstacleType = 0; // RANGE: 1 - 9
+	uint obstacleXPos = 0; // RANGE: 0 - mapWidth
+	uint obstacleYPos = 0; // RANGE: 0 - mapHeight
+	Obstacle *newObstacle = nullptr;
+	for (uint index = 0; index < obstacleCount; index++) {
+		// Pick a tile within the map that is not water
+		do {
+			obstacleXPos = getRandomValue(0, (worldMap.getWidth() - 1));
+			obstacleYPos = getRandomValue(0, (worldMap.getHeight() - 1));
+//			clog << "OBST #" << index << " trying " << obstacleXPos << ", " << obstacleYPos << ": " << worldMap.getTile(obstacleXPos, obstacleYPos) << endl;
+		} while (worldMap.getTile(obstacleXPos, obstacleYPos) == 1);
+		// Choose an obstacle to put at that spot
+//		obstacleType = getRandomValue(1, 9);
+		obstacleType = 1;
+		switch(obstacleType) {
+			case 1:
+				newObstacle = new Thief(obstacleXPos, obstacleYPos);
+				break;
+			default:
+				cerr << "Invalid obstacle type generated!\n";
+				break;
+		}
+		obstacleList.push_back(newObstacle);
+	}
+}
+

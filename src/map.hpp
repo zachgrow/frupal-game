@@ -26,6 +26,7 @@ public:
 	void updateMap(Pos player, int visibility);
 	bool getObserved(unsigned int x, unsigned int y);
 	bool getObstruct(unsigned int x, unsigned int y);
+	int getTile(unsigned int x, unsigned int y){ return mapArray[x * mapWidth + y]->getTile();};
 private:
 	unsigned int mapWidth;
 	unsigned int mapHeight;

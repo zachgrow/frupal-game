@@ -31,8 +31,8 @@ void Event::greeting()
 
 void Back_Track::greeting()
 {
-     cout<<"Uh-Oh You've run into a little trouble " <<endl;
-     cout<<"You got caught in a mudslide and got moved back 3 spaces" <<endl;
+     //cout<<"Uh-Oh You've run into a little trouble " <<endl;
+     writeMsg("You got caught in a mudslide and got moved back 3 spaces");
      return;
 }
 
@@ -81,8 +81,8 @@ bool Back_Track::move_player()
 
 void Wind_Storm::greeting()
 {
-     cout<<"Uh-Oh You've run into a little trouble " <<endl;
-     cout<<"You got caught in a tornado that lifted you up and dropped you 3 spaces away" <<endl;
+     //cout<<"Uh-Oh You've run into a little trouble " <<endl;
+     writeMsg("You got caught in a tornado that lifted you up and dropped you 3 spaces away");
      return;
 }
 
@@ -131,8 +131,8 @@ bool Wind_Storm::move_player()
 
 void Binoculars::greeting()
 {
-     cout<<"You sumbled upon an old pair of Binoculars " <<endl;
-     cout<<"These can be used to see further ahead and watch out for upcomming obstacles" <<endl;
+     writeMsg("You sumbled upon an old pair of Binoculars ");
+     writeMsg("These can be used to see further ahead and watch out for upcomming obstacles");
      return;
 }
 
@@ -186,8 +186,8 @@ bool Greedy_Tile::take_money()
 }
 void Jackpot::greeting()
 {
-     cout<<"Someone who came before you dropped their bag of money" <<endl;
-     cout<<"Congrats! This is a big break. You double your money!" <<endl; 
+     writeMsg("Someone who came before you dropped their bag of money");
+     writeMsg("Congrats! This is a big break. You double your money!"); 
      return;
 }
 
@@ -209,8 +209,8 @@ bool Jackpot::give_money()
 
 void Nap::greeting()
 {
-     cout<<"Is that a hammock?" <<endl;
-     cout<<"Congrats! Take a power Nap and boost your energy by 50%" <<endl; 
+     writeMsg("Is that a hammock?");
+     writeMsg("Congrats! Take a power Nap and boost your energy by 50%"); 
      return;
 }
 void Nap::react_to_player()
@@ -230,8 +230,8 @@ bool Nap::take_nap()
 
 void Dehydration::greeting()
 {
-     cout<<"You've been walking for a while" <<endl;
-     cout<<"The elements are getting to you. Dehydration costs you half of your energy" <<endl; 
+     writeMsg("You've been walking for a while");
+     writeMsg("The elements are getting to you. Dehydration costs you half of your energy"); 
      return;
 }
 
@@ -252,9 +252,9 @@ bool Dehydration::dehydrate()
 
 void Troll::greeting()
 {
-    cout<<"You came across a nasty Troll living on the island" <<endl;
-    cout<<"In order to let you pass, he wants you to either give him half of your money or you must spend half of your energy helping him repair his hut" <<endl; 
-    cout<<"Enter 'W' if you want to work, or 'M' if you want to pay him off"<<endl;
+    writeMsg("You came across a nasty Troll living on the island");
+    writeMsg("In order to let you pass, he wants you to either give him half of your money or you must spend half of your energy helping him repair his hut"); 
+    writeMsg("Enter 'W' if you want to work, or 'M' if you want to pay him off");
 	char response;	
 	cin>>response;
 	response=toupper(response);
@@ -265,7 +265,7 @@ void Troll::greeting()
         steal_money();
     else
     {
-        cout<<"Invalid input. Please select 'W' or 'M'" <<endl;
+        writeMsg("Invalid input. Please select 'W' or 'M'");
         greeting();
     }
     
@@ -295,7 +295,7 @@ bool Troll::steal_money()
 
 void Mud_Event::greeting()
 {
-     cout<<"You've run into a some Mud" <<endl;
+     writeMsg("You've run into a some Mud");
      return;
 }
 
@@ -316,7 +316,7 @@ bool Mud_Event::mud_boots()
 
 void Tree_Event::greeting()
 {
-     cout<<"A Tree is blocking your path" <<endl;
+     writeMsg("A Tree is blocking your path");
      return;
 }
 
@@ -332,13 +332,15 @@ bool Tree_Event::chop()
     //place holder for accessing player
     if(player->hasTool("AXE"))
     {
-        cout<<"Using your axe you clear your path and continue on your way";
+        writeMsg("Using your axe you clear your path and continue on your way");
         is_resolved = true;
         return 1;
     }
     else
     {
-        cout<<"You'll have to buy an Axe if you want to continue on this path";
+        writeMsg("You'll have to buy an Axe if you want to continue on this path");
+                /*Find way to call vendor function and give option to purchase*/
+
 //        Vendor tempVendor;
 //        tempVendor.action(player);
 //        is_resolved = true;
@@ -348,8 +350,8 @@ bool Tree_Event::chop()
 
 void Water_Event::greeting()
 {
-    cout<<"You've come across a river" <<endl;
-    cout<<"You'll need a boat in order to cross" <<endl;
+    writeMsg("You've come across a river");
+    writeMsg("You'll need a boat in order to cross");
     return;
 }
 
@@ -365,12 +367,13 @@ bool Water_Event::boating()
     //place holder for accessing player
     if(player->hasTool("BOAT"))
     {
-        cout<<"Using your boat, you cross the river safely and continue on your way";
+        writeMsg("Using your boat, you cross the river safely and continue on your way");
         is_resolved = true;
         return 1;
     }
     else
     {
+        /*Find way to call vendor function and give option to purchase*/
 //        cout<<"You'll have to buy an Boat if you want to continue on this path";
 //        Vendor tempVendor;
 //        tempVendor.action(player);

@@ -43,39 +43,15 @@ void Back_Track::react_to_player()
     return;
 }
 
-bool Back_Track::move_player()
+bool Back_Track::move_player()//Moves player back three spaces if possible 
 {
-    //Access to player position?
-//    int x = player->position.x;
-//    int y = player->position.y;
+    //Access to player position
 	Pos position = player->getPos();
-
-	/*
-    if(x-3 > 0)
-    {
-        //place holder for method to move player
-        player->setPos(x-3,y);
-        is_resolved= true;
-        return 1;
-    }
-    if(x-2 > 0)
-    {
-        player->setPos(x-2,y);
-        is_resolved= true;
-        return 1;
-    }
-    if(x-1 > 0)
-    {
-        player->setPos(x-1,y);
-        is_resolved= true;
-        return 1;
-    }
-    else
-	{
-        is_resolved= true;
-        return 0;
-	}
-	*/
+    int newX = position.x - 3;
+    int newY = position.y;
+    player->setPos(newX,newY);
+    is_resolved = true;
+     
 	return true;
 }
 
@@ -93,39 +69,15 @@ void Wind_Storm::react_to_player()
     return;
 }
 
-bool Wind_Storm::move_player()
+bool Wind_Storm::move_player()//Moves player down three spaces if possible
 {
-    //Access to player position?
-//    int x = player->position.x;
-//    int y = player->position.y;
-	Pos position = player->getPos();
-
-	/*
-    if(y-3 > 0)
-    {
-        //place holder for method to move player
-        player->setPos(x,y-3);
-        is_resolved= true;
-        return 1;
-    }
-    if(y-2 > 0)
-    {
-        player->setPos(x,y-2);
-        is_resolved= true;
-        return 1;
-    }
-    if(y-1 > 0)
-    {
-        player->setPos(x,y-1);
-        is_resolved= true;
-        return 1;
-    }
-    else
-	{
-        is_resolved= true;
-        return 0;
-	}
-	*/
+    //Access to player position
+    Pos position = player->getPos();
+    int newX = position.x;
+    int newY = position.y - 3;
+    player->setPos(newX,newY);
+    is_resolved = true;
+     
 	return true;
 }
 
@@ -143,7 +95,7 @@ void Binoculars::react_to_player()
     return;
 }
 
-bool Binoculars::give_binoculars()
+bool Binoculars::give_binoculars()//Calculates cost and gives needed money to purchase binoculars
 {
     if(player->hasTool("Binoculars")==1)    
     {
@@ -163,8 +115,6 @@ bool Binoculars::give_binoculars()
 }
 void Greedy_Tile::greeting()
 {
-//     cout<<"You look down to see that your money bag has a hole in it!" <<endl;
-//     cout<<"Looking down into you bag, you realize that all of your money is gone!" <<endl; 
      writeMsg("You look down to see that your money bag has a hole in it!");
 	 writeMsg("Looking down into you bag, you realize that all of your money is gone!");
      return;
@@ -177,10 +127,12 @@ void Greedy_Tile::react_to_player()
     return;
 }
 
-bool Greedy_Tile::take_money()
+bool Greedy_Tile::take_money()//Greedy tile requirement takes all of the money
 {
-    //place holder for accessing player
-    player->setMoney((player->getMoney() / 2));
+    //place holder for taking half of the money
+    //player->setMoney((player->getMoney() / 2));
+    //place holder for taking all of the money 
+    player->setMoney(0);
     is_resolved= true;
     return 1; 
 }
@@ -198,7 +150,7 @@ void Jackpot::react_to_player()
     return;
 }
 
-bool Jackpot::give_money()
+bool Jackpot::give_money()//Doubles the players' money
 {
     //place holder for accessing player
     int Jackpot = player->getMoney();
@@ -220,7 +172,7 @@ void Nap::react_to_player()
     return;
 }
 
-bool Nap::take_nap()
+bool Nap::take_nap()//Doubles player's energy
 {
     int boost = player->getEnergy() *2;
     player->setEnergy(boost);
@@ -242,7 +194,7 @@ void Dehydration::react_to_player()
     return;
 }
 
-bool Dehydration::dehydrate()
+bool Dehydration::dehydrate()//Takes half of the player's energy
 {
     int loss = player->getEnergy()/2;
     player->setEnergy(loss);
@@ -260,9 +212,15 @@ void Troll::greeting()
 	response=toupper(response);
     
     if (response=='W')
+    {
         labor();
+        return;
+    }
     if (response== 'M')
+    {
         steal_money();
+        return;
+    }
     else
     {
         writeMsg("Invalid input. Please select 'W' or 'M'");
@@ -277,7 +235,7 @@ void Troll::react_to_player()
     return;
 }
 
-bool Troll::labor()
+bool Troll::labor()//Take's half of the player's energy
 {
     int loss = player->getEnergy()/2;
     player->setEnergy(loss);
@@ -285,33 +243,12 @@ bool Troll::labor()
     return 1; 
 }
 
-bool Troll::steal_money()
+bool Troll::steal_money()//Take's half of the player's energy
 {
     int left_overs = player->getMoney();
     player->setMoney(left_overs);
     is_resolved= true;
     return 1;
-}
-
-void Mud_Event::greeting()
-{
-     writeMsg("You've run into a some Mud");
-     return;
-}
-
-void Mud_Event::react_to_player()
-{
-    greeting();
-//    give_money();
-    return;
-}
-
-bool Mud_Event::mud_boots()
-{
-    //place holder for Mud action
-  
-    is_resolved = true;
-    return 1; 
 }
 
 void Tree_Event::greeting()
@@ -339,11 +276,7 @@ bool Tree_Event::chop()
     else
     {
         writeMsg("You'll have to buy an Axe if you want to continue on this path");
-                /*Find way to call vendor function and give option to purchase*/
-
-//        Vendor tempVendor;
-//        tempVendor.action(player);
-//        is_resolved = true;
+    
         return 1 ;
     }
 }
@@ -373,11 +306,9 @@ bool Water_Event::boating()
     }
     else
     {
-        /*Find way to call vendor function and give option to purchase*/
-//        cout<<"You'll have to buy an Boat if you want to continue on this path";
-//        Vendor tempVendor;
-//        tempVendor.action(player);
-//        is_resolved = true;
+        //Since vendor is accessible from anywhere on map, just give message
+        writeMsg("You'll have to buy an Boat if you want to continue on this path");
+        is_resolved = true;
         return 1 ;
     }
 }

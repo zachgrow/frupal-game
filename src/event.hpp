@@ -108,45 +108,12 @@ class Troll : public Event
         Pos position;
 };
 
-class Mud_Event : public Event
-{
-    public:
-        void greeting();
-		void react_to_player();
-        bool mud_boots();
-    private:
-        Pos position;
-
-};
-
 class Tree_Event : public Event
 {
     public:
         void greeting();
 		void react_to_player();
         bool chop();
-    private:
-        Pos position;
-
-};
-
-class Rock_Event : public Event
-{
-    public:
-        void greeting();
-		void react_to_player();
-        bool mud();
-    private:
-        Pos position;
-
-};
-
-class Quicksand_Event : public Event
-{
-    public:
-        void greeting();
-		void react_to_player();
-        bool quicksand();
     private:
         Pos position;
 

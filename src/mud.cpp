@@ -1,7 +1,7 @@
 #include "tile.hpp"
 Mud::Mud()
 {
-    this->symbol = '.';
+    this->symbol = ' ';
     this->color = 0xBB8B4513;
     this->movementCost = 2;
     this->obstructMovement = true;
@@ -50,6 +50,7 @@ bool Mud::wasObserved()
 {
     return hasBeenSeen;
 }
-void Mud::setObserved(){
-	this->hasBeenSeen=true;
+void Mud::setObserved()
+{
+    this->hasBeenSeen = true;
 }

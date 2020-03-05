@@ -50,10 +50,10 @@ const Pos Actor::getPos(){return position;}
 int Actor::getColor(){return color;}
 char Actor::getSymbol(){return symbol;}
 
-Vendor::Vendor():isVisible(true){
+Vendor::Vendor():isVisible(false){
   position.x = 0;
   position.y = 0;
-  setSymbol('V');
+  //setSymbol('V');
   initialize("src/tools.txt");
 }
 Vendor::Vendor(const Vendor& other):Actor(other){
@@ -77,9 +77,9 @@ void Vendor::action(Player &user){//when player position and vendor position are
       cerr << "No tool by that name" << endl;
       action(user);//restart action
     }
-    cout << "Please return to other terminal" << endl; 
+    cout << "Please return to other terminal" << endl;
   }
-    
+
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
   bool found = false;

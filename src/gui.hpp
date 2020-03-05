@@ -11,18 +11,6 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 #include "player.hpp"
 #include <string>
 #include <vector>
-
-
-class GameGUI {
-	private:
-		struct MessageLog { // semantic wrapper around the message log object
-			std::vector<std::string> messageList;
-			int add(std::string newMessage); // Returns # of messages in log
-			uint size() { return messageList.size(); }
-			// probably need some kind of log culling function(s)
-			// NOTE: the message log is structured as a STACK, ie LIFO
-		};
-=======
 #include <list>
 
 class Obstacle;
@@ -33,13 +21,11 @@ class GameGUI {
 		GameGUI();
 		~GameGUI();
 		// Initializes a GameGUI to initial state
-		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles,Vendor *vendorPtr);
+		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles);
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
 		void testMessageLog();
-		// addMessage(string message); // Adds a string to the message log
-		MessageLog globalMsgLog;
 		static void addMessage(const std::string& message); // Adds a string to the message log
 
 	private:
@@ -56,8 +42,7 @@ class GameGUI {
 			unsigned int height;
 			// background color?
 			void initialize(unsigned int inputX, unsigned int inputY, unsigned int inputWidth, unsigned int inputHeight);
-		} mapDisplay, statPanel, messageLog;
-		//} mapDisplay, statPanel, messageDisplay;
+		} mapDisplay, statPanel, messageDisplay;
 		struct MessageLog { // semantic wrapper around the message log object
 			static std::vector<std::string> messageList;
 			int add(const std::string& newMessage); // Returns # of messages in log
@@ -70,7 +55,6 @@ class GameGUI {
 		Player* playerObject;
 		GameMap* mapObject;
 		std::list<Obstacle*> *obstacleList;
-		Vendor * vendorObject;
 		// Internal geometry information
 		unsigned int windowWidth;
 		unsigned int windowHeight;

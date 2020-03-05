@@ -32,7 +32,6 @@ struct GameEngine
 	int jewelsY;
 	GameMap worldMap;
 	Player player;
-	Vendor vendor;
 	GameGUI gui;
 	std::string terminalFontPath; // Contains relative path to the terminal font
 	unsigned int terminalFontSize; // Size of the terminal font
@@ -42,7 +41,7 @@ struct GameEngine
 	std::list<Obstacle*> obstacleList;
 	void addObstacles();
 
-	GameEngine(unsigned int health,unsigned int money, bool debug_mode) noexcept;	// Default constructor
+	GameEngine(int health, int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop
 	bool initialize(const std::string& configFile); // Initialize the engine's components
 	void terminate();		// Performs end-of-game cleanup before the engine itself is to be shutdown

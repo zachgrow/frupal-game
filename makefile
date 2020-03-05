@@ -32,7 +32,7 @@ SRCS=$(wildcard src/*.cpp)
 # The object files live next to the source files, with a different extension
 OBJS=$(SRCS:.cpp=.o)
 # Specifies the path to any external libraries we will include when compiling
-INCLUDE=./include
+INCLUDE=include
 
 # ! Allow the user's environment to specify the value of CXX! If make says it cannot be found, check your environment variables to ensure it is set correctly.
 CXXFLAGS=-I$(INCLUDE) -std=c++11 -Wall -g

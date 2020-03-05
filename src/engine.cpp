@@ -23,8 +23,8 @@ std::mt19937 GameEngine::randomEng (47);
 int main(int argc, char** argv)
 {
 	std::string configFilePath = "config.txt";
-	unsigned int health = 0;
-	unsigned int money = 0;
+	int health = 100;
+	int money = 100;
 	bool debug_mode = 0;
 	if (argc >= 2) {
 		argv++;
@@ -40,18 +40,16 @@ int main(int argc, char** argv)
 				switch ((*argv)[1]) {
 					case 'H':
 						if (std::string(*argv).size() == 2)
-							(*argv) += 3;
+							(*argv)++;
 						else
-							(*argv) += 2;
+							argv++;
 						health = atoi(*argv);
 						break;
 					case 'M':
 						if (std::string(*argv).size() == 2)
-							(*argv)+= 3;
-						else{
-							//argv++;
-							(*argv) += 2;
-						}
+							(*argv)++;
+						else
+							argv++;
 						money = atoi(*argv);
 						break;
 					default:
@@ -79,21 +77,19 @@ int main(int argc, char** argv)
 }
 
 // GameEngine class implementation
-GameEngine::GameEngine(unsigned int health,unsigned int money, bool debug_mode) noexcept :
+GameEngine::GameEngine(int health, int money, bool debug_mode) noexcept :
 gameState(STARTUP),
 debug_mode(debug_mode),
 screenWidth(80),
 screenHeight(50),
-player(money, health, ""),
+player(health, money, ""),
 inputParser(player, worldMap)
 {
 	// The default constructor
 	gui = GameGUI(); // Create a GUI instance
-	srand(time(NULL));
 	player.setPos(MAP_DIM/2, MAP_DIM/2); // Move the player onto the map
-	vendor.setPos(rand() % MAP_DIM + 1,rand() % MAP_DIM+1); // Move the vendor onto the map
-	vendor.initialize("src/tools.txt");
 }
+
 void GameEngine::loop()
 {
 	// BLT display explicitly requires an initial call to _refresh() prior to
@@ -114,9 +110,6 @@ void GameEngine::loop()
 			}
 			// Check with input parser
 			inputParser.checkAndParseInput(inputKey);
-			if(vendor.getPos() == player.getPos())
-				vendor.action(player);
-
 			worldMap.updateMap(player.getPos(), player.getVis());
 		}
 		// Check the obstacle list to see if anything should trigger
@@ -144,13 +137,6 @@ bool GameEngine::initialize(const std::string& configFile)
 		std::cerr << "*** GUI: There was a problem starting BearLibTerminal.\n";
 		return false;
 	}
-
-	worldMap.generateMap(MAP_DIM, MAP_DIM, getRandomValue);
-	gui.initialize(screenWidth, screenHeight, &player, &worldMap, &vendor); // Initialize the GUI's state
-	std::string bltConfigString = generateBLTConfigString();
-//	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
-	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
-
 //	The RNG is seeded as part of its instantiation call as a static obj
 	if (!debug_mode) {
 		std::random_device rd;

@@ -9,11 +9,6 @@ DESC Contains definitions of the GameGUI class, which displays the game
 #include "map.hpp"
 #include "player.hpp"
 #include "gui.hpp"
-#include <iostream>
-#include <string>
-
-using namespace std;
-
 #include "obstacle.hpp"
 #include <iostream>
 #include <string>
@@ -150,13 +145,12 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles,Vendor *vendorPtr) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
 	mapObject = mapPtr;
 	obstacleList = obstacles;
-	vendorObject = vendorPtr;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -262,24 +256,6 @@ void GameGUI::displayMap() {
 	// Display the map
 	for (uint xIndex = 0; xIndex < mapWidth; xIndex++) {
 		for (uint yIndex = 0; yIndex < mapHeight; yIndex++) {
-			// Set the background first
-			terminal_layer(0);
-			uint tileColor = mapObject->getTileColorAt(xIndex,yIndex);
-			terminal_bkcolor((tileColor - 0x22000000)); // Use a slightly darker color for the bkground
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, ' ');
-			// Draw the terrain symbols
-			terminal_layer(2); // Move to the terrain layer
-			terminal_color(tileColor);
-			terminal_put(cursorXOrigin + xIndex, cursorYOrigin + yIndex, mapObject->getTileSymbolAt(xIndex, yIndex));
-		}
-	}
-	// Display the player's location within the map
-	terminal_layer(4);
-	terminal_color("lightest blue"); // no way to obtain player color yet
-	Pos playerPosn = playerObject->getPos();
-	Pos vendorPosn = vendorObject->getPos();
-	terminal_put(playerPosn.x + mapViewHorizontalOffset, playerPosn.y + mapViewVerticalOffset, '@');
-	terminal_put(vendorPosn.x + mapViewHorizontalOffset, vendorPosn.y + mapViewVerticalOffset, 'V');
 			if (mapObject->getObserved(xIndex, yIndex)) { // Has the player seen this tile before?
 				// Set the background first
 				terminal_layer(0);
@@ -357,15 +333,6 @@ void GameGUI::displayStatPanel() {
 void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen
 	// Obtain the starting position and set some defaults
-	int cursorXPosition = messageLog.xOrigin;
-	int cursorYPosition = messageLog.yOrigin;
-	terminal_color("white"); // Default text color, can be overridden inline
-	// Display some example text for now
-//	terminal_print(cursorXPosition, cursorYPosition++, "Press Q or Alt+F4 to exit.");
-if (globalMsgLog.size() > 0) {
-		vector<string>::reverse_iterator msgLogIter = globalMsgLog.messageList.rbegin();
-		for ( ; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
-			terminal_print(cursorXPosition, cursorYPosition++, (*msgLogIter).c_str());
 	int cursorXPosition = messageDisplay.xOrigin;
 	int cursorYPosition = messageDisplay.yOrigin;
 	terminal_color("white"); // Default text color, can be overridden inline
@@ -437,6 +404,7 @@ yOrigin(inputY),
 width(inputWidth),
 height(inputHeight)
 {	// Constructs a GUIPanel from the supplied values
+	
 	// x and y refer to the upper-left origin point of the panel
 	// width and height are specified in number of terminal character spaces
 

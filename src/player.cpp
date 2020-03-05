@@ -227,45 +227,20 @@ void Player::action(class Player & user){//player action takes user input and ca
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
 //     Add energy cost based on tiles
     if(inp.compare("North") == 0 || inp.compare("north") == 0){
-      if(position.x > 1){
-        position.x--;
-        return true;
-      }
-      else{
-        cerr << "Cannot move West" << endl;
-        return false;
-      }
+      position.x--;
+      return true;
     }
     else if(inp.compare("West") == 0 || inp.compare("west") == 0){
-      if(position.y > 1){
         position.y--;
         return true;
-      }
-      else{
-        cerr << "Cannot move North" << endl;
-        return false;
-      }
-
     }
     else if(inp.compare("South") == 0 || inp.compare("south") == 0){
-      if(position.x < MAX){
         position.x++;
         return true;
       }
-      else{
-        cerr << "Cannot move East" << endl;
-        return false;
-      }
-    }
     else if(inp.compare("East") == 0 || inp.compare("east") == 0){
-      if(position.y < MAX){
         position.y++;
         return true;
-      }
-      else{
-        cerr << "Cannot move South" << endl;
-        return false;
-      }
     }
     else{
       cerr << "Please enter North, South, East, or West." << endl;

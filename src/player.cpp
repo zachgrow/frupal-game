@@ -50,7 +50,7 @@ const Pos Actor::getPos(){return position;}
 int Actor::getColor(){return color;}
 char Actor::getSymbol(){return symbol;}
 
-Vendor::Vendor():isVisible(false){
+Vendor::Vendor():isVisible(true){
   position.x = 0;
   position.y = 0;
   setSymbol('V');
@@ -77,8 +77,8 @@ void Vendor::action(Player &user){//when player position and vendor position are
       cerr << "No tool by that name" << endl;
       action(user);//restart action
     }
+    cout << "Please return to other terminal" << endl; 
   }
-  cout << "Please return to other terminal" << endl; 
     
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
@@ -142,6 +142,10 @@ int Vendor::getCost(string tool){//return the cost of a tool based on name
   }
   return 0;
 }
+
+bool Vendor::getVis(){return isVisible;}
+void Vendor::setVis(bool vis){isVisible = vis;}
+
 std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return a pair used for a tool
   auto it = list.find(make_pair(title,getCost(title)));
   if(it != list.end())

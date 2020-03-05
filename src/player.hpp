@@ -65,7 +65,10 @@ public:
   void displayTools();//display the tools
   void addTool();//add tool based on user input
   void addTool(string name,unsigned int cost);//add tool based on arguments
+
   int getCost(string tool);//return the cost of tool
+  bool getVis();//return whether the vendor is visible or not
+  void setVis(bool vis);//set if the vendor is visible
   bool hasTool(string tool);//return true if tool is in list
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:

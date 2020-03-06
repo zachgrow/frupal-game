@@ -335,10 +335,26 @@ void GameGUI::displayStatPanel() {
 	terminal_printf(cursorXPosition, cursorYPosition, "E %d", playerObject->getEnergy());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
+	// Player's current location
 	terminal_color("white");
 	terminal_print(cursorXPosition, cursorYPosition, "Location:");
 	cursorXPosition += 10;
 	terminal_printf(cursorXPosition, cursorYPosition, "%d, %d", playerObject->getPos().x, playerObject->getPos().y);
+	cursorXPosition = statPanel.xOrigin;
+	cursorYPosition++;
+	// Player's toolbelt
+	terminal_printf(cursorXPosition, cursorYPosition, "Tools:");
+	cursorXPosition += 2;
+	cursorYPosition++;
+	if (playerObject->getToolbelt()->empty()) {
+		terminal_printf(cursorXPosition, cursorYPosition, "NO TOOLS");
+	} else {
+		for (auto toolIter = playerObject->getToolbelt()->begin(); toolIter != playerObject->getToolbelt()->end(); toolIter++) {
+			terminal_printf(cursorXPosition, cursorYPosition, (*toolIter).c_str());
+			cursorYPosition++;
+		}
+	}
+	cursorXPosition = statPanel.xOrigin;
 }
 void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen

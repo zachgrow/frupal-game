@@ -103,6 +103,8 @@ public:
   void dropTool(string tool);//removes the arguement from toolbelt
   void giveTool(string tool);//give the player a tool for free
   void addJewel();//incriment jewels
+  std::set<std::string>* getToolbelt() { return &toolbelt; }
+
 private:
   unsigned int money;
   unsigned int energy;

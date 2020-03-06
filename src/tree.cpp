@@ -4,16 +4,16 @@ Tree::Tree()
 {
     this->symbol = 'T';
     this->color = 0xBB556B2F;
-    this->movementCost = 0;
-    this->obstructMovement = false;
+    this->movementCost = 1;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
 Tree::Tree(char c, int color)
 {
     this->symbol = c;
     this->color = color;
-    this->movementCost = 0;
-    this->obstructMovement = false;
+    this->movementCost = 1;
+    this->obstructMovement = true;
     this->hasBeenSeen = false;
 }
 void Tree::display()

@@ -4,7 +4,7 @@ Mud::Mud()
     this->symbol = ' ';
     this->color = 0xBB8B4513;
     this->movementCost = 2;
-    this->obstructMovement = true;
+    this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
 Mud::Mud(char c, int color)
@@ -12,7 +12,7 @@ Mud::Mud(char c, int color)
     this->symbol = c;
     this->color = color;
     this->movementCost = 2;
-    this->obstructMovement = true;
+    this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
 void Mud::display()

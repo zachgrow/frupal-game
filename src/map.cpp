@@ -127,7 +127,7 @@ for(int i=-visibility;i<=visibility;i++)
 bool GameMap::getObserved(unsigned int x, unsigned int y){
 	return mapArray[x * mapWidth + y]->wasObserved();
 }
-bool GameMap::getObstruct(unsigned int x, unsigned int y){
+bool GameMap::isObstructed(unsigned int x, unsigned int y){
 	if(x<0 ||y<0||x>=mapWidth||y>=mapHeight)
 	return false;
 	return mapArray[x * mapWidth + y]->obstructs();

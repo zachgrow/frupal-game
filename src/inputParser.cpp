@@ -43,7 +43,7 @@ static bool isValidDirection(int x, int y, Player *player, GameMap *map, int &de
 		return false;
 
 	// Otherwise, check to see if the destination is obstructed somehow
-	return map->getObstruct(x, y);
+	return !map->isObstructed(x, y);
 }
 
 static void testAndSet(int direction, Player *player, GameMap *map)

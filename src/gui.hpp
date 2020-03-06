@@ -14,6 +14,7 @@ DESC Implements the GameGUI class, which handles the system input/output and the
 #include <list>
 
 class Obstacle;
+class Vendor;
 class GameGUI {
 	private:
 
@@ -21,7 +22,7 @@ class GameGUI {
 		GameGUI();
 		~GameGUI();
 		// Initializes a GameGUI to initial state
-		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles);
+		void initialize(unsigned int maxWidth, unsigned int maxHeight, Player *playerPtr, GameMap *mapPtr, std::list<Obstacle*> *obstacles, std::list<Vendor*> *vendors);
 		void update(); // Polls the game state for changes in displayed info
 		void render(); // Draws the interface onto the screen
 		void testBLT(); // BearLibTerminal debugging/test function
@@ -55,6 +56,7 @@ class GameGUI {
 		Player* playerObject;
 		GameMap* mapObject;
 		std::list<Obstacle*> *obstacleList;
+		std::list<Vendor*> *vendorList;
 		// Internal geometry information
 		unsigned int windowWidth;
 		unsigned int windowHeight;

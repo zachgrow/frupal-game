@@ -3,4 +3,4 @@ screenHeight=50
 font=./fonts/UbuntuMono-R.ttf
 fontSize=12
 playerEnergy=101
-playerMoney=101
+playerMoney=1001

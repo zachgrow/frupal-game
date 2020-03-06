@@ -50,7 +50,7 @@ const Pos Actor::getPos(){return position;}
 int Actor::getColor(){return color;}
 char Actor::getSymbol(){return symbol;}
 
-Vendor::Vendor():isVisible(false){
+Vendor::Vendor():isVisible(true){
   position.x = 0;
   position.y = 0;
   //setSymbol('V');
@@ -63,23 +63,30 @@ Vendor::~Vendor(){}
 void Vendor::action(Player &user){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
-  cout << "Would you like to buy a tool? Y/N" << endl;//prompt the user
+  cout << "Would you like to buy a tool? Y/N" << endl << "> ";//prompt the user
   getline(cin,inp);
   if(inp.compare("y")==0 || inp.compare("Y") == 0){
     cout << "What tool would you like to buy?" << endl;
     displayTools();
+    cout << "> ";
     getline(cin,inp);
     if(hasTool(inp)){//check if the tool exists
-      if(!user.buy(inp,getCost(inp)))//buy the tool: fails if player doesn't have enough money
+      if(!user.buy(inp,getCost(inp))) {//buy the tool: fails if player doesn't have enough money
         action(user);//if buy fails restart action
+      } else {
+        cout << "Thanks for your business!" << endl;
+        this->setVis(false);
+      }
     }
     else{//tool doesn't exist
-      cerr << "No tool by that name" << endl;
+      cerr << "I can't find which tool you mean." << endl;
       action(user);//restart action
     }
-    cout << "Please return to other terminal" << endl;
+  } else {
+    cout << "I guess I'll take my business somewhere else, then." << endl;
+    this->setVis(false); // hide the vendor to prevent bugging the player
   }
-
+  cout << "Please return to other terminal. ->" << endl;
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
   bool found = false;

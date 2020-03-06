@@ -145,12 +145,13 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles, list<Vendor*> *vendors) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
 	mapObject = mapPtr;
 	obstacleList = obstacles;
+	vendorList = vendors;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -289,6 +290,15 @@ void GameGUI::displayMap() {
 				terminal_color((*obstIter)->getColor());
 				actorPosn = (*obstIter)->getPos();
 				terminal_put(actorPosn.x + cursorXOrigin, actorPosn.y + cursorYOrigin, (*obstIter)->getSymbol());
+			}
+		}
+	}
+	if (!vendorList->empty()) {
+		for (auto vendIter = vendorList->begin(); vendIter != vendorList->end(); vendIter++) {
+			if ((*vendIter)->getVis()) {
+				terminal_color((*vendIter)->getColor());
+				actorPosn = (*vendIter)->getPos();
+				terminal_put(actorPosn.x + cursorXOrigin, actorPosn.y + cursorYOrigin, (*vendIter)->getSymbol());
 			}
 		}
 	}

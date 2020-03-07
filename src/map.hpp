@@ -27,6 +27,8 @@ public:
 	bool getObserved(unsigned int x, unsigned int y);
 	bool getObstruct(unsigned int x, unsigned int y);
 	int getTile(unsigned int x, unsigned int y){ return mapArray[x * mapWidth + y]->getTile();};
+	void destroyTile(unsigned int x, unsigned int y);// use to destroy the obstacle tile, and replace it with grass
+	void generateImportantStuff(unsigned int x, unsigned int y);// when generate important stuff, use this to clear 1 cell away from it to ensure the object is not trapped.
 private:
 	unsigned int mapWidth;
 	unsigned int mapHeight;

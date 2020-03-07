@@ -117,6 +117,25 @@ void GameMap::debugDumpMap()
 	}
 }
 void GameMap::updateMap(Pos player, int visibility){
+if(player.y == 0){
+	for(int i=-visibility;i<=visibility;i++)
+	for(int j=-visibility;j<=visibility;j++){
+		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)&&j>=0){
+			mapArray[(player.x + i ) * mapWidth + (player.y + j )]->setObserved();
+		}
+	}
+	return;
+}
+else if(player.y==mapHeight-1){
+	for(int i=-visibility;i<=visibility;i++)
+	for(int j=-visibility;j<=visibility;j++){
+		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)&&j<=0){
+			mapArray[(player.x + i ) * mapWidth + (player.y + j )]->setObserved();
+		}
+	}
+	return;
+}
+else
 for(int i=-visibility;i<=visibility;i++)
 	for(int j=-visibility;j<=visibility;j++){
 		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)){

@@ -108,6 +108,8 @@ InputParser::result InputParser::checkAndParseInput(int key_stroke)
 			break;
 		case TK_Q:
 			return EXIT;
+		case TK_P:
+			return JEWEL;
 		default: break;
 	}
 

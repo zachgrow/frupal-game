@@ -115,11 +115,9 @@ void GameEngine::loop()
 				Victory victory;
 				victory.react_to_player();
 				// Reveal map
-#if 0
-				for (int i = 0; i < worldMap.getWidth(); i++)
-					for (int j = 0; j < worldMap.getHeight(); j++)
-						worldMap.getTile(
-#endif
+				for (auto i = 0U; i < worldMap.getWidth(); i++)
+					for (auto j = 0U; j < worldMap.getHeight(); j++)
+						worldMap.getTileAt(i,j)->setObserved();
 			}
 
 			worldMap.updateMap(player.getPos(), player.getVis());

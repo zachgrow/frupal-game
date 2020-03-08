@@ -10,12 +10,17 @@ class InputParser {
 	GameMap* game_map_;
 	int previous_value_;
 public:
+	enum result {
+		CONTINUE,
+		EXIT,
+		JEWEL,
+	};
 
 	InputParser() = delete;
 
 	InputParser(Player& player, GameMap& map);
 
-	bool checkAndParseInput(int key_stroke);
+	result checkAndParseInput(int key_stroke);
 };
 
 #endif // FRUPALGAME_SRC_INPUTPARSER_HPP_INCLUDED

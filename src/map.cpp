@@ -117,6 +117,25 @@ void GameMap::debugDumpMap()
 	}
 }
 void GameMap::updateMap(Pos player, int visibility){
+if(player.y == 0){
+	for(int i=-visibility;i<=visibility;i++)
+	for(int j=-visibility;j<=visibility;j++){
+		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)&&j>=0){
+			mapArray[(player.x + i ) * mapWidth + (player.y + j )]->setObserved();
+		}
+	}
+	return;
+}
+else if(player.y==mapHeight-1){
+	for(int i=-visibility;i<=visibility;i++)
+	for(int j=-visibility;j<=visibility;j++){
+		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)&&j<=0){
+			mapArray[(player.x + i ) * mapWidth + (player.y + j )]->setObserved();
+		}
+	}
+	return;
+}
+else
 for(int i=-visibility;i<=visibility;i++)
 	for(int j=-visibility;j<=visibility;j++){
 		if((player.x + i ) * mapWidth + (player.y + j ) < (mapWidth * mapHeight)){
@@ -127,7 +146,7 @@ for(int i=-visibility;i<=visibility;i++)
 bool GameMap::getObserved(unsigned int x, unsigned int y){
 	return mapArray[x * mapWidth + y]->wasObserved();
 }
-bool GameMap::getObstruct(unsigned int x, unsigned int y){
+bool GameMap::isObstructed(unsigned int x, unsigned int y){
 	if(x<0 ||y<0||x>=mapWidth||y>=mapHeight)
 	return false;
 	return mapArray[x * mapWidth + y]->obstructs();

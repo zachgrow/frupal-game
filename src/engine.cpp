@@ -6,13 +6,14 @@ DESC Contains implementation of game engine as well as main()
 
 #include "BearLibTerminal.h"
 #include "engine.hpp"
+#include "victory.hpp"
 #include <cstdlib>
 #include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
 #include <sstream>		// Object for conversion from std::string to input stream
 #include <fstream>		// Simple file input/output
 
-#define MAP_DIM 20
+#define MAP_DIM 30
 #define HELP_INFO "Pass --help for help\n" \
 				  "     --DEBUG_MODE to default random seed, (disables scoring)\n" \
 				  "      -H integer for health\n" \
@@ -106,8 +107,20 @@ void GameEngine::loop()
 			int inputKey = terminal_read();
 
 			// Check with input parser
-			if (inputParser.checkAndParseInput(inputKey))
+			auto parse_result = inputParser.checkAndParseInput(inputKey);
+			if (parse_result == inputParser.EXIT) {
 				break;
+			}
+			if (parse_result == inputParser.JEWEL) {
+				Victory victory;
+				victory.react_to_player();
+				// Reveal map
+#if 0
+				for (int i = 0; i < worldMap.getWidth(); i++)
+					for (int j = 0; j < worldMap.getHeight(); j++)
+						worldMap.getTile(
+#endif
+			}
 
 			worldMap.updateMap(player.getPos(), player.getVis());
 		}
@@ -115,6 +128,11 @@ void GameEngine::loop()
 		for (auto obstIter = obstacleList.begin(); obstIter != obstacleList.end(); obstIter++) {
 			if ((*obstIter)->isActive()) (*obstIter)->action(player);
 		}
+		// Do the same for the vendor list
+		for (auto vendIter = vendorList.begin(); vendIter != vendorList.end(); vendIter++) {
+			if ((*vendIter)->getPos() == player.getPos() && (*vendIter)->getVis()) (*vendIter)->action(player);
+		}
+
 		// Write result
 		gui.update();
 		gui.render();
@@ -151,7 +169,9 @@ bool GameEngine::initialize(const std::string& configFile)
 	Event::setMsgLogPtr(gui.addMessage);
 	// add some obstacles to the map
 	addObstacles();
-	gui.initialize(screenWidth, screenHeight, &player, &worldMap, &obstacleList); // Initialize the GUI's state
+	// add some vendors as well
+	addVendors();
+	gui.initialize(screenWidth, screenHeight, &player, &worldMap, &obstacleList, &vendorList); // Initialize the GUI's state
 	std::string bltConfigString = generateBLTConfigString();
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
@@ -169,6 +189,9 @@ void GameEngine::terminate()
 	terminal_close(); // Halt the BearLibTerminal instance
 	for (auto obstIter = obstacleList.begin(); obstIter != obstacleList.end(); obstIter++) {
 		delete *obstIter;
+	}
+	for (auto vendIter = vendorList.begin(); vendIter != vendorList.end(); vendIter++) {
+		delete *vendIter;
 	}
 }
 
@@ -288,6 +311,28 @@ void GameEngine::addObstacles() {
 				break;
 		}
 		obstacleList.push_back(newObstacle);
+	}
+}
+void GameEngine::addVendors() {
+	// Adds some vendors with the default tool list to the game map
+	uint vendorCount = 3;
+	uint vendorXPos = 0;
+	uint vendorYPos = 0;
+	Vendor *newVendor = nullptr;
+	for (uint index = 0; index < vendorCount; index++) {
+		// Look for an open tile
+		do {
+			vendorXPos = getRandomValue(0, (worldMap.getWidth() - 1));
+			vendorYPos = getRandomValue(0, (worldMap.getHeight() - 1));
+		} while (worldMap.getTile(vendorXPos, vendorYPos) != 0);
+//		clog << "new vendor at " << vendorXPos << ", " << vendorYPos << endl;
+		newVendor = new Vendor();
+		newVendor->setSymbol('&');
+		int vendorColor = 0x000011 * index;
+		if (index < 5) vendorColor += 0x555555;
+		newVendor->setColor(0xFF000000 + vendorColor);
+		newVendor->setPos(vendorXPos, vendorYPos);
+		vendorList.push_back(newVendor);
 	}
 }
 

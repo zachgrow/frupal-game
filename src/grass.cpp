@@ -6,7 +6,7 @@ Grass::Grass()
     this->symbol = ' ';
     this->color = 0xBB006400;
     this->movementCost = 1;
-    this->obstructMovement = true;
+    this->obstructMovement = false;
     this->hasBeenSeen = false;
 }
 Grass::Grass(char c, int color)

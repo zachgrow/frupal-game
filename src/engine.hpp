@@ -39,7 +39,9 @@ struct GameEngine
 	static int getRandomValue(int minimum, int maximum);
 	static std::mt19937 randomEng;
 	std::list<Obstacle*> obstacleList;
+	std::list<Vendor*> vendorList;
 	void addObstacles();
+	void addVendors();
 
 	GameEngine(int health, int money, bool debug_mode) noexcept;	// Default constructor
 	void loop();			// Core game loop

@@ -1,0 +1,4 @@
+hammer#500
+boat#1000
+binoculars#500
+AXE#200

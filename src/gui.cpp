@@ -145,12 +145,13 @@ GameGUI::~GameGUI() {
 	// default destructor
 
 }
-void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles) {
+void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameMap *mapPtr, list<Obstacle*> *obstacles, list<Vendor*> *vendors) {
 	// Sets up a created GameGUI object to the runtime default configuration
 	// Obtain pointers to the game objects we want to display
 	playerObject = playerPtr;
 	mapObject = mapPtr;
 	obstacleList = obstacles;
+	vendorList = vendors;
 //	clog << "Link to player object at: " << playerPtr << endl;
 	// Assign the maximum parameters
 	windowWidth = maxWidth;
@@ -292,6 +293,15 @@ void GameGUI::displayMap() {
 			}
 		}
 	}
+	if (!vendorList->empty()) {
+		for (auto vendIter = vendorList->begin(); vendIter != vendorList->end(); vendIter++) {
+			if ((*vendIter)->getVis()) {
+				terminal_color((*vendIter)->getColor());
+				actorPosn = (*vendIter)->getPos();
+				terminal_put(actorPosn.x + cursorXOrigin, actorPosn.y + cursorYOrigin, (*vendIter)->getSymbol());
+			}
+		}
+	}
 }
 void GameGUI::displayStatPanel() {
 	// Displays the player's name, HP, and assorted other statistics
@@ -325,10 +335,26 @@ void GameGUI::displayStatPanel() {
 	terminal_printf(cursorXPosition, cursorYPosition, "E %d", playerObject->getEnergy());
 	cursorXPosition = statPanel.xOrigin;
 	cursorYPosition++;
+	// Player's current location
 	terminal_color("white");
 	terminal_print(cursorXPosition, cursorYPosition, "Location:");
 	cursorXPosition += 10;
 	terminal_printf(cursorXPosition, cursorYPosition, "%d, %d", playerObject->getPos().x, playerObject->getPos().y);
+	cursorXPosition = statPanel.xOrigin;
+	cursorYPosition++;
+	// Player's toolbelt
+	terminal_printf(cursorXPosition, cursorYPosition, "Tools:");
+	cursorXPosition += 2;
+	cursorYPosition++;
+	if (playerObject->getToolbelt()->empty()) {
+		terminal_printf(cursorXPosition, cursorYPosition, "NO TOOLS");
+	} else {
+		for (auto toolIter = playerObject->getToolbelt()->begin(); toolIter != playerObject->getToolbelt()->end(); toolIter++) {
+			terminal_printf(cursorXPosition, cursorYPosition, (*toolIter).c_str());
+			cursorYPosition++;
+		}
+	}
+	cursorXPosition = statPanel.xOrigin;
 }
 void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen

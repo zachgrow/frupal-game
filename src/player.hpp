@@ -13,7 +13,7 @@
 #include<string>
 #include<sstream>
 //Update when tools are implemented
-const int MAX = 80;//global used for bounds checking
+const int MAX = 20;//global used for bounds checking
 const char DEL = '#';//delimeter used for reading tools from file
 using namespace std;
 typedef std::set<std::pair<std::string,int>> tools;
@@ -65,10 +65,14 @@ public:
   void displayTools();//display the tools
   void addTool();//add tool based on user input
   void addTool(string name,unsigned int cost);//add tool based on arguments
+
   int getCost(string tool);//return the cost of tool
+  bool getVis();//return whether the vendor is visible or not
+  void setVis(bool vis);//set if the vendor is visible
   bool hasTool(string tool);//return true if tool is in list
   std::pair<std::string,int> getTool(std::string title,int cost);
 private:
+  bool isVisible;
   tools list;
 };
 
@@ -97,7 +101,10 @@ public:
   bool buy(string tool, unsigned int cost);//checks cost then adds tool to toolbelt and subtracts from money
   bool hasTool(string tool);//searches toolbelt for argument returns true if found
   void dropTool(string tool);//removes the arguement from toolbelt
+  void giveTool(string tool);//give the player a tool for free
   void addJewel();//incriment jewels
+  std::set<std::string>* getToolbelt() { return &toolbelt; }
+
 private:
   unsigned int money;
   unsigned int energy;

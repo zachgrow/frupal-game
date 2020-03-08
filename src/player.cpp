@@ -50,9 +50,11 @@ const Pos Actor::getPos(){return position;}
 int Actor::getColor(){return color;}
 char Actor::getSymbol(){return symbol;}
 
-Vendor::Vendor(){
+Vendor::Vendor():isVisible(true){
   position.x = 0;
   position.y = 0;
+  //setSymbol('V');
+  initialize("src/tools.txt");
 }
 Vendor::Vendor(const Vendor& other):Actor(other){
   list = other.list;
@@ -61,23 +63,30 @@ Vendor::~Vendor(){}
 void Vendor::action(Player &user){//when player position and vendor position are equal
   //give the player a chance to buy a tool
   string inp;
-  cout << "Would you like to buy a tool? Y/N" << endl;//prompt the user
+  cout << "Would you like to buy a tool? Y/N" << endl << "> ";//prompt the user
   getline(cin,inp);
   if(inp.compare("y")==0 || inp.compare("Y") == 0){
     cout << "What tool would you like to buy?" << endl;
+    displayTools();
+    cout << "> ";
     getline(cin,inp);
     if(hasTool(inp)){//check if the tool exists
-      if(!user.buy(inp,getCost(inp)))//buy the tool: fails if player doesn't have enough money
+      if(!user.buy(inp,getCost(inp))) {//buy the tool: fails if player doesn't have enough money
         action(user);//if buy fails restart action
+      } else {
+        cout << "Thanks for your business!" << endl;
+        this->setVis(false);
+      }
     }
     else{//tool doesn't exist
-      cerr << "No tool by that name" << endl;
+      cerr << "I can't find which tool you mean." << endl;
       action(user);//restart action
     }
+  } else {
+    cout << "I guess I'll take my business somewhere else, then." << endl;
+    this->setVis(false); // hide the vendor to prevent bugging the player
   }
-  else{//user doesn't want a tool
-    //user.action(user);
-  }
+  cout << "Please return to other terminal. ->" << endl;
 }
 bool Vendor::hasTool(string tool){//check the tools list for tool
   bool found = false;
@@ -140,6 +149,10 @@ int Vendor::getCost(string tool){//return the cost of a tool based on name
   }
   return 0;
 }
+
+bool Vendor::getVis(){return isVisible;}
+void Vendor::setVis(bool vis){isVisible = vis;}
+
 std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return a pair used for a tool
   auto it = list.find(make_pair(title,getCost(title)));
   if(it != list.end())
@@ -193,7 +206,7 @@ void Player::setVis(unsigned int vis){
 }
 bool Player::deductEnergy(unsigned int cost){//reduce player energy on movement
   //returns false if player has run out of energy ideally ending the game
-  if(energy - cost > 0){
+  if(cost >= 0 && energy - cost > 0){
     energy -= cost;
     return true;
   }
@@ -221,45 +234,20 @@ void Player::action(class Player & user){//player action takes user input and ca
 bool Player::move(string inp){//change the players position based on user input, returns true after succesful movement
 //     Add energy cost based on tiles
     if(inp.compare("North") == 0 || inp.compare("north") == 0){
-      if(position.x > 0){
-        position.x--;
-        return true;
-      }
-      else{
-        cerr << "Cannot move North" << endl;
-        return false;
-      }
+      position.x--;
+      return true;
     }
     else if(inp.compare("West") == 0 || inp.compare("west") == 0){
-      if(position.y > 0){
         position.y--;
         return true;
-      }
-      else{
-        cerr << "Cannot move West" << endl;
-        return false;
-      }
-
     }
     else if(inp.compare("South") == 0 || inp.compare("south") == 0){
-      if(position.x < MAX){
         position.x++;
         return true;
       }
-      else{
-        cerr << "Cannot move South" << endl;
-        return false;
-      }
-    }
     else if(inp.compare("East") == 0 || inp.compare("east") == 0){
-      if(position.y < MAX){
         position.y++;
         return true;
-      }
-      else{
-        cerr << "Cannot move East" << endl;
-        return false;
-      }
     }
     else{
       cerr << "Please enter North, South, East, or West." << endl;
@@ -273,7 +261,7 @@ bool Player::move(string inp){//change the players position based on user input,
       return false;
     }
     else{
-      if(cost > money){//check cost of tool
+      if(cost > money || money < 0){//check cost of tool
         cerr << "You don't have enough money for that tool" << endl;
         return false;
       }
@@ -301,5 +289,9 @@ bool Player::move(string inp){//change the players position based on user input,
     }
     else
       cerr << "You don't have that tool" << endl;
+  }
+  void Player::giveTool(string tool){//give the player a free tool
+    if(!hasTool(tool))
+      toolbelt.insert(tool);
   }
   void Player::addJewel(){++jewels;}

@@ -10,6 +10,19 @@ DESC Defines the GameMap class, which contains and manages map objects
 #include "tile.hpp"
 #include "player.hpp"
 
+/*  NOTES ON THE TILES
+	#	TYPE	OBSTRUCTS?
+	0	Grass	N
+	1	Water	Y
+	2	Tree	Y
+	3	Mud		N (costs extra energy)
+	4	Stone	N
+	5	Qsand	N
+	6	UNUSED
+	7	UNUSED
+	8	UNUSED
+	9	UNUSED
+*/
 class GameMap
 {
 public:
@@ -25,7 +38,7 @@ public:
 	unsigned int getHeight() { return mapHeight; }
 	void updateMap(Pos player, int visibility);
 	bool getObserved(unsigned int x, unsigned int y);
-	bool getObstruct(unsigned int x, unsigned int y);
+	bool isObstructed(unsigned int x, unsigned int y);
 	int getTile(unsigned int x, unsigned int y){ return mapArray[x * mapWidth + y]->getTile();};
 	void destroyTile(unsigned int x, unsigned int y);// use to destroy the obstacle tile, and replace it with grass
 	void generateImportantStuff(unsigned int x, unsigned int y);// when generate important stuff, use this to clear 1 cell away from it to ensure the object is not trapped.

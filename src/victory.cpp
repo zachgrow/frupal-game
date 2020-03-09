@@ -14,3 +14,5 @@ void Victory::react_to_player()
 	greeting();
 	player->addJewel();
 }
+
+Victory::~Victory() = default;

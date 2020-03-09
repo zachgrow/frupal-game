@@ -8,6 +8,7 @@ class Victory : public Event {
     public:
         void greeting();
 		void react_to_player();
+		~Victory();
 };
 
 #endif // FRUPALGAME_SRC_VICTORY_EVENT_HPP_INCLUDED

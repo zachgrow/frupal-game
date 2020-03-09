@@ -115,6 +115,8 @@ bool InputParser::checkAndParseInput(int key_stroke)
 				victory.react_to_player();
 			}
 			break;
+		case TK_RBRACKET:
+			player_->setEnergy(1);
 		default: break;
 	}
 

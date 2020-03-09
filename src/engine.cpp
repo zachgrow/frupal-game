@@ -6,7 +6,8 @@ DESC Contains implementation of game engine as well as main()
 
 #include "BearLibTerminal.h"
 #include "engine.hpp"
-#include "victory.hpp"
+#include "map.hpp"
+#include "death.hpp"
 #include <cstdlib>
 #include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
@@ -120,6 +121,19 @@ void GameEngine::loop()
 					for (auto j = 0U; j < worldMap.getHeight(); j++)
 						worldMap.getTileAt(i,j)->setObserved();
 				gameState = VICTORY;
+			}
+
+			if (player.getEnergy() <= 0) {
+				auto pos = player.getPos();
+				if (worldMap.getTile(pos.x, pos.y) == 3) {
+					Death_event mud(true);
+					mud.react_to_player();
+				}
+				else {
+					Death_event normal(false);
+					normal.react_to_player();
+				}
+				gameState = DEFEAT;
 			}
 
 			worldMap.updateMap(player.getPos(), player.getVis());

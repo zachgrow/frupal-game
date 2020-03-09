@@ -15,7 +15,7 @@ public:
 
 	InputParser(Player& player, GameMap& map);
 
-	void checkAndParseInput(int key_stroke);
+	bool checkAndParseInput(int key_stroke);
 };
 
 #endif // FRUPALGAME_SRC_INPUTPARSER_HPP_INCLUDED

@@ -166,12 +166,14 @@ std::pair<std::string,int> Vendor::getTool(std::string title,int cost){//return 
 Player::Player():money(0),energy(0),jewels(0),visibility(1){//default constructor
   position.x = 0;
   position.y = 0;
+  jewels = 0;
 }
 
 Player::Player(int strtMoney,int strtEnergy, string name):money(strtMoney),energy(strtEnergy),visibility(1){//constructor to set given values
   this->name = name;
   position.x = 0;
   position.y = 0;
+  jewels = 0;
 
 }
 Player::Player(const Player& user):Actor(user){//copy constructor

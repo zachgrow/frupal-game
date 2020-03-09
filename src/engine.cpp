@@ -107,17 +107,19 @@ void GameEngine::loop()
 			int inputKey = terminal_read();
 
 			// Check with input parser
-			auto parse_result = inputParser.checkAndParseInput(inputKey);
-			if (parse_result == inputParser.EXIT) {
-				break;
+			if (gameState != RUNNING) {
+				if (inputKey == TK_Q)
+					break;
 			}
-			if (parse_result == inputParser.JEWEL) {
-				Victory victory;
-				victory.react_to_player();
+			else if (!inputParser.checkAndParseInput(inputKey))
+				break;
+
+			if (player.getJewels()) {
 				// Reveal map
 				for (auto i = 0U; i < worldMap.getWidth(); i++)
 					for (auto j = 0U; j < worldMap.getHeight(); j++)
 						worldMap.getTileAt(i,j)->setObserved();
+				gameState = VICTORY;
 			}
 
 			worldMap.updateMap(player.getPos(), player.getVis());

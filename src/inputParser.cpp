@@ -2,6 +2,7 @@
 #include "inputParser.hpp"
 #include "player.hpp"
 #include "map.hpp"
+#include "victory.hpp"
 #include <iostream>
 #include <BearLibTerminal.h>
 
@@ -87,7 +88,7 @@ static void testAndSet(int direction, Player *player, GameMap *map)
 	}
 }
 
-InputParser::result InputParser::checkAndParseInput(int key_stroke)
+bool InputParser::checkAndParseInput(int key_stroke)
 {
 	switch (key_stroke) {
 		case TK_UP:
@@ -107,12 +108,16 @@ InputParser::result InputParser::checkAndParseInput(int key_stroke)
 			testAndSet(DOWN, player_, game_map_);
 			break;
 		case TK_Q:
-			return EXIT;
+			return false;
 		case TK_P:
-			return JEWEL;
+			{
+				Victory victory;
+				victory.react_to_player();
+			}
+			break;
 		default: break;
 	}
 
 	previous_value_ = key_stroke;
-	return CONTINUE;
+	return true;
 }

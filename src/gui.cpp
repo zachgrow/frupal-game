@@ -360,14 +360,17 @@ void GameGUI::displayMessageLog() {
 	// Prints the message log onto the screen
 	// Obtain the starting position and set some defaults
 	int cursorXPosition = messageDisplay.xOrigin;
-	int cursorYPosition = messageDisplay.yOrigin;
+	int cursorYPosition = messageDisplay.yOrigin + msgPanelHeightMinimum - 2;
 	terminal_color("white"); // Default text color, can be overridden inline
 	// Display some example text for now
 	if (globalMsgLog.size() > 0) {
 		vector<string>::reverse_iterator msgLogIter = globalMsgLog.messageList.rbegin();
 		for ( ; msgLogIter != globalMsgLog.messageList.rend(); msgLogIter++) {
-			terminal_print(cursorXPosition, cursorYPosition++, (*msgLogIter).c_str());
-//			terminal_print_ext(cursorXPosition, cursorYPosition++, messageDisplay.width, messageDisplay.height, TK_ALIGN_DEFAULT, (*msgLogIter).c_str());
+			if (cursorYPosition > messageDisplay.yOrigin) {
+				// don't print messages if we're out of room
+				terminal_print(cursorXPosition, cursorYPosition--, (*msgLogIter).c_str());
+//				terminal_print_ext(cursorXPosition, cursorYPosition++, messageDisplay.width, messageDisplay.height, TK_ALIGN_DEFAULT, (*msgLogIter).c_str());
+			}
 		}
 	}
 }

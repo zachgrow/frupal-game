@@ -42,7 +42,7 @@ bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inpu
 	mapArray = new Tile *[mapWidth * mapHeight];
 	// Specific values are accessed as mapArray[x * mapWidth + y]
 	uint randomValue = 0;
-	clog << "Generating new map with dims " << mapWidth << "x" << mapHeight << "\n";
+//	clog << "Generating new map with dims " << mapWidth << "x" << mapHeight << "\n";
 	for (uint mapXIndex = 0; mapXIndex < inputWidth; mapXIndex++)
 	{
 		for (uint mapYIndex = 0; mapYIndex < inputHeight; mapYIndex++)

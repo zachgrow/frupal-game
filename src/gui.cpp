@@ -164,11 +164,6 @@ void GameGUI::initialize(uint maxWidth, uint maxHeight, Player *playerPtr, GameM
 	statPanel.initialize((windowWidth - statPanelWidthMinimum + 1), 1, statPanelWidthMinimum, (windowHeight - 2));
 	messageDisplay.initialize(2, (windowHeight - msgPanelHeightMinimum), msgPanelWidthMinimum, msgPanelHeightMinimum);
 }
-void GameGUI::update() {
-	// polls game state to see if any of the GUI elements need to change
-	// performs scene composition
-
-}
 void GameGUI::render() {
 	// draws the interface onto the screen
 	// -- can use terminal_crop to set scene/layer sizes?

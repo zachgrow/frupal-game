@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 						money = atoi(*argv);
 						break;
 					default:
-						std::cerr << "Unknown argument exiting.\n";
+						std::cerr << "Unknown argument; exiting.\n";
 						return EXIT_FAILURE;
 				}
 			} else {
@@ -99,13 +99,15 @@ void GameEngine::loop()
 	terminal_refresh();
 	worldMap.updateMap(player.getPos(), player.getVis());
 	gui.render();
+	int inputKey = 0;
 	// TK_CLOSE == true when the terminal window is closed
 	while (terminal_peek() != TK_CLOSE) { // _peek does not block if false (unlike _read)
+		if (gameState == DEFEAT || gameState == VICTORY) break;
 		// Fetch player action
 		if (terminal_has_input()) { // Is there control input waiting?
 			// Perform action
 			// Parse the command input by reading it from terminal_
-			int inputKey = terminal_read();
+			inputKey = terminal_read();
 
 			// Check with input parser
 			if (gameState != RUNNING) {
@@ -145,18 +147,28 @@ void GameEngine::loop()
 		// Do the same for the vendor list
 		for (auto vendIter = vendorList.begin(); vendIter != vendorList.end(); vendIter++) {
 			if ((*vendIter)->getPos() == player.getPos() && (*vendIter)->getVis()){ 
-  				GameGUI::addMessage("(Use the terminal to respond)");
-  				GameGUI::addMessage("The vendor waves you over.");
-		                gui.update();
+				GameGUI::addMessage("The vendor waves you over.");
+				GameGUI::addMessage("(Use the terminal to respond)");
 				gui.render();
 				(*vendIter)->action(player);
 			}
 		}
-
 		// Write result
-		gui.update();
 		gui.render();
 	};
+	if (inputKey != TK_Q) { // did the player trigger a QUIT intentionally?
+		if (gameState == DEFEAT) {
+			GameGUI::addMessage(" **** G A M E  O V E R ****");
+		}
+		if (gameState == VICTORY) {
+			GameGUI::addMessage(" **** V I C T O R Y ****");
+		}
+		GameGUI::addMessage("(Press Q to quit the game.)");
+		while (terminal_read() != TK_Q) {
+			// do nothing but wait for the player to agree to quit
+			gui.render();
+		}
+	}
 }
 
 bool GameEngine::initialize(const std::string& configFile)

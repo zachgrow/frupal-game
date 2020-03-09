@@ -118,7 +118,13 @@ void GameEngine::loop()
 		}
 		// Do the same for the vendor list
 		for (auto vendIter = vendorList.begin(); vendIter != vendorList.end(); vendIter++) {
-			if ((*vendIter)->getPos() == player.getPos() && (*vendIter)->getVis()) (*vendIter)->action(player);
+			if ((*vendIter)->getPos() == player.getPos() && (*vendIter)->getVis()){ 
+  				GameGUI::addMessage("(Use the terminal to respond)");
+  				GameGUI::addMessage("The vendor waves you over.");
+		                gui.update();
+				gui.render();
+				(*vendIter)->action(player);
+			}
 		}
 
 		// Write result

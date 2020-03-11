@@ -116,7 +116,7 @@ bool Binoculars::give_binoculars()//Calculates cost and gives needed money to pu
 void Greedy_Tile::greeting()
 {
      writeMsg("You look down to see that your money bag has a hole in it!");
-	 writeMsg("Looking down into you bag, you realize that all of your money is gone!");
+	 writeMsg("Looking down into you bag, you realize that half of your money is gone!");
      return;
 }
 
@@ -130,9 +130,9 @@ void Greedy_Tile::react_to_player()
 bool Greedy_Tile::take_money()//Greedy tile requirement takes all of the money
 {
     //place holder for taking half of the money
-    //player->setMoney((player->getMoney() / 2));
+    player->setMoney((player->getMoney() / 2));
     //place holder for taking all of the money 
-    player->setMoney(0);
+    //player->setMoney(0);
     is_resolved= true;
     return 1; 
 }

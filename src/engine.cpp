@@ -8,6 +8,7 @@ DESC Contains implementation of game engine as well as main()
 #include "engine.hpp"
 #include "map.hpp"
 #include "death.hpp"
+#include "start_msg.hpp"
 #include <cstdlib>
 #include <cstring>
 #include <iostream>		// Provides access to stdin/stdout (cout, cerr, etc)
@@ -208,6 +209,10 @@ bool GameEngine::initialize(const std::string& configFile)
 //	std::clog << "*** Generated BLT configuration:\n    " << bltConfigString << endl;
 	terminal_set(bltConfigString.c_str()); // Get BLT set up to its default state
 	gui.addMessage("Press Q or Alt+F4 to quit.");
+
+	// Report start message
+	Start_msg start_msg;
+	start_msg.react_to_player();
 
 	gameState = RUNNING;
 

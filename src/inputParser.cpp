@@ -31,7 +31,7 @@ static bool isValidDirection(int x, int y, Player *player, GameMap *map, int &de
 	// Is the player attempting to move outside the literal map bounds?
 	if (x < 0 || y < 0 || x >= (int)map->getWidth() || y >= (int)map->getHeight())
 	{
-		std::cerr << "Out of range(" << x << ',' << y << ")\n";
+//		std::cerr << "Out of range(" << x << ',' << y << ")\n";
 		deduction = 0;
 		return false;
 	}

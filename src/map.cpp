@@ -22,7 +22,6 @@ GameMap::~GameMap()
 	// The destructor
 	delete[] mapArray;
 }
-//bool GameMap::generateMap(const uint inputWidth, const uint inputHeight, const GameEngine* engine) {
 bool GameMap::generateMap(const unsigned int inputWidth, const unsigned int inputHeight, int (*rng)(int, int))
 {
 	// Generates a new map, given a rectangular size
